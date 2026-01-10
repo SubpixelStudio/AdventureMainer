@@ -1,0 +1,103 @@
+[gd_scene load_steps=2 format=3 uid="uid://cwxtl16ajnq0q"]
+
+[sub_resource type="GDScript" id="GDScript_ngkl2"]
+script/source = "extends Label
+
+@export var velocidade: float = 0.04 # tempo entre letras
+@export var missao_atual: int = 0
+
+var _indice: int = 0
+var _escrevendo: bool = false
+var _texto_completo: String = \"\"
+
+@export var missoes := {
+	0: \"\"\"Objetivo: Mate 10 Almas Vermelhas
+
+Quando a noite cai, a cidade entra em um silêncio estranho...
+A cidade não está apenas dormindo — ela está sendo observada.\"\"\",
+
+	1: \"\"\"Objetivo: Mate 20 Almas Vermelhas
+
+Edgar envia um pedido urgente na floresta...
+“Isso começou depois que mexeram naquele velho altar…”\"\"\",
+
+	2: \"\"\"Objetivo: Proteja a casa de Edgar
+
+A noite não pretende deixá-lo em paz...
+“Elas estão esperando… esperando ele acordar.”\"\"\",
+
+	3: \"\"\"Objetivo: Mate 15 Almas Vermelhas
+
+As almas agora agem como soldados.
+“Enquanto ele existir… isso nunca vai acabar.”\"\"\",
+
+	4: \"\"\"Objetivo: Mate o King SoulRed
+
+A origem da corrupção é revelada.
+“Enquanto houver medo… eu retorno.”\"\"\"
+}
+
+func _ready():
+	iniciar_missao(missao_atual)
+
+func iniciar_missao(indice: int) -> void:
+	if not missoes.has(indice):
+		push_warning(\"Missão não encontrada: %s\" % indice)
+		return
+	
+	_texto_completo = missoes[indice]
+	_indice = 0
+	text = \"\"
+	_escrevendo = true
+	_escrever_texto()
+
+func _escrever_texto() -> void:
+	while _indice < _texto_completo.length() and _escrevendo:
+		text += _texto_completo[_indice]
+		_indice += 1
+		await get_tree().create_timer(velocidade).timeout
+	
+	_escrevendo = false
+
+func _input(event):
+	# Pular animação ao apertar espaço ou clique
+	if _escrevendo and (event.is_action_pressed(\"ui_accept\") or event is InputEventMouseButton):
+		_escrevendo = false
+		text = _texto_completo
+"
+
+[node name="Canvas" type="CanvasLayer"]
+
+[node name="NodeUI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="Color" type="ColorRect" parent="NodeUI"]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.74300003
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 0.039978027
+grow_horizontal = 2
+grow_vertical = 0
+color = Color(0, 0, 0, 0.5882353)
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="NodeUI/Color"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -11.5
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_ngkl2")
+metadata/_edit_use_anchors_ = true

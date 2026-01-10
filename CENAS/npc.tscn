@@ -1,0 +1,185 @@
+[gd_scene load_steps=13 format=3 uid="uid://bxadna0se63kg"]
+
+[ext_resource type="Script" uid="uid://sxrm42bhaqwk" path="res://SCRIPT/npc.gd" id="1_5a2k8"]
+[ext_resource type="Texture2D" uid="uid://bnkdk36p7i8cs" path="res://IDLE/idle_down.png" id="1_ngkl2"]
+[ext_resource type="FontFile" uid="uid://43814se2v5d0" path="res://PressStart2P-Regular.ttf" id="2_85goq"]
+[ext_resource type="Script" uid="uid://ysdm0el3qcol" path="res://SCRIPT/label_mission.gd" id="4_is1ok"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_4b6u5"]
+
+[sub_resource type="Animation" id="Animation_ngkl2"]
+resource_name = "Main"
+length = 0.71
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6, 7]
+}
+
+[sub_resource type="Animation" id="Animation_85goq"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_5a2k8"]
+_data = {
+&"Main": SubResource("Animation_ngkl2"),
+&"RESET": SubResource("Animation_85goq")
+}
+
+[sub_resource type="LabelSettings" id="LabelSettings_5a2k8"]
+font = ExtResource("2_85goq")
+
+[sub_resource type="LabelSettings" id="LabelSettings_85goq"]
+font = ExtResource("2_85goq")
+outline_size = 14
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="GDScript" id="GDScript_5a2k8"]
+script/source = "extends Label
+
+var textos_missao := {
+	0: \"Mate 10 Almas Vermelhas\",
+	1: \"Mate 20 Almas Vermelhas\",
+	2: \"Proteja a casa de Edgar\",
+	3: \"Mate 15 Almas Vermelhas\",
+	4: \"Mate o King SoulRed\"
+}
+
+@export var world: WorldManager
+
+func _ready():
+	text = \"...\"
+	world = $\"../../../../..\"
+
+func _physics_process(_delta):
+	# Só mostra durante combate
+	if world.state == \"COMBAT\":
+		var total = world.limite_inimigos[world.missao_atual]
+		text = textos_missao.get(world.missao_atual, \"Missão\") \\
+			+ \"\\n\\n\" \\
+			+ str(world.inimigos_derrotados) + \" / \" + str(total)
+"
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ngkl2"]
+radius = 36.124783
+
+[node name="NPC" type="Node2D"]
+
+[node name="Character" type="CharacterBody2D" parent="." node_paths=PackedStringArray("ui", "label_mission")]
+collision_layer = 8
+script = ExtResource("1_5a2k8")
+ui = NodePath("../Canvas/NodeUI")
+label_mission = NodePath("../Canvas/NodeUI/Color/LabelMission")
+
+[node name="Shape" type="CollisionShape2D" parent="Character"]
+shape = SubResource("CapsuleShape2D_4b6u5")
+
+[node name="Texture" type="Sprite2D" parent="Character"]
+modulate = Color(0, 1, 1, 0.7019608)
+texture = ExtResource("1_ngkl2")
+hframes = 8
+frame = 1
+
+[node name="Anim" type="AnimationPlayer" parent="Character/Texture"]
+libraries = {
+&"": SubResource("AnimationLibrary_5a2k8")
+}
+autoplay = "Main"
+
+[node name="Canvas" type="CanvasLayer" parent="."]
+
+[node name="NodeUI" type="Control" parent="Canvas"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="Color" type="ColorRect" parent="Canvas/NodeUI"]
+custom_minimum_size = Vector2(720, 200)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -360.0
+offset_top = -200.0
+offset_right = 360.0
+grow_horizontal = 2
+grow_vertical = 0
+color = Color(0, 0, 0, 0.5882353)
+
+[node name="LabelMission" type="Label" parent="Canvas/NodeUI/Color"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "lorem ipsum"
+label_settings = SubResource("LabelSettings_5a2k8")
+script = ExtResource("4_is1ok")
+
+[node name="ColorRect" type="ColorRect" parent="Canvas/NodeUI"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.68700004
+anchor_top = 0.13900001
+anchor_right = 1.0
+anchor_bottom = 0.41700003
+offset_left = 0.6399536
+offset_top = -0.08000946
+offset_bottom = -0.24002075
+grow_horizontal = 0
+grow_vertical = 2
+color = Color(0, 0, 0, 0.1882353)
+
+[node name="Label" type="Label" parent="Canvas/NodeUI/ColorRect" node_paths=PackedStringArray("world")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "lorem"
+label_settings = SubResource("LabelSettings_85goq")
+horizontal_alignment = 1
+vertical_alignment = 1
+script = SubResource("GDScript_5a2k8")
+world = NodePath("../../../..")
+
+[node name="AreaMission" type="Area2D" parent="."]
+collision_layer = 8
+
+[node name="Shape" type="CollisionShape2D" parent="AreaMission"]
+position = Vector2(0, 35)
+shape = SubResource("CircleShape2D_ngkl2")
+
+[connection signal="body_entered" from="AreaMission" to="Character" method="_on_AreaMission_body_entered"]
+[connection signal="body_exited" from="AreaMission" to="Character" method="_on_AreaMission_body_exited"]
