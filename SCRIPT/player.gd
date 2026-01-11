@@ -36,7 +36,7 @@ func _ready():
 	power = max_mana
 	attack_area.monitoring = false
 	attack_area.body_entered.connect(_on_attack_area_body_entered)
-
+	print(GameData)
 	update_enemy_list()
 
 # -------------------------------------------------
@@ -178,6 +178,7 @@ func die():
 
 	await get_tree().create_timer(0.3).timeout
 	get_tree().reload_current_scene()
+	
 
 # -------------------------------------------------
 # ANIMAÇÕES
