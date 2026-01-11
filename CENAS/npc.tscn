@@ -1,9 +1,11 @@
-[gd_scene load_steps=13 format=3 uid="uid://bxadna0se63kg"]
+[gd_scene load_steps=19 format=3 uid="uid://bxadna0se63kg"]
 
 [ext_resource type="Script" uid="uid://sxrm42bhaqwk" path="res://SCRIPT/npc.gd" id="1_5a2k8"]
 [ext_resource type="Texture2D" uid="uid://bnkdk36p7i8cs" path="res://IDLE/idle_down.png" id="1_ngkl2"]
 [ext_resource type="FontFile" uid="uid://43814se2v5d0" path="res://PressStart2P-Regular.ttf" id="2_85goq"]
+[ext_resource type="Texture2D" uid="uid://dylf84ojf2vtj" path="res://UI/space-Sheet-Sheet.png" id="3_6g1jd"]
 [ext_resource type="Script" uid="uid://ysdm0el3qcol" path="res://SCRIPT/label_mission.gd" id="4_is1ok"]
+[ext_resource type="Script" uid="uid://2yy13grlc84" path="res://CENAS/canvas.gd" id="4_la7mh"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_4b6u5"]
 
@@ -45,6 +47,28 @@ _data = {
 &"RESET": SubResource("Animation_85goq")
 }
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_la7mh"]
+atlas = ExtResource("3_6g1jd")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gellq"]
+atlas = ExtResource("3_6g1jd")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_v3pj5"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_la7mh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gellq")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 2.0
+}]
+
 [sub_resource type="LabelSettings" id="LabelSettings_5a2k8"]
 font = ExtResource("2_85goq")
 
@@ -79,10 +103,15 @@ func _physics_process(_delta):
 			+ str(world.inimigos_derrotados) + \" / \" + str(total)
 "
 
+[sub_resource type="LabelSettings" id="LabelSettings_6g1jd"]
+font = ExtResource("2_85goq")
+font_color = Color(0, 0, 0, 1)
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_ngkl2"]
-radius = 36.124783
+radius = 20.09975
 
 [node name="NPC" type="Node2D"]
+z_index = 2
 
 [node name="Character" type="CharacterBody2D" parent="." node_paths=PackedStringArray("ui", "label_mission")]
 collision_layer = 8
@@ -105,7 +134,14 @@ libraries = {
 }
 autoplay = "Main"
 
+[node name="Input" type="AnimatedSprite2D" parent="Character"]
+position = Vector2(0, -25)
+sprite_frames = SubResource("SpriteFrames_v3pj5")
+animation = &"idle"
+frame_progress = 0.35205775
+
 [node name="Canvas" type="CanvasLayer" parent="."]
+script = ExtResource("4_la7mh")
 
 [node name="NodeUI" type="Control" parent="Canvas"]
 layout_mode = 3
@@ -154,8 +190,8 @@ anchor_top = 0.13900001
 anchor_right = 1.0
 anchor_bottom = 0.41700003
 offset_left = 0.6399536
-offset_top = -0.08000946
-offset_bottom = -0.24002075
+offset_top = -40.08001
+offset_bottom = -40.24002
 grow_horizontal = 0
 grow_vertical = 2
 color = Color(0, 0, 0, 0.1882353)
@@ -174,11 +210,26 @@ vertical_alignment = 1
 script = SubResource("GDScript_5a2k8")
 world = NodePath("../../../..")
 
+[node name="ocultar" type="ColorRect" parent="Canvas/NodeUI/ColorRect"]
+layout_mode = 0
+offset_left = -37.0
+offset_right = 3.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="Canvas/NodeUI/ColorRect/ocultar"]
+layout_mode = 0
+offset_left = 12.0
+offset_top = 12.0
+offset_right = 52.0
+offset_bottom = 35.0
+text = "Q"
+label_settings = SubResource("LabelSettings_6g1jd")
+
 [node name="AreaMission" type="Area2D" parent="."]
 collision_layer = 8
 
 [node name="Shape" type="CollisionShape2D" parent="AreaMission"]
-position = Vector2(0, 35)
+position = Vector2(0, 20)
 shape = SubResource("CircleShape2D_ngkl2")
 
 [connection signal="body_entered" from="AreaMission" to="Character" method="_on_AreaMission_body_entered"]

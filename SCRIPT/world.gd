@@ -49,10 +49,11 @@ func start_combat():
 # ---------------- NPC ----------------
 func spawnar_npc():
 	if is_instance_valid(npc_parent):
-		npc_parent.queue_free()
+		npc_parent.call_deferred("queue_free")
 
 	npc_parent = npc_scene.instantiate()
-	add_child(npc_parent)
+	call_deferred("add_child", npc_parent)
+
 
 	# Define referência para este WorldManager
 	if npc_parent.has_node("."):

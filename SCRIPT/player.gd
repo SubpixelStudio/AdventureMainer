@@ -98,7 +98,7 @@ func get_target_direction() -> Vector2:
 # -------------------------------------------------
 
 func update_attack_area():
-	var shape := attack_area.get_node("CollisionShape2D")
+	var shape := attack_area.get_node("Polygon")
 	var direction := get_target_direction()
 
 	# ajuste para shape que aponta para cima
