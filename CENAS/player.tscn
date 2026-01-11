@@ -1,17 +1,16 @@
-[gd_scene load_steps=7 format=3 uid="uid://blik8w00x5ity"]
+[gd_scene load_steps=6 format=3 uid="uid://blik8w00x5ity"]
 
 [ext_resource type="Script" uid="uid://b70in06erswue" path="res://SCRIPT/player.gd" id="1_eu07l"]
-[ext_resource type="Texture2D" uid="uid://c01r1u0utwb01" path="res://ATTACK 2/attack2_right.png" id="2_na7l4"]
+[ext_resource type="Texture2D" uid="uid://fths53jftgfi" path="res://RUN/run_up.png" id="2_8w3h7"]
 [ext_resource type="PackedScene" uid="uid://bmdsvf5rv54fy" path="res://CENAS/anim.tscn" id="3_kc4hd"]
 [ext_resource type="AnimationLibrary" uid="uid://ba0m37f2lyvq6" path="res://RESOURCES/anim.res" id="4_8w3h7"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_043cr"]
-height = 34.0
-
-[sub_resource type="SeparationRayShape2D" id="SeparationRayShape2D_8w3h7"]
-length = 30.0
+radius = 5.0
+height = 22.0
 
 [node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("anim", "attack_area")]
+z_index = 2
 collision_mask = 14
 script = ExtResource("1_eu07l")
 anim = NodePath("Anim")
@@ -19,7 +18,7 @@ attack_area = NodePath("AttackArea")
 
 [node name="Texture" type="Sprite2D" parent="."]
 texture_filter = 3
-texture = ExtResource("2_na7l4")
+texture = ExtResource("2_8w3h7")
 hframes = 8
 frame = 1
 
@@ -29,11 +28,12 @@ libraries = {
 }
 
 [node name="Shape" type="CollisionShape2D" parent="."]
+position = Vector2(0, 5)
 shape = SubResource("CapsuleShape2D_043cr")
 
 [node name="AttackArea" type="Area2D" parent="."]
 collision_mask = 2
 monitoring = false
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea"]
-shape = SubResource("SeparationRayShape2D_8w3h7")
+[node name="Polygon" type="CollisionPolygon2D" parent="AttackArea"]
+polygon = PackedVector2Array(10, 30, -10, 30, 0, 0)
