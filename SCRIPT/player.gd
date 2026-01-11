@@ -4,13 +4,16 @@ extends CharacterBody2D
 @export var attack_cooldown: float = 0.4
 @export var damage: int = 10
 @export var max_life: int = 100
+@export var max_mana:int = 200
 @export var anim: AnimationPlayer
 @export var attack_area: Area2D
-@export var progress:ProgressBar
-@export var texture_rect:TextureRect
+@export var health:ProgressBar
+@export var mana:ProgressBar
 @export var npc:Node2D
 @export var world:WorldManager
+@export var animation:AnimationPlayer
 var life: int
+var power: int
 var last_direction: Vector2 = Vector2.DOWN
 
 var can_attack := true
@@ -30,6 +33,7 @@ var current_target: Node2D = null
 
 func _ready():
 	life = max_life
+	power = max_mana
 	attack_area.monitoring = false
 	attack_area.body_entered.connect(_on_attack_area_body_entered)
 
@@ -38,8 +42,10 @@ func _ready():
 # -------------------------------------------------
 
 func _physics_process(delta):
-	progress.value = life
-	progress.max_value = max_life
+	health.value = life
+	health.max_value = max_life
+	mana.value = power
+	mana.max_value = max_mana
 	if is_dead:
 		return
 
@@ -98,7 +104,7 @@ func get_target_direction() -> Vector2:
 # -------------------------------------------------
 
 func update_attack_area():
-	var shape := attack_area.get_node("CollisionShape2D")
+	var shape := attack_area.get_node("Polygon")
 	var direction := get_target_direction()
 
 	# ajuste para shape que aponta para cima
@@ -124,8 +130,9 @@ func handle_movement():
 # -------------------------------------------------
 
 func handle_attack_input():
-	if Input.is_action_pressed("attack") and can_attack:
+	if Input.is_action_pressed("attack") and can_attack and power > 0:
 		attack()
+		power -= 10
 
 func attack():
 	can_attack = false
@@ -178,13 +185,18 @@ func die():
 
 func play_walk_animation():
 	play_directional_animation("walk")
+	animation.play('Walking')
 
 func play_idle_animation():
 	play_directional_animation("idle")
+	animation.play('Current')
+	if power < max_mana and !is_attacked:
+		power += 1
 	if life < max_life and !is_attacked:
 		life += 1
 
 func play_attack_animation():
+	animation.play('Current')
 	play_directional_animation("attack", true)
 
 func play_directional_animation(prefix: String, alternate := false):

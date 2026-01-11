@@ -59,7 +59,7 @@ func iniciar_missao(indice: int):
 
 
 func _input(event):
-	if event.is_action_pressed("attack"):
+	if event.is_action_pressed("interagir"):
 		frase_atual += 1
 		if frase_atual < frases.size():
 			text = frases[frase_atual]  # mostra próxima linha
