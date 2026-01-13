@@ -14,6 +14,7 @@ config/name="Adventure Mainer"
 run/main_scene="uid://pcwxft3n2dd1"
 config/features=PackedStringArray("4.5", "GL Compatibility")
 config/icon="uid://c132w6lfk86ad"
+config/tags=PackedStringArray("2d", "action", "subpixel")
 
 [autoload]
 
