@@ -1,0 +1,198 @@
+[gd_scene load_steps=13 format=3 uid="uid://pcwxft3n2dd1"]
+
+[ext_resource type="Script" uid="uid://de25s6dpwc18u" path="res://Script/menu.gd" id="1_vpgfy"]
+[ext_resource type="Texture2D" uid="uid://d3eau32k2guw6" path="res://Assets/Menu/menu_background.png" id="2_vpgfy"]
+[ext_resource type="FontFile" uid="uid://43814se2v5d0" path="res://PressStart2P-Regular.ttf" id="3_fapvr"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_vpgfy"]
+font = ExtResource("3_fapvr")
+font_size = 88
+shadow_size = 0
+shadow_color = Color(0.77, 0.77, 0.77, 0.43137255)
+shadow_offset = Vector2(4, 4)
+stacked_outline_count = 1
+stacked_shadow_count = 1
+stacked_shadow_0/offset = Vector2(8, 8)
+stacked_shadow_0/color = Color(0, 0, 0, 0.47058824)
+
+[sub_resource type="Animation" id="Animation_fapvr"]
+resource_name = "wave"
+length = 3.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.5, 3),
+"transitions": PackedFloat32Array(-2, -2, 1),
+"update": 0,
+"values": [Vector2(110, 68), Vector2(110, 30), Vector2(110, 68)]
+}
+
+[sub_resource type="Animation" id="Animation_kdsmm"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(110, 68)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_8lfl8"]
+_data = {
+&"RESET": SubResource("Animation_kdsmm"),
+&"wave": SubResource("Animation_fapvr")
+}
+
+[sub_resource type="LabelSettings" id="LabelSettings_m7tta"]
+font = ExtResource("3_fapvr")
+font_size = 32
+outline_size = 16
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="Animation" id="Animation_eheat"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("StartText:label_settings:outline_color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0, 0, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("GameName:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(110, 68)]
+}
+
+[sub_resource type="Animation" id="Animation_vpgfy"]
+resource_name = "enter"
+length = 0.125
+loop_mode = 1
+step = 0.0625
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("StartText:label_settings:outline_color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0625),
+"transitions": PackedFloat32Array(0, 0),
+"update": 0,
+"values": [Color(0.63909996, 0.63909996, 0.83, 1), Color(0.3212, 0.3212, 0.44, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_8lfl8"]
+resource_name = "blink"
+loop_mode = 1
+step = 0.0625
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("StartText:label_settings:outline_color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1.4640858, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 1), Color(0.3332, 0.38808, 0.49, 1), Color(0, 0, 0, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_fapvr"]
+_data = {
+&"RESET": SubResource("Animation_eheat"),
+&"blink": SubResource("Animation_8lfl8"),
+&"enter": SubResource("Animation_vpgfy")
+}
+
+[node name="Menu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_vpgfy")
+
+[node name="Background" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_vpgfy")
+expand_mode = 5
+stretch_mode = 5
+
+[node name="GameName" type="Label" parent="."]
+modulate = Color(1, 1, 0.92156863, 1)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.0859375
+anchor_top = 0.094444446
+anchor_right = 0.484375
+anchor_bottom = 0.67361104
+offset_right = 0.00012207031
+grow_horizontal = 2
+grow_vertical = 0
+text = "No
+Place
+for
+Honor"
+label_settings = SubResource("LabelSettings_vpgfy")
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="GameName"]
+libraries = {
+&"": SubResource("AnimationLibrary_8lfl8")
+}
+
+[node name="StartText" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.04609375
+anchor_top = 0.8333333
+anchor_right = 0.54609376
+anchor_bottom = 0.87777776
+grow_horizontal = 2
+grow_vertical = 0
+text = "Press Enter to Start"
+label_settings = SubResource("LabelSettings_m7tta")
+metadata/_edit_use_anchors_ = true
+
+[node name="StartGameTimer" type="Timer" parent="StartText"]
+one_shot = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="StartText"]
+root_node = NodePath("../..")
+libraries = {
+&"": SubResource("AnimationLibrary_fapvr")
+}
+
+[connection signal="timeout" from="StartText/StartGameTimer" to="." method="_on_start_game_timer_timeout"]
