@@ -3,7 +3,6 @@ extends Node
 
 # ---------------- ESTADOS ----------------
 var state: String = "IDLE"
-var missao_atual := 0
 
 var limite_inimigos := [10, 20, 50, 15, 1]
 var inimigos_derrotados = GameData.inimigos_derrotados
@@ -112,8 +111,7 @@ func _on_enemy_died():
 func finalizar_missao():
 	print("Missão concluída")
 	start_idle()
-	Global.indice += 1
-	print("Indice global agora: %s" % Global.indice)
 	GameData.iniciou_combat = false
 	GameData.pegou_missao = false
 	GameData.missao_atual = clamp(GameData.missao_atual + 1, 0, GameData.limite_de_inimigos.size() - 1)
+	print("GameData.missao_atual: %s" % GameData.missao_atual)

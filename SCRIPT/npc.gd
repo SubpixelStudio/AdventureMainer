@@ -16,7 +16,7 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	if jogador_perto and Input.is_action_just_pressed("interagir"):
 		dialog_panel.visible = true
-		dialog_text.iniciar_missao(Global.indice)
+		dialog_text.iniciar_missao(GameData.missao_atual)
 		if dialog_text.frase_atual >= dialog_text.frases.size():
 			print("terminar leitura")
 			terminar_leitura()

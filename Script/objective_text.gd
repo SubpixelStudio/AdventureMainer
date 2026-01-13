@@ -17,7 +17,6 @@ func _physics_process(_delta) -> void:
 	# Só mostra durante combate
 	if GameData.iniciou_combat and GameData.pegou_missao:
 		var total = GameData.limite_de_inimigos[GameData.missao_atual]
-		text = textos_missao.get(world.missao_atual, "Missão") \
+		text = textos_missao.get(GameData.missao_atual, "Missão") \
 			+ "\n\n" \
 			+ str(world.inimigos_derrotados) + " / " + str(total)
-		print(text)

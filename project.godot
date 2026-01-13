@@ -18,7 +18,6 @@ config/icon="uid://c132w6lfk86ad"
 [autoload]
 
 GameData="*res://Script/game_data.gd"
-Global="*res://Script/global.gd"
 
 [display]
 
