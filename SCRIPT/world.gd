@@ -40,7 +40,6 @@ func start_reading():
 	print("Estado: READING")
 
 func start_combat():
-	Global.indice += 1
 	if state != "READING":
 		return
 	state = "COMBAT"
@@ -96,7 +95,7 @@ func _on_countdown_timeout():
 	if state != "COMBAT":
 		return
 
-	var enemy = preload("res://CENAS/enemy.tscn").instantiate()
+	var enemy = preload("res://Cenas/enemy.tscn").instantiate()
 	enemy.position = player.position + Vector2(
 		randf_range(-60, 60),
 		randf_range(-60, 60)
@@ -113,6 +112,8 @@ func _on_enemy_died():
 func finalizar_missao():
 	print("Missão concluída")
 	start_idle()
+	Global.indice += 1
+	print("Indice global agora: %s" % Global.indice)
 	GameData.iniciou_combat = false
 	GameData.pegou_missao = false
 	GameData.missao_atual = clamp(GameData.missao_atual + 1, 0, GameData.limite_de_inimigos.size() - 1)

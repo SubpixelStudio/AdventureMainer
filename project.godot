@@ -13,12 +13,12 @@ config_version=5
 config/name="Adventure Mainer"
 run/main_scene="uid://pcwxft3n2dd1"
 config/features=PackedStringArray("4.5", "GL Compatibility")
-config/icon="res://icon.svg"
+config/icon="uid://c132w6lfk86ad"
 
 [autoload]
 
+GameData="*res://Script/game_data.gd"
 Global="*res://Script/global.gd"
-GameData="*res://SCRIPT/game_data.gd"
 
 [display]
 

@@ -16,6 +16,7 @@ func _process(_delta):
 		ui.get_node('Color').visible = true
 		label_mission.iniciar_missao(Global.indice)
 		if label_mission.frase_atual >= label_mission.frases.size():
+			print("terminar leitura")
 			terminar_leitura()
 	
 	if jogador_perto == true:
