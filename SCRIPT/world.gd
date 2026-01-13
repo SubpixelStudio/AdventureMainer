@@ -17,7 +17,7 @@ var iniciou_combat = GameData.iniciou_combat
 
 @export var npc_scene: PackedScene
 @export var npc_parent: Node2D
-
+  
 # ---------------- READY ----------------
 func _ready():
 	hud_tempo.visible = false
