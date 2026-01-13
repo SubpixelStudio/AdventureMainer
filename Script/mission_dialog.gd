@@ -41,16 +41,17 @@ liberte a cidade do terror eterno."""
 }
 
 var frases: PackedStringArray
-var frase_atual := -1
+var frase_atual: int = -1
 
-@export var world: WorldManager # WorldManager para iniciar o combate depois
+# WorldManager para iniciar o combate depois
+@onready var world: WorldManager = get_tree().current_scene
 
-func _ready():
+
+func _ready() -> void:
 	text = ""
 	visible = false
-	world = $"../../../../.."
 
-func iniciar_missao(indice: int):
+func iniciar_missao(indice: int) -> void:
 	frases = missoes[indice].split("\n")
 	# Pega as linhas da missão
 	if frase_atual < frases.size():
@@ -58,7 +59,7 @@ func iniciar_missao(indice: int):
 		visible = true
 
 
-func _input(event):
+func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("interagir"):
 		frase_atual += 1
 		if frase_atual < frases.size():

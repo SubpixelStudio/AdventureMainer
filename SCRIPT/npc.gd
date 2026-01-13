@@ -1,40 +1,42 @@
 extends CharacterBody2D
 
-@export var indice_missao := 0
-@export var world: WorldManager
+@export var mission_screen: Control
+@export var dialog_text: Objective
 
-@export var ui : Control
-@export var label_mission : Objective
-@export var input : Sprite2D
-var jogador_perto := false
+@onready var world: WorldManager = get_tree().current_scene
+@onready var input: AnimatedSprite2D = $Input
+@onready var dialog_panel: ColorRect = mission_screen.get_node("DialogPanel")
 
-func _ready():
-	ui.get_node("Color").visible = false
+var jogador_perto: bool = false
 
-func _process(_delta):
+
+func _ready() -> void:
+	dialog_panel.visible = false
+
+func _process(_delta: float) -> void:
 	if jogador_perto and Input.is_action_just_pressed("interagir"):
-		ui.get_node('Color').visible = true
-		label_mission.iniciar_missao(Global.indice)
-		if label_mission.frase_atual >= label_mission.frases.size():
+		dialog_panel.visible = true
+		dialog_text.iniciar_missao(Global.indice)
+		if dialog_text.frase_atual >= dialog_text.frases.size():
 			print("terminar leitura")
 			terminar_leitura()
 	
 	if jogador_perto == true:
-		$Input.visible = true
-		$Input.play("idle")
+		input.visible = true
+		input.play("idle")
 	else:
-		$Input.visible = false
+		input.visible = false
 
-func terminar_leitura():
-	ui.get_node('Color').visible = false
+func terminar_leitura() -> void:
+	dialog_panel.visible = false
 	world.leitura_concluida()
 	queue_free()
 
-func _on_AreaMission_body_entered(body):
+func _on_AreaMission_body_entered(body: Node2D) -> void:
 	if body.is_in_group("Player"):
 		jogador_perto = true
 
-func _on_AreaMission_body_exited(body):
+func _on_AreaMission_body_exited(body: Node2D) -> void:
 	if body.is_in_group("Player"):
 		jogador_perto = false
-		ui.visible = false
+		mission_screen.visible = false

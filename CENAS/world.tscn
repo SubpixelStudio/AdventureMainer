@@ -390,7 +390,7 @@ _data = {
 radius = 338.0
 height = 698.0
 
-[node name="Node" type="Node" node_paths=PackedStringArray("player", "enemies_container", "hud_tempo", "countdown", "npc_parent")]
+[node name="World" type="Node" node_paths=PackedStringArray("player", "enemies_container", "hud_tempo", "countdown", "npc_parent")]
 script = ExtResource("1_y3i6s")
 player = NodePath("Player")
 enemies_container = NodePath("Enemies")
@@ -522,19 +522,7 @@ shape = SubResource("CapsuleShape2D_dswv5")
 
 [node name="NPC" parent="." instance=ExtResource("13_2gbgk")]
 
-[node name="Character" parent="NPC" index="0" node_paths=PackedStringArray("world")]
-world = NodePath("../..")
-
-[node name="ColorRect" parent="NPC/Canvas/NodeUI" index="1"]
-offset_left = -0.3600464
-offset_right = -1.0
-
-[node name="Label" parent="NPC/Canvas/NodeUI/ColorRect" index="0" node_paths=PackedStringArray("world")]
-world = NodePath("../../../../..")
-
 [connection signal="timeout" from="CanvasLayer/Label/Timer" to="." method="_on_timer_timeout"]
 [connection signal="body_entered" from="LabelArea" to="." method="_on_body_entered"]
 [connection signal="body_exited" from="LabelArea" to="." method="_on_body_exited"]
 [connection signal="timeout" from="Timer" to="." method="_on_countdown_timeout"]
-
-[editable path="NPC"]

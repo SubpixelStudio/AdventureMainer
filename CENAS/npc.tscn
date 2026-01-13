@@ -4,8 +4,9 @@
 [ext_resource type="Texture2D" uid="uid://bnkdk36p7i8cs" path="res://Assets/Player/IDLE/idle_down.png" id="1_ngkl2"]
 [ext_resource type="FontFile" uid="uid://43814se2v5d0" path="res://PressStart2P-Regular.ttf" id="2_85goq"]
 [ext_resource type="Texture2D" uid="uid://dylf84ojf2vtj" path="res://Assets/UI/space-Sheet-Sheet.png" id="3_6g1jd"]
-[ext_resource type="Script" uid="uid://ysdm0el3qcol" path="res://Script/label_mission.gd" id="4_is1ok"]
+[ext_resource type="Script" uid="uid://ysdm0el3qcol" path="res://Script/mission_dialog.gd" id="4_is1ok"]
 [ext_resource type="Script" uid="uid://2yy13grlc84" path="res://Cenas/canvas.gd" id="4_la7mh"]
+[ext_resource type="Script" uid="uid://bmsfo62413myf" path="res://Script/objective_text.gd" id="7_a2sxp"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_4b6u5"]
 
@@ -77,32 +78,6 @@ font = ExtResource("2_85goq")
 outline_size = 14
 outline_color = Color(0, 0, 0, 1)
 
-[sub_resource type="GDScript" id="GDScript_5a2k8"]
-script/source = "extends Label
-
-var textos_missao := {
-	0: \"Mate 10 Almas Vermelhas\",
-	1: \"Mate 20 Almas Vermelhas\",
-	2: \"Proteja a casa de Edgar\",
-	3: \"Mate 15 Almas Vermelhas\",
-	4: \"Mate o King SoulRed\"
-}
-
-@export var world: WorldManager
-
-func _ready():
-	text = \"...\"
-	world = $\"../../../../..\"
-
-func _physics_process(_delta):
-	# Só mostra durante combate
-	if GameData.iniciou_combat == true and GameData.pegou_missao == true:
-		var total = GameData.limite_de_inimigos[GameData.missao_atual]
-		text = textos_missao.get(world.missao_atual, \"Missão\") \\
-			+ \"\\n\\n\" \\
-			+ str(world.inimigos_derrotados) + \" / \" + str(total)
-"
-
 [sub_resource type="LabelSettings" id="LabelSettings_6g1jd"]
 font = ExtResource("2_85goq")
 font_color = Color(0, 0, 0, 1)
@@ -113,11 +88,11 @@ radius = 20.09975
 [node name="NPC" type="Node2D"]
 z_index = 2
 
-[node name="Character" type="CharacterBody2D" parent="." node_paths=PackedStringArray("ui", "label_mission")]
+[node name="Character" type="CharacterBody2D" parent="." node_paths=PackedStringArray("mission_screen", "dialog_text")]
 collision_layer = 8
 script = ExtResource("1_5a2k8")
-ui = NodePath("../Canvas/NodeUI")
-label_mission = NodePath("../Canvas/NodeUI/Color/LabelMission")
+mission_screen = NodePath("../Canvas/MissionScreen")
+dialog_text = NodePath("../Canvas/MissionScreen/DialogPanel/DialogText")
 
 [node name="Shape" type="CollisionShape2D" parent="Character"]
 shape = SubResource("CapsuleShape2D_4b6u5")
@@ -138,12 +113,13 @@ autoplay = "Main"
 position = Vector2(0, -25)
 sprite_frames = SubResource("SpriteFrames_v3pj5")
 animation = &"idle"
-frame_progress = 0.35205775
+frame = 1
+frame_progress = 0.7264189
 
 [node name="Canvas" type="CanvasLayer" parent="."]
 script = ExtResource("4_la7mh")
 
-[node name="NodeUI" type="Control" parent="Canvas"]
+[node name="MissionScreen" type="Control" parent="Canvas"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -152,7 +128,7 @@ grow_horizontal = 2
 grow_vertical = 2
 metadata/_edit_use_anchors_ = true
 
-[node name="Color" type="ColorRect" parent="Canvas/NodeUI"]
+[node name="DialogPanel" type="ColorRect" parent="Canvas/MissionScreen"]
 custom_minimum_size = Vector2(720, 200)
 layout_mode = 1
 anchors_preset = 7
@@ -167,7 +143,7 @@ grow_horizontal = 2
 grow_vertical = 0
 color = Color(0, 0, 0, 0.5882353)
 
-[node name="LabelMission" type="Label" parent="Canvas/NodeUI/Color"]
+[node name="DialogText" type="Label" parent="Canvas/MissionScreen/DialogPanel"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -180,9 +156,11 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "lorem ipsum"
 label_settings = SubResource("LabelSettings_5a2k8")
+autowrap_mode = 2
 script = ExtResource("4_is1ok")
 
-[node name="ColorRect" type="ColorRect" parent="Canvas/NodeUI"]
+[node name="MissionPanel" type="ColorRect" parent="Canvas/MissionScreen"]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.68700004
@@ -196,7 +174,7 @@ grow_horizontal = 0
 grow_vertical = 2
 color = Color(0, 0, 0, 0.1882353)
 
-[node name="Label" type="Label" parent="Canvas/NodeUI/ColorRect" node_paths=PackedStringArray("world")]
+[node name="MissionText" type="Label" parent="Canvas/MissionScreen/MissionPanel"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -207,16 +185,15 @@ text = "lorem"
 label_settings = SubResource("LabelSettings_85goq")
 horizontal_alignment = 1
 vertical_alignment = 1
-script = SubResource("GDScript_5a2k8")
-world = NodePath("../../../..")
+script = ExtResource("7_a2sxp")
 
-[node name="ocultar" type="ColorRect" parent="Canvas/NodeUI/ColorRect"]
+[node name="ocultar" type="ColorRect" parent="Canvas/MissionScreen/MissionPanel"]
 layout_mode = 0
 offset_left = -37.0
 offset_right = 3.0
 offset_bottom = 40.0
 
-[node name="Label" type="Label" parent="Canvas/NodeUI/ColorRect/ocultar"]
+[node name="Label" type="Label" parent="Canvas/MissionScreen/MissionPanel/ocultar"]
 layout_mode = 0
 offset_left = 12.0
 offset_top = 12.0
