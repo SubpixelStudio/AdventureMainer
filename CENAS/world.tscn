@@ -511,6 +511,7 @@ libraries = {
 &"": SubResource("AnimationLibrary_ojfwj")
 }
 autoplay = "Current"
+speed_scale = 1.4
 
 [node name="LabelArea" type="Area2D" parent="."]
 position = Vector2(300, 117)
