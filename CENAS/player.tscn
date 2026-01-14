@@ -1,9 +1,9 @@
 [gd_scene load_steps=6 format=3 uid="uid://blik8w00x5ity"]
 
-[ext_resource type="Script" uid="uid://b70in06erswue" path="res://SCRIPT/player.gd" id="1_eu07l"]
-[ext_resource type="Texture2D" uid="uid://fths53jftgfi" path="res://RUN/run_up.png" id="2_8w3h7"]
-[ext_resource type="PackedScene" uid="uid://bmdsvf5rv54fy" path="res://CENAS/anim.tscn" id="3_kc4hd"]
-[ext_resource type="AnimationLibrary" uid="uid://ba0m37f2lyvq6" path="res://RESOURCES/anim.res" id="4_8w3h7"]
+[ext_resource type="Script" uid="uid://b70in06erswue" path="res://Script/player.gd" id="1_eu07l"]
+[ext_resource type="Texture2D" uid="uid://fths53jftgfi" path="res://Assets/Player/RUN/run_up.png" id="2_8w3h7"]
+[ext_resource type="PackedScene" uid="uid://bmdsvf5rv54fy" path="res://Cenas/anim.tscn" id="3_kc4hd"]
+[ext_resource type="AnimationLibrary" uid="uid://ba0m37f2lyvq6" path="res://Recursos/anim.res" id="4_8w3h7"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_043cr"]
 radius = 5.0

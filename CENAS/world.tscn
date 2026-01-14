@@ -1,19 +1,20 @@
-[gd_scene load_steps=30 format=4 uid="uid://fhd1osrl7ew6"]
+[gd_scene load_steps=36 format=4 uid="uid://fhd1osrl7ew6"]
 
 [ext_resource type="Script" uid="uid://b0xxwahjhpp0" path="res://SCRIPT/world.gd" id="1_y3i6s"]
 [ext_resource type="PackedScene" uid="uid://blik8w00x5ity" path="res://CENAS/player.tscn" id="1_yxi74"]
-[ext_resource type="Texture2D" uid="uid://dfqpw7hpa706l" path="res://tilesets/grass.png" id="2_gi2ty"]
-[ext_resource type="Texture2D" uid="uid://d00m6bclt1qq5" path="res://tilesets/fences.png" id="3_bqdng"]
-[ext_resource type="Texture2D" uid="uid://bfdtbhdn8khc1" path="res://tilesets/plains.png" id="3_ge5mm"]
-[ext_resource type="Texture2D" uid="uid://btxr5taowilfb" path="res://tilesets/walls/walls.png" id="4_w45jc"]
-[ext_resource type="Texture2D" uid="uid://bd0jl137uobul" path="res://tilesets/walls/wooden_door.png" id="5_dswv5"]
-[ext_resource type="Texture2D" uid="uid://bxgofwurap8tn" path="res://tilesets/floors/wooden.png" id="6_kokpr"]
-[ext_resource type="Texture2D" uid="uid://n8agtcyt2r03" path="res://Pine/Size_02.png" id="7_ijklj"]
-[ext_resource type="Texture2D" uid="uid://cexnxh1h0gnc" path="res://Pine/Size_03.png" id="8_2gbgk"]
+[ext_resource type="Texture2D" uid="uid://dfqpw7hpa706l" path="res://Assets/Tilemap/tilesets/grass.png" id="2_gi2ty"]
+[ext_resource type="Texture2D" uid="uid://d00m6bclt1qq5" path="res://Assets/Tilemap/tilesets/fences.png" id="3_bqdng"]
+[ext_resource type="Texture2D" uid="uid://bfdtbhdn8khc1" path="res://Assets/Tilemap/tilesets/plains.png" id="3_ge5mm"]
+[ext_resource type="Texture2D" uid="uid://btxr5taowilfb" path="res://Assets/Tilemap/tilesets/walls/walls.png" id="4_w45jc"]
+[ext_resource type="Texture2D" uid="uid://bd0jl137uobul" path="res://Assets/Tilemap/tilesets/walls/wooden_door.png" id="5_dswv5"]
+[ext_resource type="Texture2D" uid="uid://bxgofwurap8tn" path="res://Assets/Tilemap/tilesets/floors/wooden.png" id="6_kokpr"]
+[ext_resource type="Texture2D" uid="uid://n8agtcyt2r03" path="res://Assets/Tilemap/Pine/Size_02.png" id="7_ijklj"]
+[ext_resource type="Texture2D" uid="uid://cexnxh1h0gnc" path="res://Assets/Tilemap/Pine/Size_03.png" id="8_2gbgk"]
 [ext_resource type="FontFile" uid="uid://43814se2v5d0" path="res://PressStart2P-Regular.ttf" id="8_dswv5"]
-[ext_resource type="Texture2D" uid="uid://c287hd1ijld43" path="res://Pine/Size_04.png" id="9_y3i6s"]
-[ext_resource type="Texture2D" uid="uid://dvqaiwefjt2bi" path="res://Pine/Size_05.png" id="10_k0dnu"]
+[ext_resource type="Texture2D" uid="uid://c287hd1ijld43" path="res://Assets/Tilemap/Pine/Size_04.png" id="9_y3i6s"]
+[ext_resource type="Texture2D" uid="uid://dvqaiwefjt2bi" path="res://Assets/Tilemap/Pine/Size_05.png" id="10_k0dnu"]
 [ext_resource type="PackedScene" uid="uid://bxadna0se63kg" path="res://CENAS/npc.tscn" id="13_2gbgk"]
+[ext_resource type="Texture2D" uid="uid://bnkdk36p7i8cs" path="res://Assets/Player/IDLE/idle_down.png" id="15_o8vbg"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_bqdng"]
 texture = ExtResource("2_gi2ty")
@@ -242,12 +243,148 @@ shadow_offset = Vector2(4, 4)
 bg_color = Color(0, 0, 0, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ijklj"]
-bg_color = Color(0.73718524, 0, 0, 1)
+bg_color = Color(0.7372549, 0, 0, 1)
 border_width_left = 5
 border_width_top = 5
 border_width_right = 5
 border_width_bottom = 5
 border_color = Color(0.8, 0.8, 0.8, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h8bqs"]
+bg_color = Color(0.2976344, 0.8151441, 0.8151441, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.8, 0.8, 0.8, 0)
+
+[sub_resource type="Animation" id="Animation_o8vbg"]
+resource_name = "Current"
+length = 0.1
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("15_o8vbg")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:hframes")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [8]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:vframes")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [2]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".:frame")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_m1lnq"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+
+[sub_resource type="Animation" id="Animation_ojfwj"]
+resource_name = "Walking"
+length = 0.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("15_o8vbg")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:hframes")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [8]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:vframes")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [2]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".:frame")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.0333, 0.0666, 0.10000001, 0.13333334, 0.16666667, 0.20000002, 0.23333335),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6, 7]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ojfwj"]
+_data = {
+&"Current": SubResource("Animation_o8vbg"),
+&"RESET": SubResource("Animation_m1lnq"),
+&"Walking": SubResource("Animation_ojfwj")
+}
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_dswv5"]
 radius = 338.0
@@ -262,12 +399,14 @@ countdown = NodePath("Timer")
 npc_scene = ExtResource("13_2gbgk")
 npc_parent = NodePath("NPC")
 
-[node name="Player" parent="." node_paths=PackedStringArray("progress", "npc", "world") groups=["Player"] instance=ExtResource("1_yxi74")]
+[node name="Player" parent="." node_paths=PackedStringArray("health", "mana", "npc", "world", "animation") groups=["Player"] instance=ExtResource("1_yxi74")]
 position = Vector2(135, 475)
 attack_cooldown = 0.0
-progress = NodePath("../CanvasLayer/HuD/ProgressBar")
+health = NodePath("../CanvasLayer/HuD/Health")
+mana = NodePath("../CanvasLayer/HuD/Mana")
 npc = NodePath("../NPC")
 world = NodePath("..")
+animation = NodePath("../CanvasLayer/HuD/ColorRect/Sprite2D/Animation")
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 zoom = Vector2(3, 3)
@@ -329,16 +468,49 @@ anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="ProgressBar" type="ProgressBar" parent="CanvasLayer/HuD"]
+[node name="Health" type="ProgressBar" parent="CanvasLayer/HuD"]
 layout_mode = 0
-offset_left = 30.0
+offset_left = 113.0
 offset_top = 30.0
-offset_right = 430.0
+offset_right = 513.0
 offset_bottom = 60.0
 theme_override_styles/background = SubResource("StyleBoxFlat_2gbgk")
 theme_override_styles/fill = SubResource("StyleBoxFlat_ijklj")
 value = 100.0
 show_percentage = false
+
+[node name="Mana" type="ProgressBar" parent="CanvasLayer/HuD"]
+layout_mode = 0
+offset_left = 113.0
+offset_top = 65.0
+offset_right = 513.0
+offset_bottom = 85.0
+theme_override_styles/background = SubResource("StyleBoxFlat_2gbgk")
+theme_override_styles/fill = SubResource("StyleBoxFlat_h8bqs")
+value = 100.0
+show_percentage = false
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/HuD"]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 110.0
+offset_bottom = 110.0
+color = Color(0, 0, 0, 0.5254902)
+
+[node name="Sprite2D" type="Sprite2D" parent="CanvasLayer/HuD/ColorRect"]
+position = Vector2(53, 0)
+scale = Vector2(5, 5)
+texture = ExtResource("15_o8vbg")
+hframes = 8
+vframes = 2
+frame = 1
+
+[node name="Animation" type="AnimationPlayer" parent="CanvasLayer/HuD/ColorRect/Sprite2D"]
+libraries = {
+&"": SubResource("AnimationLibrary_ojfwj")
+}
+autoplay = "Current"
 
 [node name="LabelArea" type="Area2D" parent="."]
 position = Vector2(300, 117)

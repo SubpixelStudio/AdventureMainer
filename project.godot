@@ -17,7 +17,8 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-Global="*res://SCRIPT/global.gd"
+Global="*res://Script/global.gd"
+GameData="*res://SCRIPT/game_data.gd"
 
 [display]
 

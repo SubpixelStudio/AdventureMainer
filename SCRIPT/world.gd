@@ -6,7 +6,9 @@ var state: String = "IDLE"
 var missao_atual := 0
 
 var limite_inimigos := [10, 20, 50, 15, 1]
-var inimigos_derrotados := 0
+var inimigos_derrotados = GameData.inimigos_derrotados
+
+var iniciou_combat = GameData.iniciou_combat
 
 @export var player: Node2D
 @export var enemies_container: Node
@@ -45,6 +47,7 @@ func start_combat():
 	inimigos_derrotados = 0
 	countdown.start(randi_range(2,4))
 	print("Estado: COMBAT - Combate iniciado") 
+	GameData.iniciou_combat = true
 
 # ---------------- NPC ----------------
 func spawnar_npc():
@@ -67,7 +70,7 @@ func spawnar_npc():
 		Vector2(620,188),
 		Vector2(776,414)
 	]
-	npc_parent.position = posicoes[missao_atual]
+	npc_parent.position = posicoes[GameData.missao_atual]
 	npc_parent.visible = true
 
 	# Começa a leitura quando o NPC aparece
@@ -85,6 +88,7 @@ func _physics_process(_delta):
 # ---------------- LEITURA ----------------
 func leitura_concluida():
 	start_combat()
+	GameData.pegou_missao = true
 
 # ---------------- INIMIGOS ----------------
 func _on_countdown_timeout():
@@ -102,11 +106,13 @@ func _on_countdown_timeout():
 
 func _on_enemy_died():
 	inimigos_derrotados += 1
-	if inimigos_derrotados >= limite_inimigos[missao_atual]:
+	if inimigos_derrotados >= limite_inimigos[GameData.missao_atual]:
 		finalizar_missao()
 
 # ---------------- FINAL ----------------
 func finalizar_missao():
 	print("Missão concluída")
 	start_idle()
-	missao_atual = clamp(missao_atual + 1, 0, limite_inimigos.size() - 1)
+	GameData.iniciou_combat = false
+	GameData.pegou_missao = false
+	GameData.missao_atual = clamp(GameData.missao_atual + 1, 0, GameData.limite_de_inimigos.size() - 1)

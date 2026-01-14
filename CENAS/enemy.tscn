@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://c2ubtvdrrvcpg"]
 
 [ext_resource type="PackedScene" uid="uid://bmdsvf5rv54fy" path="res://CENAS/anim.tscn" id="1_hp8vh"]
-[ext_resource type="Texture2D" uid="uid://bnkdk36p7i8cs" path="res://IDLE/idle_down.png" id="1_ol0vt"]
+[ext_resource type="Texture2D" uid="uid://bnkdk36p7i8cs" path="res://Assets/Player/IDLE/idle_down.png" id="1_ol0vt"]
 
 [sub_resource type="GDScript" id="GDScript_ol0vt"]
 script/source = "extends CharacterBody2D
@@ -13,6 +13,7 @@ signal died
 @export var damage: int = 10
 @export var max_life: int = 30
 @export var anim: AnimationPlayer
+
 
 var player: Node2D
 var life: int
