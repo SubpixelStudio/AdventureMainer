@@ -19,8 +19,9 @@ const ATTACK_ANIM_SPEED: float = 1
 @onready var anim: AnimationPlayer = $Anim
 @onready var attack_area: Area2D = $AttackArea
 
-var life: int
-var power: int
+@onready var life: int = max_life
+@onready var power: int = max_mana
+
 var last_direction: Vector2 = Vector2.DOWN
 
 var can_attack: bool = true
@@ -29,13 +30,13 @@ var attack_index: int = 1
 var is_dead: bool = false
 var is_attacked: bool = false
 
-enum player_state {
-	idle,
-	walk,
-	attack
+enum PlayerState {
+	IDLE,
+	WALK,
+	ATTACK
 }
 
-var status : player_state
+var state: PlayerState
 
 # ------------------------------
 # SISTEMA DE ALVO
@@ -47,8 +48,6 @@ var current_target: Node2D = null
 # -------------------------------------------------
 
 func _ready() -> void:
-	life = max_life
-	power = max_mana
 	attack_area.monitoring = false
 	attack_area.body_entered.connect(_on_attack_area_body_entered)
 	print(GameData)
@@ -57,13 +56,7 @@ func _ready() -> void:
 # -------------------------------------------------
 
 func _physics_process(_delta: float) -> void:
-	match status:
-		player_state.idle:
-			idle_state()
-		player_state.walk:
-			walk_state()
-		player_state.attack:
-			attack_state()
+	handle_states()
 	
 	health.value = life
 	health.max_value = max_life
@@ -82,45 +75,58 @@ func _physics_process(_delta: float) -> void:
 # STATE MACHINE
 #--------------------------------------------------
 
-func go_to_idle() -> void:
-	status = player_state.idle
-	play_idle_animation()
+func switch_state(new_state: PlayerState) -> void:
+	# Previnir que troque pro mesmo estado
+	if state == new_state: 
+		print("Player: Can't switch to current state")
+		return
+	state = new_state
+	print("Player State: %s" % PlayerState.find_key(state))
+	
+	match new_state:
+		PlayerState.IDLE:
+			play_idle_animation()
+		
+		PlayerState.WALK:
+			play_walk_animation()
+		
+		PlayerState.ATTACK:
+			attack()
+			power -= 10
+			play_attack_animation()
 
-func go_to_walk() -> void:
-	status = player_state.walk
-	play_walk_animation()
-
-func go_to_attack() -> void:
-	status = player_state.attack
-	attack()
-	power -= 10
-	play_attack_animation()
-
-
+#--------------------------------------------------
 func idle_state() -> void:
 	handle_movement()
 	
 	if velocity != Vector2.ZERO:
-		play_walk_animation()
-	
-	if velocity == Vector2.ZERO:
-		go_to_idle()
+		switch_state(PlayerState.WALK)
 	
 	if Input.is_action_just_pressed("attack") and power > 0:
-		go_to_attack()
+		switch_state(PlayerState.ATTACK)
 
 func walk_state() -> void:
 	handle_movement()
+	play_walk_animation()
 	
-	if velocity.x == 0 and velocity.y == 0:
-		go_to_idle()
-		return
+	if velocity == Vector2.ZERO:
+		switch_state(PlayerState.IDLE)
 	
 	if Input.is_action_just_pressed("attack") and power > 0:
-		go_to_attack()
+		switch_state(PlayerState.ATTACK)
 
 func attack_state() -> void:
 	velocity = Vector2.ZERO
+#--------------------------------------------------
+
+func handle_states() -> void:
+	match state:
+		PlayerState.IDLE:
+			idle_state()
+		PlayerState.WALK:
+			walk_state()
+		PlayerState.ATTACK:
+			attack_state()
 
 # -------------------------------------------------
 # INIMIGOS / ALVO
@@ -207,9 +213,9 @@ func attack() -> void:
 	
 	# volta para estado correto
 	if velocity != Vector2.ZERO:
-		go_to_walk()
+		switch_state(PlayerState.ATTACK)
 	else:
-		go_to_idle()
+		switch_state(PlayerState.IDLE)
 
 
 func _on_attack_area_body_entered(body: Node2D) -> void:
@@ -237,7 +243,7 @@ func die() -> void:
 	
 	await get_tree().create_timer(0.3).timeout
 	get_tree().reload_current_scene()
-	
+
 
 # -------------------------------------------------
 # ANIMAÇÕES
