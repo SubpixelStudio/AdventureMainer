@@ -31,12 +31,14 @@ var is_dead: bool = false
 var is_attacked: bool = false
 
 enum PlayerState {
+	NONE,
 	IDLE,
 	WALK,
 	ATTACK
 }
 
 var state: PlayerState
+var last_state: PlayerState
 
 # ------------------------------
 # SISTEMA DE ALVO
@@ -50,13 +52,14 @@ var current_target: Node2D = null
 func _ready() -> void:
 	attack_area.monitoring = false
 	attack_area.body_entered.connect(_on_attack_area_body_entered)
-	print(GameData)
+	switch_state(PlayerState.IDLE)
+	last_state = PlayerState.IDLE
 	update_enemy_list()
 
 # -------------------------------------------------
 
 func _physics_process(_delta: float) -> void:
-	handle_states()
+	_handle_states()
 	
 	health.value = life
 	health.max_value = max_life
@@ -80,6 +83,7 @@ func switch_state(new_state: PlayerState) -> void:
 	if state == new_state: 
 		print("Player: Can't switch to current state")
 		return
+	last_state = state
 	state = new_state
 	print("Player State: %s" % PlayerState.find_key(state))
 	
@@ -91,21 +95,48 @@ func switch_state(new_state: PlayerState) -> void:
 			play_walk_animation()
 		
 		PlayerState.ATTACK:
-			attack()
+			can_attack = false
+			is_attacking = true
+			
+			velocity = Vector2.ZERO
 			power -= 10
+			# Olhar pro inimigo pra atacá-lo
+			last_direction = get_target_direction()
 			play_attack_animation()
+			
+			attack_area.monitoring = true
+			
+			# Acabar ataque. Ainda não dá pra atacar, mas dá pra se mover
+			await anim.animation_finished
+			
+			attack_area.monitoring = false
+			is_attacking = false
+			
+			switch_state(last_state)
+			
+			# Reativar ataque após cooldown
+			await get_tree().create_timer(attack_cooldown).timeout
+			can_attack = true
 
 #--------------------------------------------------
-func idle_state() -> void:
+func _idle_state() -> void:
 	handle_movement()
 	
+	# Reencher vida e power/mana
+	if not is_attacked:
+		if life < max_life:
+			life += 1
+		if power < max_mana:
+			power += 1
+	
+	# Mudar estados
 	if velocity != Vector2.ZERO:
 		switch_state(PlayerState.WALK)
 	
 	if Input.is_action_just_pressed("attack") and power > 0:
-		switch_state(PlayerState.ATTACK)
+		attack()
 
-func walk_state() -> void:
+func _walk_state() -> void:
 	handle_movement()
 	play_walk_animation()
 	
@@ -113,20 +144,20 @@ func walk_state() -> void:
 		switch_state(PlayerState.IDLE)
 	
 	if Input.is_action_just_pressed("attack") and power > 0:
-		switch_state(PlayerState.ATTACK)
+		attack()
 
-func attack_state() -> void:
-	velocity = Vector2.ZERO
+func _attack_state() -> void:
+	pass
 #--------------------------------------------------
 
-func handle_states() -> void:
+func _handle_states() -> void:
 	match state:
 		PlayerState.IDLE:
-			idle_state()
+			_idle_state()
 		PlayerState.WALK:
-			walk_state()
+			_walk_state()
 		PlayerState.ATTACK:
-			attack_state()
+			_attack_state()
 
 # -------------------------------------------------
 # INIMIGOS / ALVO
@@ -184,7 +215,7 @@ func update_attack_area() -> void:
 # -------------------------------------------------
 
 func handle_movement() -> void:
-	var input_vector := Input.get_vector("A", "D", "W", "S")
+	var input_vector: Vector2 = Input.get_vector("A", "D", "W", "S")
 	velocity = input_vector * speed
 	
 	if input_vector != Vector2.ZERO:
@@ -195,27 +226,7 @@ func handle_movement() -> void:
 # -------------------------------------------------
 
 func attack() -> void:
-	can_attack = false
-	is_attacking = true
-	
-	last_direction = get_target_direction()
-	play_attack_animation()
-	
-	attack_area.monitoring = true
-	
-	await anim.animation_finished   # ✅ aqui é correto
-	
-	attack_area.monitoring = false
-	is_attacking = false
-	
-	await get_tree().create_timer(attack_cooldown).timeout
-	can_attack = true
-	
-	# volta para estado correto
-	if velocity != Vector2.ZERO:
-		switch_state(PlayerState.ATTACK)
-	else:
-		switch_state(PlayerState.IDLE)
+	switch_state(PlayerState.ATTACK)
 
 
 func _on_attack_area_body_entered(body: Node2D) -> void:
@@ -253,10 +264,6 @@ func play_idle_animation() -> void:
 	anim.speed_scale = NORMAL_ANIM_SPEED
 	play_directional_animation("idle")
 	animation.play("Current")
-	if power < max_mana and !is_attacked:
-		power += 1
-	if life < max_life and !is_attacked:
-		life += 1
 
 func play_walk_animation() -> void:
 	anim.speed_scale = NORMAL_ANIM_SPEED
