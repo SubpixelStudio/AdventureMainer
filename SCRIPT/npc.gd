@@ -12,6 +12,8 @@ var jogador_perto: bool = false
 
 func _ready() -> void:
 	dialog_panel.visible = false
+	if GameData.autoiniciar_missao:
+		world.leitura_concluida()
 
 func _process(_delta: float) -> void:
 	if jogador_perto and Input.is_action_just_pressed("interagir"):

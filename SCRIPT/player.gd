@@ -1,4 +1,5 @@
 extends CharacterBody2D
+class_name Player
 
 const NORMAL_ANIM_SPEED: float = .6
 const ATTACK_ANIM_SPEED: float = 1
@@ -231,20 +232,24 @@ func attack() -> void:
 
 func _on_attack_area_body_entered(body: Node2D) -> void:
 	if body.has_method("take_damage"):
-		body.take_damage(damage)
+		body.take_damage(damage, self)
 
 # -------------------------------------------------
 # VIDA / MORTE
 # -------------------------------------------------
 
-func take_damage(amount: int) -> void:
+func take_damage(amount: int, attacker: CharacterBody2D) -> void:
+
 	if is_dead:
 		return
 	
 	is_attacked = true
 	life -= amount
+
+	calc_knockback(self, attacker)
 	
 	if life <= 0:
+		if GameData.jogador_imortal:	return
 		die()
 
 func die() -> void:
@@ -290,3 +295,10 @@ func play_directional_animation(prefix: String, alternate: bool = false) -> void
 
 	if anim.current_animation != anim_name:
 		anim.play(anim_name)
+
+
+static func calc_knockback(me: CharacterBody2D, enemy: CharacterBody2D, forca_do_knockback: int = 2000) -> void:
+	var temp = me.velocity
+	me.velocity = (me.position - enemy.position).normalized() * forca_do_knockback
+	me.move_and_slide()
+	me.velocity = temp

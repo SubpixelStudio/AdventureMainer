@@ -66,7 +66,7 @@ func attack():
 	
 	play_attack_animation()
 	
-	player.take_damage(damage)
+	player.take_damage(damage, self)
 	
 	await anim.animation_finished
 	is_attacking = false
@@ -78,12 +78,14 @@ func attack():
 # VIDA / DANO / MORTE
 # -------------------------------------------------
 
-func take_damage(amount: int):
+func take_damage(amount: int, attacker: CharacterBody2D) -> void:
 	if is_dead:
 		return
 	
 	life -= amount
 	#print("Inimigo vida:", life)
+
+	Player.calc_knockback(self, attacker)	
 	
 	if life <= 0:
 		die()
