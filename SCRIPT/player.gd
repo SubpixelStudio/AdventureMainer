@@ -20,6 +20,7 @@ const ATTACK_ANIM_SPEED: float = 1
 @onready var anim: AnimationPlayer = $Anim
 @onready var attack_area: Area2D = $AttackArea
 @onready var parry_buffer_timer: Timer = $ParryBufferTimer
+@onready var parry_effect: ParryEffect = $ParryEffect
 
 
 @onready var life: int = max_life
@@ -293,6 +294,9 @@ func take_damage(amount: int, attacker: CharacterBody2D = null) -> void:
 				attacker.take_damage(attacker.life)
 			parry_buffer_timer.stop()
 			knockback = attacker_dir * 500
+			
+			parry_effect.start_parry()
+			
 			print("PARRY!!!")
 		return
 	
