@@ -167,13 +167,16 @@ func _block_state() -> void:
 	handle_movement()
 	
 	if velocity == Vector2.ZERO:
-		play_idle_animation()
+		#play_idle_animation()
+		anim.speed_scale = NORMAL_ANIM_SPEED
+		play_directional_animation("blockidle")
 	else:
-		play_walk_animation()
+		anim.speed_scale = NORMAL_ANIM_SPEED * .6
+		play_directional_animation("blockwalk")
+		#play_directional_animation("blockidle")
 	
 	# Ficar mais lento
 	velocity *= .5
-	anim.speed_scale *= .5
 	
 	# TODO: parry
 	
