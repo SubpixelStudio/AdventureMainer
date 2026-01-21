@@ -280,22 +280,26 @@ func _on_attack_area_body_entered(body: Node2D) -> void:
 func take_damage(amount: int, attacker: CharacterBody2D = null) -> void:
 	if is_dead:
 		return
+	var attacker_dir: Vector2
+	if attacker:
+		attacker_dir = attacker.position.direction_to(position)
+	
 	if state == PlayerState.BLOCK:
+		knockback = attacker_dir * 150
 		# Espaço de tempo que é possivel dar parry
 		if parry_buffer_timer.time_left > 0:
 			# Matar o inimigo que tomou parry
 			if attacker and attacker.has_method("take_damage"):
 				attacker.take_damage(attacker.life)
 			parry_buffer_timer.stop()
+			knockback = attacker_dir * 500
 			print("PARRY!!!")
 		return
 	
 	is_attacked = true
 	life -= amount
 	
-	# Receber knockback se for passado o atacante
-	if attacker:
-		knockback = attacker.position.direction_to(position) * 300
+	knockback = attacker_dir * 350
 	
 	if life <= 0:
 		if GameData.jogador_imortal:	return
