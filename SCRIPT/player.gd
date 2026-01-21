@@ -19,6 +19,8 @@ const ATTACK_ANIM_SPEED: float = 1
 
 @onready var anim: AnimationPlayer = $Anim
 @onready var attack_area: Area2D = $AttackArea
+@onready var parry_buffer_timer: Timer = $ParryBufferTimer
+
 
 @onready var life: int = max_life
 @onready var power: int = max_mana
@@ -104,7 +106,7 @@ func switch_state(new_state: PlayerState) -> void:
 			_pre_attack_state()
 		
 		PlayerState.BLOCK:
-			pass
+			parry_buffer_timer.start()
 
 #--------------------------------------------------
 func _idle_state() -> void:
@@ -176,9 +178,6 @@ func _block_state() -> void:
 	
 	# Ficar mais lento
 	velocity *= .5
-	
-	# TODO: parry
-	
 	
 	# Parou de bloquear
 	if Input.is_action_just_released("block"):
@@ -278,10 +277,17 @@ func _on_attack_area_body_entered(body: Node2D) -> void:
 # VIDA / MORTE
 # -------------------------------------------------
 
-func take_damage(amount: int) -> void:
+func take_damage(amount: int, attacker: CharacterBody2D = null) -> void:
 	if is_dead:
 		return
 	if state == PlayerState.BLOCK:
+		# Espaço de tempo que é possivel dar parry
+		if parry_buffer_timer.time_left > 0:
+			# Matar o inimigo que tomou parry
+			if attacker and attacker.has_method("take_damage"):
+				attacker.take_damage(attacker.life)
+			parry_buffer_timer.stop()
+			print("PARRY!!!")
 		return
 	
 	is_attacked = true
