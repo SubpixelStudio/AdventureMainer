@@ -117,11 +117,13 @@ func _idle_state() -> void:
 		if power < max_mana:
 			power += 1
 	
-	# Mudar estados
 	if velocity != Vector2.ZERO:
 		switch_state(PlayerState.WALK)
 	
-	if Input.is_action_just_pressed("attack") and power > 0:
+	if Input.is_action_just_pressed("block"):
+		switch_state(PlayerState.BLOCK)
+	
+	if Input.is_action_pressed("attack") and power > 0:
 		attack()
 
 func _walk_state() -> void:
@@ -130,6 +132,9 @@ func _walk_state() -> void:
 	
 	if velocity == Vector2.ZERO:
 		switch_state(PlayerState.IDLE)
+	
+	if Input.is_action_pressed("block"):
+		switch_state(PlayerState.BLOCK)
 	
 	if Input.is_action_just_pressed("attack") and power > 0:
 		attack()
@@ -161,13 +166,24 @@ func _pre_attack_state() -> void:
 func _block_state() -> void:
 	handle_movement()
 	
+	if velocity == Vector2.ZERO:
+		play_idle_animation()
+	else:
+		play_walk_animation()
+	
+	# Ficar mais lento
+	velocity *= .5
+	anim.speed_scale *= .5
+	
 	# TODO: parry
 	
 	
 	# Parou de bloquear
 	if Input.is_action_just_released("block"):
-		# Deve voltar ao idle ou walk
-		switch_state(last_state)
+		if velocity == Vector2.ZERO:
+			switch_state(PlayerState.IDLE)
+		else:
+			switch_state(PlayerState.WALK)
 #--------------------------------------------------
 
 func _handle_states() -> void:
