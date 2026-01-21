@@ -173,7 +173,6 @@ func _block_state() -> void:
 	else:
 		anim.speed_scale = NORMAL_ANIM_SPEED * .6
 		play_directional_animation("blockwalk")
-		#play_directional_animation("blockidle")
 	
 	# Ficar mais lento
 	velocity *= .5
@@ -280,8 +279,9 @@ func _on_attack_area_body_entered(body: Node2D) -> void:
 # -------------------------------------------------
 
 func take_damage(amount: int) -> void:
-
 	if is_dead:
+		return
+	if state == PlayerState.BLOCK:
 		return
 	
 	is_attacked = true
