@@ -183,7 +183,7 @@ func _block_state() -> void:
 	velocity *= .5
 	
 	# Parou de bloquear
-	if Input.is_action_just_released("block"):
+	if not Input.is_action_pressed("block"):
 		if velocity == Vector2.ZERO:
 			switch_state(PlayerState.IDLE)
 		else:
