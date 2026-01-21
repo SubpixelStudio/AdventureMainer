@@ -1,15 +1,14 @@
 extends Label
 
 var textos_missao: Dictionary = {
-	0: "Mate 10 Almas Vermelhas",
-	1: "Mate 20 Almas Vermelhas",
+	0: "Derrote 10 Almas Vermelhas",
+	1: "Derrote 20 Almas Vermelhas",
 	2: "Proteja a casa de Edgar",
-	3: "Mate 15 Almas Vermelhas",
-	4: "Mate o King SoulRed"
+	3: "Derrote 15 Almas Vermelhas",
+	4: "Derrote o King SoulRed"
 }
 
 @onready var world: WorldManager = get_tree().current_scene
-
 func _ready() -> void:
 	text = "..."
 

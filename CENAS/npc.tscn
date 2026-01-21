@@ -1,12 +1,12 @@
 [gd_scene load_steps=19 format=3 uid="uid://bxadna0se63kg"]
 
-[ext_resource type="Script" uid="uid://sxrm42bhaqwk" path="res://Script/npc.gd" id="1_5a2k8"]
+[ext_resource type="Script" uid="uid://sxrm42bhaqwk" path="res://SCRIPT/npc.gd" id="1_5a2k8"]
 [ext_resource type="Texture2D" uid="uid://bnkdk36p7i8cs" path="res://Assets/Player/IDLE/idle_down.png" id="1_ngkl2"]
 [ext_resource type="FontFile" uid="uid://43814se2v5d0" path="res://PressStart2P-Regular.ttf" id="2_85goq"]
 [ext_resource type="Texture2D" uid="uid://dylf84ojf2vtj" path="res://Assets/UI/space-Sheet-Sheet.png" id="3_6g1jd"]
-[ext_resource type="Script" uid="uid://ysdm0el3qcol" path="res://Script/mission_dialog.gd" id="4_is1ok"]
-[ext_resource type="Script" uid="uid://2yy13grlc84" path="res://Cenas/canvas.gd" id="4_la7mh"]
-[ext_resource type="Script" uid="uid://bmsfo62413myf" path="res://Script/objective_text.gd" id="7_a2sxp"]
+[ext_resource type="Script" uid="uid://ysdm0el3qcol" path="res://SCRIPT/mission_dialog.gd" id="4_is1ok"]
+[ext_resource type="Script" uid="uid://2yy13grlc84" path="res://CENAS/canvas.gd" id="4_la7mh"]
+[ext_resource type="Script" uid="uid://bmsfo62413myf" path="res://SCRIPT/objective_text.gd" id="7_a2sxp"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_4b6u5"]
 
@@ -166,10 +166,10 @@ anchors_preset = -1
 anchor_left = 0.68700004
 anchor_top = 0.13900001
 anchor_right = 1.0
-anchor_bottom = 0.41700003
+anchor_bottom = 0.36100003
 offset_left = 0.6399536
 offset_top = -40.08001
-offset_bottom = -40.24002
+offset_bottom = 0.07998657
 grow_horizontal = 0
 grow_vertical = 2
 color = Color(0, 0, 0, 0.1882353)
@@ -185,6 +185,7 @@ text = "lorem"
 label_settings = SubResource("LabelSettings_85goq")
 horizontal_alignment = 1
 vertical_alignment = 1
+autowrap_mode = 3
 script = ExtResource("7_a2sxp")
 
 [node name="ocultar" type="ColorRect" parent="Canvas/MissionScreen/MissionPanel"]

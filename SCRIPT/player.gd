@@ -126,19 +126,18 @@ func switch_state(new_state: PlayerState) -> void:
 #--------------------------------------------------
 func _idle_state() -> void:
 	handle_movement()
-	
+	if power < max_mana:
+		power += 1
 	# Reencher vida e power/mana
 	if not is_attacked:
 		if life < max_life:
 			life += 1
-		if power < max_mana:
-			power += 1
 	
 	# Mudar estados
 	if velocity != Vector2.ZERO:
 		switch_state(PlayerState.WALK)
 	
-	if Input.is_action_just_pressed("attack") and power > 0:
+	if Input.is_action_pressed("attack") and power > 0:
 		attack()
 
 func _walk_state() -> void:
@@ -148,7 +147,7 @@ func _walk_state() -> void:
 	if velocity == Vector2.ZERO:
 		switch_state(PlayerState.IDLE)
 	
-	if Input.is_action_just_pressed("attack") and power > 0:
+	if Input.is_action_pressed("attack") and power > 0:
 		attack()
 
 func _attack_state() -> void:
