@@ -8,6 +8,9 @@ signal died
 @export var max_life: int = 30
 @export var anim: AnimationPlayer
 
+var knockback = Vector2.ZERO
+var min_knockback := 100.0
+var slow_knockback := 1.1
 
 var player: CharacterBody2D
 var life: int
@@ -27,6 +30,7 @@ func _ready():
 # -------------------------------------------------
 
 func _physics_process(_delta):
+	calc_knockback()
 	if player == null or is_dead:
 		return
 
@@ -66,7 +70,8 @@ func attack():
 	
 	play_attack_animation()
 	
-	player.take_damage(damage, self)
+	player.take_damage(damage)
+	player.knockback = position.direction_to(player.position) * 500
 	
 	await anim.animation_finished
 	is_attacking = false
@@ -78,14 +83,13 @@ func attack():
 # VIDA / DANO / MORTE
 # -------------------------------------------------
 
-func take_damage(amount: int, attacker: CharacterBody2D) -> void:
+func take_damage(amount: int) -> void:
 	if is_dead:
 		return
 	
 	life -= amount
 	#print("Inimigo vida:", life)
 
-	Player.calc_knockback(self, attacker)	
 	
 	if life <= 0:
 		die()
@@ -146,3 +150,10 @@ func toggle_attack_index():
 func play_if_not(anim_name: String):
 	if anim.current_animation != anim_name:
 		anim.play(anim_name)
+
+func calc_knockback() -> void:
+	if knockback.length() > min_knockback:
+		knockback /= slow_knockback
+		velocity = knockback
+		move_and_slide()
+		return

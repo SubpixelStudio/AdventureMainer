@@ -31,6 +31,10 @@ var attack_index: int = 1
 var is_dead: bool = false
 var is_attacked: bool = false
 
+var knockback = Vector2.ZERO
+var min_knockback := 100.0
+var slow_knockback := 1.1
+
 enum PlayerState {
 	NONE,
 	IDLE,
@@ -61,7 +65,7 @@ func _ready() -> void:
 
 func _physics_process(_delta: float) -> void:
 	_handle_states()
-	
+	calc_knockback()
 	health.value = life
 	health.max_value = max_life
 	mana.value = power
@@ -232,21 +236,21 @@ func attack() -> void:
 
 func _on_attack_area_body_entered(body: Node2D) -> void:
 	if body.has_method("take_damage"):
-		body.take_damage(damage, self)
+		body.take_damage(damage)
+		body.knockback = position.direction_to(body.position) * 500
 
 # -------------------------------------------------
 # VIDA / MORTE
 # -------------------------------------------------
 
-func take_damage(amount: int, attacker: CharacterBody2D) -> void:
+func take_damage(amount: int) -> void:
 
 	if is_dead:
 		return
 	
 	is_attacked = true
 	life -= amount
-
-	calc_knockback(self, attacker)
+	
 	
 	if life <= 0:
 		if GameData.jogador_imortal:	return
@@ -296,9 +300,9 @@ func play_directional_animation(prefix: String, alternate: bool = false) -> void
 	if anim.current_animation != anim_name:
 		anim.play(anim_name)
 
-
-static func calc_knockback(me: CharacterBody2D, enemy: CharacterBody2D, forca_do_knockback: int = 2000) -> void:
-	var temp = me.velocity
-	me.velocity = (me.position - enemy.position).normalized() * forca_do_knockback
-	me.move_and_slide()
-	me.velocity = temp
+func calc_knockback() -> void:
+	if knockback.length() > min_knockback:
+		knockback /= slow_knockback
+		velocity = knockback
+		move_and_slide()
+		return

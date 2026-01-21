@@ -96,10 +96,8 @@ func _on_countdown_timeout() -> void:
 		return
 
 	var enemy = preload("res://Cenas/enemy.tscn").instantiate()
-	enemy.position = player.position + Vector2(
-		randf_range(-60, 60),
-		randf_range(-60, 60)
-	)
+	var pos = [60,-60]
+	enemy.position = player.position + Vector2(pos[randi_range(0,1)],pos[randi_range(0,1)])
 	enemies_container.add_child(enemy)
 	enemy.died.connect(_on_enemy_died)
 
