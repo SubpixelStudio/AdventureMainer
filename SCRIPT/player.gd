@@ -122,7 +122,7 @@ func _idle_state() -> void:
 	if velocity != Vector2.ZERO:
 		switch_state(PlayerState.WALK)
 	
-	if Input.is_action_just_pressed("block"):
+	if Input.is_action_pressed("block"):
 		switch_state(PlayerState.BLOCK)
 	
 	if Input.is_action_pressed("attack") and power > 0:
@@ -293,6 +293,9 @@ func take_damage(amount: int, attacker: CharacterBody2D = null) -> void:
 	is_attacked = true
 	life -= amount
 	
+	# Receber knockback se for passado o atacante
+	if attacker:
+		knockback = attacker.position.direction_to(position) * 300
 	
 	if life <= 0:
 		if GameData.jogador_imortal:	return
