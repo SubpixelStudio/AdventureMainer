@@ -39,7 +39,8 @@ enum PlayerState {
 	NONE,
 	IDLE,
 	WALK,
-	ATTACK
+	ATTACK,
+	BLOCK,
 }
 
 var state: PlayerState
@@ -55,10 +56,10 @@ var current_target: Node2D = null
 # -------------------------------------------------
 
 func _ready() -> void:
+	switch_state(PlayerState.IDLE)
+	
 	attack_area.monitoring = false
 	attack_area.body_entered.connect(_on_attack_area_body_entered)
-	switch_state(PlayerState.IDLE)
-	last_state = PlayerState.IDLE
 	update_enemy_list()
 
 # -------------------------------------------------
@@ -100,28 +101,10 @@ func switch_state(new_state: PlayerState) -> void:
 			play_walk_animation()
 		
 		PlayerState.ATTACK:
-			can_attack = false
-			is_attacking = true
-			
-			velocity = Vector2.ZERO
-			power -= 10
-			# Olhar pro inimigo pra atacá-lo
-			last_direction = get_target_direction()
-			play_attack_animation()
-			
-			attack_area.monitoring = true
-			
-			# Acabar ataque. Ainda não dá pra atacar, mas dá pra se mover
-			await anim.animation_finished
-			
-			attack_area.monitoring = false
-			is_attacking = false
-			
-			switch_state(last_state)
-			
-			# Reativar ataque após cooldown
-			await get_tree().create_timer(attack_cooldown).timeout
-			can_attack = true
+			_pre_attack_state()
+		
+		PlayerState.BLOCK:
+			pass
 
 #--------------------------------------------------
 func _idle_state() -> void:
@@ -151,8 +134,40 @@ func _walk_state() -> void:
 	if Input.is_action_just_pressed("attack") and power > 0:
 		attack()
 
-func _attack_state() -> void:
-	pass
+func _pre_attack_state() -> void:
+	can_attack = false
+	is_attacking = true
+	
+	velocity = Vector2.ZERO
+	power -= 10
+	# Olhar pro inimigo pra atacá-lo
+	last_direction = get_target_direction()
+	play_attack_animation()
+	
+	attack_area.monitoring = true
+	
+	# Acabar ataque. Ainda não dá pra atacar, mas dá pra se mover
+	await anim.animation_finished
+	
+	attack_area.monitoring = false
+	is_attacking = false
+	
+	switch_state(last_state)
+	
+	# Reativar ataque após cooldown
+	await get_tree().create_timer(attack_cooldown).timeout
+	can_attack = true
+
+func _block_state() -> void:
+	handle_movement()
+	
+	# TODO: parry
+	
+	
+	# Parou de bloquear
+	if Input.is_action_just_released("block"):
+		# Deve voltar ao idle ou walk
+		switch_state(last_state)
 #--------------------------------------------------
 
 func _handle_states() -> void:
@@ -162,7 +177,9 @@ func _handle_states() -> void:
 		PlayerState.WALK:
 			_walk_state()
 		PlayerState.ATTACK:
-			_attack_state()
+			pass #_attack_state()
+		PlayerState.BLOCK:
+			_block_state()
 
 # -------------------------------------------------
 # INIMIGOS / ALVO

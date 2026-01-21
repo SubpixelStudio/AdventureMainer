@@ -1,7 +1,7 @@
 [gd_scene load_steps=36 format=4 uid="uid://fhd1osrl7ew6"]
 
-[ext_resource type="Script" uid="uid://b0xxwahjhpp0" path="res://SCRIPT/world.gd" id="1_y3i6s"]
-[ext_resource type="PackedScene" uid="uid://blik8w00x5ity" path="res://CENAS/player.tscn" id="1_yxi74"]
+[ext_resource type="Script" uid="uid://b0xxwahjhpp0" path="res://Script/world.gd" id="1_y3i6s"]
+[ext_resource type="PackedScene" uid="uid://blik8w00x5ity" path="res://Cenas/player.tscn" id="1_yxi74"]
 [ext_resource type="Texture2D" uid="uid://dfqpw7hpa706l" path="res://Assets/Tilemap/tilesets/grass.png" id="2_gi2ty"]
 [ext_resource type="Texture2D" uid="uid://d00m6bclt1qq5" path="res://Assets/Tilemap/tilesets/fences.png" id="3_bqdng"]
 [ext_resource type="Texture2D" uid="uid://bfdtbhdn8khc1" path="res://Assets/Tilemap/tilesets/plains.png" id="3_ge5mm"]
@@ -13,7 +13,7 @@
 [ext_resource type="FontFile" uid="uid://43814se2v5d0" path="res://PressStart2P-Regular.ttf" id="8_dswv5"]
 [ext_resource type="Texture2D" uid="uid://c287hd1ijld43" path="res://Assets/Tilemap/Pine/Size_04.png" id="9_y3i6s"]
 [ext_resource type="Texture2D" uid="uid://dvqaiwefjt2bi" path="res://Assets/Tilemap/Pine/Size_05.png" id="10_k0dnu"]
-[ext_resource type="PackedScene" uid="uid://bxadna0se63kg" path="res://CENAS/npc.tscn" id="13_2gbgk"]
+[ext_resource type="PackedScene" uid="uid://bxadna0se63kg" path="res://Cenas/npc.tscn" id="13_2gbgk"]
 [ext_resource type="Texture2D" uid="uid://bnkdk36p7i8cs" path="res://Assets/Player/IDLE/idle_down.png" id="15_o8vbg"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_bqdng"]
