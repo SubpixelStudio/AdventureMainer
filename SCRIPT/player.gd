@@ -64,6 +64,8 @@ func _ready() -> void:
 	attack_area.monitoring = false
 	attack_area.body_entered.connect(_on_attack_area_body_entered)
 	update_enemy_list()
+	
+	parry_effect.call_deferred("reparent", world)
 
 # -------------------------------------------------
 
@@ -295,6 +297,7 @@ func take_damage(amount: int, attacker: CharacterBody2D = null) -> void:
 			parry_buffer_timer.stop()
 			knockback = attacker_dir * 500
 			
+			parry_effect.global_position = global_position
 			parry_effect.start_parry()
 			
 			print("PARRY!!!")

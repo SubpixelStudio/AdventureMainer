@@ -1,7 +1,4 @@
-@tool
 class_name ParryEffect extends Node2D
-
-@export_tool_button("Do the parry") var _start_parry_action = start_parry
 
 @onready var parried_sprite: AnimatedSprite2D = $ParriedSprite
 @onready var particles: CPUParticles2D = $CPUParticles2D
@@ -19,11 +16,6 @@ func start_parry():
 	parried_sprite.play("parried")
 	get_tree().paused = true
 	flashbang.visible = true
-	var rect: ColorRect = flashbang.get_node("ColorRect")
-	if Engine.is_editor_hint():
-		rect.global_position = global_position - rect.size * .5
-	else:
-		rect.position = Vector2.ZERO
 	
 	unfreeze_timer.start()
 
