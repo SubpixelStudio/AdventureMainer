@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://bmdsvf5rv54fy" path="res://Cenas/anim.tscn" id="3_kc4hd"]
 [ext_resource type="AnimationLibrary" uid="uid://ba0m37f2lyvq6" path="res://Recursos/anim.res" id="4_8w3h7"]
 
+
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_043cr"]
 radius = 5.0
 height = 22.0
