@@ -172,10 +172,10 @@ func _block_state() -> void:
 	handle_movement()
 	
 	if velocity == Vector2.ZERO:
-		#play_idle_animation()
 		anim.speed_scale = NORMAL_ANIM_SPEED
 		play_directional_animation("blockidle")
 	else:
+		last_direction = get_target_direction()
 		anim.speed_scale = NORMAL_ANIM_SPEED * .6
 		play_directional_animation("blockwalk")
 	
