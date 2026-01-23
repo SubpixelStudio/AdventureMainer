@@ -256,6 +256,7 @@ func take_damage(amount: int) -> void:
 		die()
 
 func die() -> void:
+	GameData.has_died = true
 	is_dead = true
 	velocity = Vector2.ZERO
 	print("Player morreu")

@@ -8,7 +8,6 @@
 [ext_resource type="Script" uid="uid://2yy13grlc84" path="res://Cenas/canvas.gd" id="4_la7mh"]
 [ext_resource type="Script" uid="uid://bmsfo62413myf" path="res://Script/objective_text.gd" id="7_a2sxp"]
 
-
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_4b6u5"]
 
 [sub_resource type="Animation" id="Animation_ngkl2"]

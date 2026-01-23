@@ -58,6 +58,9 @@ func iniciar_missao(indice: int) -> void:
 		text = frases[frase_atual]
 		visible = true
 
+func resetar_dialogo() -> void:
+	frase_atual = 0
+
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("interagir"):
