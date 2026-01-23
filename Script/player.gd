@@ -9,7 +9,7 @@ const ATTACK_ANIM_SPEED: float = 1
 @export var attack_cooldown: float = 0.4
 @export var damage: int = 10
 @export var max_life: int = 100
-@export var max_mana: int = 200
+@export var max_mana: int = 400
 @export_group("Nodes")
 @export var health: ProgressBar
 @export var mana: ProgressBar
@@ -116,20 +116,21 @@ func _idle_state() -> void:
 	handle_movement()
 	
 	# Reencher vida e power/mana
+	if power < max_mana:
+		power += 2
 	if not is_attacked:
 		if life < max_life:
 			life += 1
-		if power < max_mana:
-			power += 1
 	
 	if velocity != Vector2.ZERO:
 		switch_state(PlayerState.WALK)
 	
-	if Input.is_action_pressed("block"):
-		switch_state(PlayerState.BLOCK)
-	
-	if Input.is_action_pressed("attack") and power > 0:
-		attack()
+	if power > 0:
+		if Input.is_action_pressed("block"):
+			switch_state(PlayerState.BLOCK)
+		
+		if Input.is_action_pressed("attack"):
+			attack()
 
 func _walk_state() -> void:
 	handle_movement()
@@ -138,18 +139,19 @@ func _walk_state() -> void:
 	if velocity == Vector2.ZERO:
 		switch_state(PlayerState.IDLE)
 	
-	if Input.is_action_pressed("block"):
-		switch_state(PlayerState.BLOCK)
-	
-	if Input.is_action_just_pressed("attack") and power > 0:
-		attack()
+	if power > 0:
+		if Input.is_action_pressed("block"):
+			switch_state(PlayerState.BLOCK)
+		
+		if Input.is_action_just_pressed("attack"):
+			attack()
 
 func _pre_attack_state() -> void:
 	can_attack = false
 	is_attacking = true
 	
 	velocity = Vector2.ZERO
-	power -= 10
+	power -= 20
 	# Olhar pro inimigo pra atacá-lo
 	last_direction = get_target_direction()
 	play_attack_animation()
@@ -182,8 +184,11 @@ func _block_state() -> void:
 	# Ficar mais lento
 	velocity *= .5
 	
+	# Diminuir stamina pra não ficar bloqueando pra sempre
+	power -= 1
+	
 	# Parou de bloquear
-	if not Input.is_action_pressed("block"):
+	if not Input.is_action_pressed("block") or power <= 0:
 		if velocity == Vector2.ZERO:
 			switch_state(PlayerState.IDLE)
 		else:
