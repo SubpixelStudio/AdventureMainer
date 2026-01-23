@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cvm6q0sey07ct" path="res://Parry/parry_particle.gd" id="1_cd4hu"]
 [ext_resource type="Script" uid="uid://bgq02jc0yinag" path="res://Parry/scripts/viewport_center_node2d.gd" id="1_lqiek"]
-[ext_resource type="Texture2D" uid="uid://wri5rsmkch14" path="res://Parry/parried.png" id="3_equ8e"]
+[ext_resource type="Texture2D" uid="uid://d3d2xbc6yg57c" path="res://Parry/parry_star_atlas.png" id="3_equ8e"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_cd4hu"]
 viewport_path = NodePath("CPUParticles2D/SubViewport")
@@ -13,41 +13,44 @@ point_count = 2
 
 [sub_resource type="Curve" id="Curve_j11rp"]
 _limits = [0.0, 2.0, 0.0, 1.0]
-_data = [Vector2(0, 0.6516855), 0.0, 16.694584, 0, 0, Vector2(0.25550663, 2), 0.0, 0.0, 0, 0, Vector2(1, 0), -8.926981, 0.0, 0, 0]
+_data = [Vector2(0, 0.6966293), 0.0, 8.1850605, 0, 0, Vector2(0.25550663, 2), 0.0, 0.0, 0, 0, Vector2(1, 0), -8.926981, 0.0, 0, 0]
 point_count = 3
 
 [sub_resource type="Gradient" id="Gradient_7dexb"]
-interpolation_mode = 1
-offsets = PackedFloat32Array(0, 0.5)
-colors = PackedColorArray(0.7294118, 0.3137255, 0.26666668, 1, 0.9372549, 0.9764706, 0.8392157, 1)
+interpolation_mode = 2
+offsets = PackedFloat32Array(0.28082192, 0.69863015, 0.80136985)
+colors = PackedColorArray(0.2701, 0.42340007, 0.73, 1, 0.6174, 0.98, 0.9316534, 1, 0.8918, 0.98, 0.9682401, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_equ8e"]
+atlas = ExtResource("3_equ8e")
+region = Rect2(0, 0, 19, 19)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_317p4"]
 atlas = ExtResource("3_equ8e")
-region = Rect2(0, 0, 17, 17)
+region = Rect2(19, 0, 19, 19)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_m7a2g"]
 atlas = ExtResource("3_equ8e")
-region = Rect2(17, 0, 17, 17)
+region = Rect2(38, 0, 19, 19)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2pvlr"]
 atlas = ExtResource("3_equ8e")
-region = Rect2(34, 0, 17, 17)
+region = Rect2(57, 0, 19, 19)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_low27"]
 atlas = ExtResource("3_equ8e")
-region = Rect2(51, 0, 17, 17)
+region = Rect2(76, 0, 19, 19)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_34niw"]
 atlas = ExtResource("3_equ8e")
-region = Rect2(68, 0, 17, 17)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_8n3l8"]
-atlas = ExtResource("3_equ8e")
-region = Rect2(85, 0, 17, 17)
+region = Rect2(95, 0, 19, 19)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_4ifc8"]
 animations = [{
 "frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_equ8e")
+}, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_317p4")
 }, {
@@ -62,13 +65,10 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_34niw")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_8n3l8")
 }],
 "loop": false,
 "name": &"parried",
-"speed": 20.0
+"speed": 16.0
 }]
 
 [node name="Parry" type="Node2D"]
@@ -78,7 +78,7 @@ script = ExtResource("1_cd4hu")
 emitting = false
 amount = 12
 texture = SubResource("ViewportTexture_cd4hu")
-lifetime = 0.3
+lifetime = 0.5
 one_shot = true
 explosiveness = 1.0
 local_coords = true
@@ -118,7 +118,7 @@ frame_progress = 1.0
 
 [node name="UnfreezeTimer" type="Timer" parent="."]
 process_mode = 3
-wait_time = 0.25
+wait_time = 0.3
 one_shot = true
 
 [node name="Flashbang" type="CanvasLayer" parent="."]
@@ -130,6 +130,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(1, 1, 1, 0.25)
+color = Color(1, 1, 1, 0.4)
 
 [connection signal="timeout" from="UnfreezeTimer" to="." method="unfreeze"]

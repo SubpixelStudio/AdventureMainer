@@ -65,6 +65,7 @@ func _ready() -> void:
 	attack_area.body_entered.connect(_on_attack_area_body_entered)
 	update_enemy_list()
 	
+	parry_effect.z_index = z_index
 	parry_effect.call_deferred("reparent", world)
 
 # -------------------------------------------------
