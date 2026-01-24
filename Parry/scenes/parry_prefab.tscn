@@ -1,9 +1,10 @@
-[gd_scene load_steps=17 format=3 uid="uid://o12cn7xci7q1"]
+[gd_scene load_steps=20 format=3 uid="uid://o12cn7xci7q1"]
 
 [ext_resource type="Script" uid="uid://cvm6q0sey07ct" path="res://Parry/parry_particle.gd" id="1_cd4hu"]
 [ext_resource type="Script" uid="uid://bgq02jc0yinag" path="res://Parry/scripts/viewport_center_node2d.gd" id="1_lqiek"]
 [ext_resource type="Shader" uid="uid://cetguxom8gilw" path="res://Parry/outline.gdshader" id="2_317p4"]
 [ext_resource type="Texture2D" uid="uid://d3d2xbc6yg57c" path="res://Parry/parry_star_atlas.png" id="3_equ8e"]
+[ext_resource type="Gradient" uid="uid://cn5b2yvv52oox" path="res://Parry/parry_particle_gradient.tres" id="3_m7a2g"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_m7a2g"]
 shader = ExtResource("2_317p4")
@@ -26,10 +27,17 @@ _limits = [0.0, 2.0, 0.0, 1.0]
 _data = [Vector2(0, 0.6966293), 0.0, 8.1850605, 0, 0, Vector2(0.25550663, 2), 0.0, 0.0, 0, 0, Vector2(1, 0), -8.926981, 0.0, 0, 0]
 point_count = 3
 
-[sub_resource type="Gradient" id="Gradient_7dexb"]
-interpolation_mode = 2
-offsets = PackedFloat32Array(0.28082192, 0.69863015, 0.80136985)
-colors = PackedColorArray(0.2701, 0.42340007, 0.73, 1, 0.6174, 0.98, 0.9316534, 1, 0.8918, 0.98, 0.9682401, 1)
+[sub_resource type="Gradient" id="Gradient_317p4"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_m7a2g"]
+gradient = SubResource("Gradient_317p4")
+width = 1
+
+[sub_resource type="Gradient" id="Gradient_2pvlr"]
+offsets = PackedFloat32Array(0.63013697, 1)
+colors = PackedColorArray(0.83, 0.83, 0.83, 1, 1, 1, 1, 0)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_equ8e"]
 atlas = ExtResource("3_equ8e")
@@ -107,7 +115,7 @@ scale_amount_max = 0.8
 split_scale = true
 scale_curve_x = SubResource("Curve_hmvie")
 scale_curve_y = SubResource("Curve_j11rp")
-color_initial_ramp = SubResource("Gradient_7dexb")
+color_initial_ramp = ExtResource("3_m7a2g")
 
 [node name="SubViewport" type="SubViewport" parent="CPUParticles2D"]
 transparent_bg = true
@@ -119,6 +127,24 @@ rotation = 1.5707964
 scale = Vector2(2, 0.69)
 polygon = PackedVector2Array(0, 0, 128, -40, 124, 40)
 uv = PackedVector2Array(0, 0, 120, 40, 120, -48)
+
+[node name="DustParticles" type="CPUParticles2D" parent="."]
+scale = Vector2(4, 4)
+emitting = false
+amount = 50
+texture = SubResource("GradientTexture1D_m7a2g")
+one_shot = true
+preprocess = 0.02
+explosiveness = 1.0
+local_coords = true
+emission_shape = 1
+emission_sphere_radius = 1.0
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 247.42
+initial_velocity_max = 483.24
+color_ramp = SubResource("Gradient_2pvlr")
+color_initial_ramp = ExtResource("3_m7a2g")
 
 [node name="ParriedSprite" type="AnimatedSprite2D" parent="."]
 scale = Vector2(4, 4)
