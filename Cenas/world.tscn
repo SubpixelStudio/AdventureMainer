@@ -16,7 +16,6 @@
 [ext_resource type="PackedScene" uid="uid://bxadna0se63kg" path="res://Cenas/npc.tscn" id="13_2gbgk"]
 [ext_resource type="Texture2D" uid="uid://bnkdk36p7i8cs" path="res://Assets/Player/IDLE/idle_down.png" id="15_o8vbg"]
 
-
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_bqdng"]
 texture = ExtResource("2_gi2ty")
 0:0/0 = 0
