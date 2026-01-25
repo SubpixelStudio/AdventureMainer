@@ -72,13 +72,7 @@ func spawnar_npc() -> void:
 	if is_instance_valid(npc_parent):
 		npc_parent.queue_free()
 	npc_parent = npc_scene.instantiate()
-	#call_deferred("add_child", npc_parent)
-	add_child(npc_parent)
-	
-	# Define referência para este WorldManager
-	#if npc_parent.has_node("."):				# b: Pq ele verifica se tem ele mesmo?
-		#var npc_script = npc_parent.get_child(0)
-		#npc_script.world = self
+	call_deferred("add_child", npc_parent)
 	
 	const spawn_pos_list: Array[Vector2] = [
 		Vector2(244, 105),	
