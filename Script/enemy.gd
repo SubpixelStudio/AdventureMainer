@@ -70,8 +70,7 @@ func attack():
 	
 	play_attack_animation()
 	
-	player.take_damage(damage)
-	player.knockback = position.direction_to(player.position) * 500
+	player.take_damage(damage, self)
 	
 	await anim.animation_finished
 	is_attacking = false
