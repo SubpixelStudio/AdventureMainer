@@ -16,7 +16,6 @@ const ATTACK_ANIM_SPEED: float = 1
 @export var npc: Node2D
 @export var world: WorldManager
 @export var animation: AnimationPlayer
-
 @onready var anim: AnimationPlayer = $Anim
 @onready var attack_area: Area2D = $AttackArea
 @onready var parry_buffer_timer: Timer = $ParryBufferTimer
@@ -150,7 +149,7 @@ func _walk_state() -> void:
 func _pre_attack_state() -> void:
 	can_attack = false
 	is_attacking = true
-	
+	play_attack_sound()
 	velocity = Vector2.ZERO
 	power -= 20
 	# Olhar pro inimigo pra atacá-lo
@@ -297,6 +296,8 @@ func take_damage(amount: int, attacker: CharacterBody2D = null) -> void:
 		knockback = attacker_dir * 150
 		# Espaço de tempo que é possivel dar parry
 		if parry_buffer_timer.time_left > 0:
+			play_parry_sound()
+			
 			# Matar o inimigo que tomou parry
 			if attacker and attacker.has_method("take_damage"):
 				attacker.take_damage(attacker.life)
@@ -368,3 +369,14 @@ func calc_knockback() -> void:
 		velocity = knockback
 		move_and_slide()
 		return
+
+func play_attack_sound():
+	var sound := SoundManager.new()
+	sound.stream = preload("res://Assets/Sound/swordslash1.mp3")
+	add_child(sound)
+	sound.play()
+func play_parry_sound():
+	var sound := SoundManager.new()
+	sound.stream = preload("res://Assets/Sound/swordparry1.mp3")
+	add_child(sound)
+	sound.play()
