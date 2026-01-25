@@ -296,17 +296,24 @@ func take_damage(amount: int, attacker: CharacterBody2D = null) -> void:
 	if state == PlayerState.BLOCK:
 		knockback = attacker_dir * 150
 		# Espaço de tempo que é possivel dar parry
-		if parry_buffer_timer.time_left > 0:
-			# Matar o inimigo que tomou parry
-			if attacker and attacker.has_method("take_damage"):
-				attacker.take_damage(attacker.life)
+		if parry_buffer_timer.time_left > 0 and attacker:
 			parry_buffer_timer.stop()
 			knockback = attacker_dir * 500
+			
+			# Ele tem q ficar morto, senao não da pra mudar a anim dele, pq o play_directional sobrescreve
+			attacker.is_dead = true
+			attacker.anim.play("dead_down")
+			
+			await attacker.anim.current_animation_changed
 			
 			parry_effect.global_position = global_position
 			parry_effect.start_parry()
 			
-			print("PARRY!!!")
+			# Matar o inimigo que tomou parry, depois do jogo destravar/despausar
+			await parry_effect.unfrozen
+			
+			attacker.is_dead = false
+			attacker.die()
 		return
 	
 	is_attacked = true

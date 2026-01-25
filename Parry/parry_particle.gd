@@ -6,6 +6,8 @@ class_name ParryEffect extends Node2D
 @onready var unfreeze_timer: Timer = $UnfreezeTimer
 @onready var flashbang: CanvasLayer = $Flashbang
 
+signal unfrozen
+
 
 func _ready() -> void:
 	particles.one_shot = true
@@ -25,3 +27,4 @@ func start_parry():
 func unfreeze():
 	get_tree().paused = false
 	flashbang.visible = false
+	unfrozen.emit()
