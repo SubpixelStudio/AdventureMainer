@@ -1,0 +1,172 @@
+[gd_scene load_steps=20 format=3 uid="uid://o12cn7xci7q1"]
+
+[ext_resource type="Script" uid="uid://cvm6q0sey07ct" path="res://Parry/parry_particle.gd" id="1_cd4hu"]
+[ext_resource type="Script" uid="uid://bgq02jc0yinag" path="res://Parry/scripts/viewport_center_node2d.gd" id="1_lqiek"]
+[ext_resource type="Shader" uid="uid://cetguxom8gilw" path="res://Parry/outline.gdshader" id="2_317p4"]
+[ext_resource type="Texture2D" uid="uid://d3d2xbc6yg57c" path="res://Parry/parry_star_atlas.png" id="3_equ8e"]
+[ext_resource type="Gradient" uid="uid://cn5b2yvv52oox" path="res://Parry/parry_particle_gradient.tres" id="3_m7a2g"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_m7a2g"]
+shader = ExtResource("2_317p4")
+shader_parameter/color = Color(0, 0, 0, 1)
+shader_parameter/width = 4.00000019
+shader_parameter/pattern = 0
+shader_parameter/inside = false
+shader_parameter/add_margins = true
+shader_parameter/number_of_images = Vector2(1, 1)
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_cd4hu"]
+viewport_path = NodePath("CPUParticles2D/SubViewport")
+
+[sub_resource type="Curve" id="Curve_hmvie"]
+_data = [Vector2(0, 0.764045), 0.0, 0.0, 0, 0, Vector2(1, 0), -2.550564, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_j11rp"]
+_limits = [0.0, 2.0, 0.0, 1.0]
+_data = [Vector2(0, 0.6966293), 0.0, 8.1850605, 0, 0, Vector2(0.25550663, 2), 0.0, 0.0, 0, 0, Vector2(1, 0), -8.926981, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Gradient" id="Gradient_317p4"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_m7a2g"]
+gradient = SubResource("Gradient_317p4")
+width = 1
+
+[sub_resource type="Gradient" id="Gradient_2pvlr"]
+offsets = PackedFloat32Array(0.63013697, 1)
+colors = PackedColorArray(0.83, 0.83, 0.83, 1, 1, 1, 1, 0)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_equ8e"]
+atlas = ExtResource("3_equ8e")
+region = Rect2(0, 0, 19, 19)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_317p4"]
+atlas = ExtResource("3_equ8e")
+region = Rect2(19, 0, 19, 19)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m7a2g"]
+atlas = ExtResource("3_equ8e")
+region = Rect2(38, 0, 19, 19)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2pvlr"]
+atlas = ExtResource("3_equ8e")
+region = Rect2(57, 0, 19, 19)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_low27"]
+atlas = ExtResource("3_equ8e")
+region = Rect2(76, 0, 19, 19)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_34niw"]
+atlas = ExtResource("3_equ8e")
+region = Rect2(95, 0, 19, 19)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_4ifc8"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_equ8e")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_317p4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m7a2g")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2pvlr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_low27")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_34niw")
+}],
+"loop": false,
+"name": &"parried",
+"speed": 16.0
+}]
+
+[node name="Parry" type="Node2D"]
+script = ExtResource("1_cd4hu")
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+material = SubResource("ShaderMaterial_m7a2g")
+emitting = false
+amount = 12
+texture = SubResource("ViewportTexture_cd4hu")
+lifetime = 0.5
+one_shot = true
+explosiveness = 1.0
+local_coords = true
+draw_order = 1
+particle_flag_align_y = true
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 1500.0
+initial_velocity_max = 1700.0
+linear_accel_min = 2500.0
+linear_accel_max = 5000.0
+damping_max = 100.0
+scale_amount_min = 0.4
+scale_amount_max = 0.8
+split_scale = true
+scale_curve_x = SubResource("Curve_hmvie")
+scale_curve_y = SubResource("Curve_j11rp")
+color_initial_ramp = ExtResource("3_m7a2g")
+
+[node name="SubViewport" type="SubViewport" parent="CPUParticles2D"]
+transparent_bg = true
+script = ExtResource("1_lqiek")
+
+[node name="Polygon2D" type="Polygon2D" parent="CPUParticles2D/SubViewport"]
+position = Vector2(256, 256)
+rotation = 1.5707964
+scale = Vector2(2, 0.69)
+polygon = PackedVector2Array(0, 0, 128, -40, 124, 40)
+uv = PackedVector2Array(0, 0, 120, 40, 120, -48)
+
+[node name="DustParticles" type="CPUParticles2D" parent="."]
+scale = Vector2(4, 4)
+emitting = false
+amount = 50
+texture = SubResource("GradientTexture1D_m7a2g")
+one_shot = true
+preprocess = 0.02
+explosiveness = 1.0
+local_coords = true
+emission_shape = 1
+emission_sphere_radius = 1.0
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 247.42
+initial_velocity_max = 483.24
+color_ramp = SubResource("Gradient_2pvlr")
+color_initial_ramp = ExtResource("3_m7a2g")
+
+[node name="ParriedSprite" type="AnimatedSprite2D" parent="."]
+scale = Vector2(4, 4)
+sprite_frames = SubResource("SpriteFrames_4ifc8")
+animation = &"parried"
+frame = 5
+frame_progress = 1.0
+
+[node name="UnfreezeTimer" type="Timer" parent="."]
+process_mode = 3
+wait_time = 0.3
+one_shot = true
+
+[node name="Flashbang" type="CanvasLayer" parent="."]
+visible = false
+
+[node name="ColorRect" type="ColorRect" parent="Flashbang"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 1, 0.4)
+
+[connection signal="timeout" from="UnfreezeTimer" to="." method="unfreeze"]
