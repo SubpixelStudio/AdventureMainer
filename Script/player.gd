@@ -9,7 +9,7 @@ const ATTACK_ANIM_SPEED: float = 1
 @export var attack_cooldown: float = 0.4
 @export var damage: int = 10
 @export var max_life: int = 100
-@export var max_mana: int = 400
+@export var max_mana: int = 200
 @export_group("Nodes")
 @export var health: ProgressBar
 @export var mana: ProgressBar
@@ -18,9 +18,6 @@ const ATTACK_ANIM_SPEED: float = 1
 @export var animation: AnimationPlayer
 @onready var anim: AnimationPlayer = $Anim
 @onready var attack_area: Area2D = $AttackArea
-@onready var parry_buffer_timer: Timer = $ParryBufferTimer
-@onready var parry_effect: ParryEffect = $ParryEffect
-
 
 @onready var life: int = max_life
 @onready var power: int = max_mana
@@ -41,8 +38,7 @@ enum PlayerState {
 	NONE,
 	IDLE,
 	WALK,
-	ATTACK,
-	BLOCK,
+	ATTACK
 }
 
 var state: PlayerState
@@ -58,14 +54,11 @@ var current_target: Node2D = null
 # -------------------------------------------------
 
 func _ready() -> void:
-	switch_state(PlayerState.IDLE)
-	
 	attack_area.monitoring = false
 	attack_area.body_entered.connect(_on_attack_area_body_entered)
+	switch_state(PlayerState.IDLE)
+	last_state = PlayerState.IDLE
 	update_enemy_list()
-	
-	parry_effect.z_index = z_index
-	parry_effect.call_deferred("reparent", world)
 
 # -------------------------------------------------
 
@@ -106,31 +99,45 @@ func switch_state(new_state: PlayerState) -> void:
 			play_walk_animation()
 		
 		PlayerState.ATTACK:
-			_pre_attack_state()
-		
-		PlayerState.BLOCK:
-			parry_buffer_timer.start()
+			can_attack = false
+			is_attacking = true
+			
+			velocity = Vector2.ZERO
+			power -= 10
+			# Olhar pro inimigo pra atacá-lo
+			last_direction = get_target_direction()
+			play_attack_animation()
+			
+			attack_area.monitoring = true
+			
+			# Acabar ataque. Ainda não dá pra atacar, mas dá pra se mover
+			await anim.animation_finished
+			
+			attack_area.monitoring = false
+			is_attacking = false
+			
+			switch_state(last_state)
+			
+			# Reativar ataque após cooldown
+			await get_tree().create_timer(attack_cooldown).timeout
+			can_attack = true
 
 #--------------------------------------------------
 func _idle_state() -> void:
 	handle_movement()
-	
-	# Reencher vida e power/mana
 	if power < max_mana:
-		power += 2
+		power += 1
+	# Reencher vida e power/mana
 	if not is_attacked:
 		if life < max_life:
 			life += 1
 	
+	# Mudar estados
 	if velocity != Vector2.ZERO:
 		switch_state(PlayerState.WALK)
 	
-	if power > 0:
-		if Input.is_action_pressed("block"):
-			switch_state(PlayerState.BLOCK)
-		
-		if Input.is_action_pressed("attack"):
-			attack()
+	if Input.is_action_pressed("attack") and power > 0:
+		attack()
 
 func _walk_state() -> void:
 	handle_movement()
@@ -139,12 +146,8 @@ func _walk_state() -> void:
 	if velocity == Vector2.ZERO:
 		switch_state(PlayerState.IDLE)
 	
-	if power > 0:
-		if Input.is_action_pressed("block"):
-			switch_state(PlayerState.BLOCK)
-		
-		if Input.is_action_just_pressed("attack"):
-			attack()
+	if Input.is_action_pressed("attack") and power > 0:
+		attack()
 
 func _pre_attack_state() -> void:
 	can_attack = false
@@ -202,9 +205,7 @@ func _handle_states() -> void:
 		PlayerState.WALK:
 			_walk_state()
 		PlayerState.ATTACK:
-			pass #_attack_state()
-		PlayerState.BLOCK:
-			_block_state()
+			_attack_state()
 
 # -------------------------------------------------
 # INIMIGOS / ALVO
@@ -285,7 +286,8 @@ func _on_attack_area_body_entered(body: Node2D) -> void:
 # VIDA / MORTE
 # -------------------------------------------------
 
-func take_damage(amount: int, attacker: CharacterBody2D = null) -> void:
+func take_damage(amount: int) -> void:
+
 	if is_dead:
 		return
 	var attacker_dir: Vector2
@@ -313,13 +315,13 @@ func take_damage(amount: int, attacker: CharacterBody2D = null) -> void:
 	is_attacked = true
 	life -= amount
 	
-	knockback = attacker_dir * 350
 	
 	if life <= 0:
 		if GameData.jogador_imortal:	return
 		die()
 
 func die() -> void:
+	GameData.has_died = true
 	is_dead = true
 	velocity = Vector2.ZERO
 	print("Player morreu")
