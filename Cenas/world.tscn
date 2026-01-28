@@ -390,12 +390,13 @@ _data = {
 radius = 338.0
 height = 698.0
 
-[node name="World" type="Node" node_paths=PackedStringArray("player", "enemies_container", "hud_tempo", "countdown", "npc_parent")]
+[node name="World" type="Node" node_paths=PackedStringArray("player", "enemies_container", "hud_tempo", "countdown", "SoundManager", "npc_parent")]
 script = ExtResource("1_y3i6s")
 player = NodePath("Player")
 enemies_container = NodePath("Enemies")
 hud_tempo = NodePath("CanvasLayer/Tempo")
 countdown = NodePath("Timer")
+SoundManager = NodePath("SoundManager")
 npc_scene = ExtResource("13_2gbgk")
 npc_parent = NodePath("NPC")
 
@@ -524,6 +525,8 @@ shape = SubResource("CapsuleShape2D_dswv5")
 [node name="Timer" type="Timer" parent="."]
 
 [node name="NPC" parent="." instance=ExtResource("13_2gbgk")]
+
+[node name="SoundManager" type="Node" parent="."]
 
 [connection signal="timeout" from="CanvasLayer/Label/Timer" to="." method="_on_timer_timeout"]
 [connection signal="body_entered" from="LabelArea" to="." method="_on_body_entered"]

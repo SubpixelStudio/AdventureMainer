@@ -263,7 +263,7 @@ func update_attack_area() -> void:
 # -------------------------------------------------
 
 func handle_movement() -> void:
-	var input_vector: Vector2 = Input.get_vector("A", "D", "W", "S")
+	var input_vector: Vector2 = Input.get_vector("A", "D", "W", "S").normalized()
 	velocity = input_vector * speed
 	
 	if input_vector != Vector2.ZERO:
@@ -380,8 +380,8 @@ func calc_knockback() -> void:
 
 func play_attack_sound():
 	const ATTACK_SOUND := preload("res://Assets/Sound/swordslash1.mp3")
-	SoundEffect.play_audio(ATTACK_SOUND,self,global_position)
+	SoundEffect.play_audio(ATTACK_SOUND,world.SoundManager,global_position)
 
 func play_parry_sound():
 	const PARRY_SOUND := preload("res://Assets/Sound/swordparry1.mp3")
-	SoundEffect.play_audio(PARRY_SOUND,self,global_position)
+	SoundEffect.play_audio(PARRY_SOUND,world.SoundManager,global_position)

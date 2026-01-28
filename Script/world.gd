@@ -13,17 +13,18 @@ var inimigos_derrotados: int = 0
 @export var enemies_container: Node
 @export var hud_tempo: Label
 @export var countdown: Timer
-
+@export var SoundManager:Node
 @export var npc_scene: PackedScene
 @export var npc_parent: Node2D
-
-
+var battle_sound = false
+var music := [preload("res://Assets/Sound/theme melodia.wav"),preload("res://Assets/Sound/ominousdark-medievalfantasy-song-309510.mp3")]
 # =========================
 # READY
 # =========================
 func _ready() -> void:
 	hud_tempo.visible = false
 	countdown.stop()
+	SoundEffect.play_music(music[0],SoundManager,player.position,"Normal")
 	start_idle()  # Começa no estado IDLE
 
 # =========================
@@ -56,10 +57,9 @@ func start_reading() -> void:
 func start_combat() -> void:
 	if state != WorldState.READING:
 		return
-	
+	battle_sound = true
 	state = WorldState.COMBAT
 	print_state("Combate iniciado")
-	
 	inimigos_derrotados = 0
 	countdown.start(randi_range(2, 4))
 	GameData.iniciou_combat = true
@@ -86,11 +86,15 @@ func spawnar_npc() -> void:
 	
 	start_reading()
 
-
 # =========================
 # HUD
 # =========================
 func _physics_process(_delta: float) -> void:
+	if battle_sound:
+		for i in SoundManager.get_children():
+			if i.name == "Normal":
+				i.queue_free()
+				SoundEffect.play_music(music[1],SoundManager,player.position,"Batalha")
 	match state:
 		WorldState.IDLE, WorldState.READING:
 			hud_tempo.visible = false
@@ -153,6 +157,12 @@ func _on_enemy_died() -> void:
 # FINAL
 # =========================
 func finalizar_missao() -> void:
+	if battle_sound:
+		battle_sound = false
+		for i in SoundManager.get_children():
+			if i.name == "Batalha":
+				i.queue_free()
+				SoundEffect.play_music(music[0],SoundManager,player.position,"Normal")
 	print("Missão concluída")
 	start_idle()
 	GameData.has_died = false
