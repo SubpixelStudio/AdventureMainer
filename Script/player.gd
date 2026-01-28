@@ -432,10 +432,10 @@ func calc_knockback() -> void:
 		velocity = knockback
 		return
 
-func play_attack_sound():
-	const ATTACK_SOUND := preload("res://Assets/Sound/swordslash1.mp3")
-	SoundEffect.play_audio(ATTACK_SOUND,world.SoundManager,global_position)
+func play_attack_sound() -> void:
+	const ATTACK_SOUND: AudioStream = preload("res://Assets/Sound/swordslash1.mp3")
+	SoundEffect.play_sound(ATTACK_SOUND, world.SoundManager, global_position)
 
-func play_parry_sound():
-	const PARRY_SOUND := preload("res://Assets/Sound/swordparry1.mp3")
-	SoundEffect.play_audio(PARRY_SOUND,world.SoundManager,global_position)
+func play_parry_sound() -> void:
+	const PARRY_SOUND: AudioStream = preload("res://Assets/Sound/swordparry1.mp3")
+	SoundEffect.play_sound(PARRY_SOUND, world.SoundManager, global_position)

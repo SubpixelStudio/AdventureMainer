@@ -18,11 +18,14 @@ var inimigos_derrotados: int = 0
 @export var enemies_container: Node
 @export var hud_tempo: Label
 @export var countdown: Timer
-@export var SoundManager:Node
+@export var SoundManager: Node
 @export var npc_scene: PackedScene
 @export var npc_parent: Node2D
-var battle_sound = false
-var music := [preload("res://Assets/Sound/theme melodia.wav"),preload("res://Assets/Sound/ominousdark-medievalfantasy-song-309510.mp3")]
+const music: Array[AudioStream] = [
+	preload("res://Assets/Sound/theme melodia.wav"),
+	preload("res://Assets/Sound/ominousdark-medievalfantasy-song-309510.mp3")
+]
+var battle_music = false
 # =========================
 # READY
 # =========================
@@ -30,7 +33,8 @@ func _ready() -> void:
 	luz.visible = false
 	hud_tempo.visible = false
 	countdown.stop()
-	SoundEffect.play_music(music[0],SoundManager,player.position,"Normal")
+	#SoundEffect.play_music(music[0], SoundManager, player.position, "Normal")
+	play_world_music(0, player.position, "Normal")
 	start_idle()  # Começa no estado IDLE
 
 # =========================
@@ -63,7 +67,7 @@ func start_combat() -> void:
 	day_cycle.color = calcular_cor(0.76)
 	if state != WorldState.READING:
 		return
-	battle_sound = true
+	battle_music = true
 	
 	state = WorldState.COMBAT
 	print_state("Combate iniciado")
@@ -110,11 +114,8 @@ func _physics_process(delta: float) -> void:
 		luz.visible = true
 		day_cycle.color = calcular_cor(COMBAT_TIME)
 
-	if battle_sound:
-		for i in SoundManager.get_children():
-			if i.name == "Normal":
-				i.queue_free()
-				SoundEffect.play_music(music[1],SoundManager,player.position,"Batalha")
+	if battle_music:
+		play_world_music(1, player.position, "Batalha", "Normal")
 	match state:
 		WorldState.IDLE, WorldState.READING:
 			hud_tempo.visible = false
@@ -191,19 +192,40 @@ func _on_enemy_died() -> void:
 # FINAL
 # =========================
 func finalizar_missao() -> void:
-	luz.visible = false
-	if battle_sound:
-		battle_sound = false
-		for i in SoundManager.get_children():
-			if i.name == "Batalha":
-				i.queue_free()
-				SoundEffect.play_music(music[0],SoundManager,player.position,"Normal")
 	print("Missão concluída")
-	for i in range(enemies_container.get_children().size()):
-		enemies_container.get_children()[i].queue_free()
+	
+	luz.visible = false
+	if battle_music:
+		play_world_music(0, player.position, "Normal", "Batalha")
+		battle_music = false
+	
+	# Destruir todos os inimigos
+	for enemy in enemies_container.get_children():
+		enemy.queue_free()
+	
 	start_idle()
 	GameData.has_died = false
 	#GameData.iniciou_combat = false
 	GameData.pegou_missao = false
 	GameData.missao_atual = min(GameData.missao_atual + 1, GameData.limite_de_inimigos.size() - 1)
 	print("GameData.missao_atual: %s" % GameData.missao_atual)
+
+
+# =========================
+# SOM
+# =========================
+func play_world_music(world_music_index: int, pos: Vector2, song_name: String, replaced_music_name: String = ""):
+	# TODO: Fazer isso de um jeito melhor. Por exemplo usando uma variável pra saber quais músicas
+	# da lista tão tocando, em vez de chamar get_node() toda hora
+	
+	# Não tocar a mesma música se já tiver tocando
+	if SoundManager.get_node_or_null(song_name): 
+		return
+	
+	# Destruir música substituida
+	if not replaced_music_name.is_empty():
+		var replaced_music: AudioStreamPlayer2D = SoundManager.get_node_or_null(replaced_music_name)
+		if replaced_music:
+			replaced_music.queue_free()
+	
+	SoundEffect.play_music(music[world_music_index], SoundManager, pos, song_name)
