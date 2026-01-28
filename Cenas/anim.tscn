@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://bmdsvf5rv54fy"]
+[gd_scene format=3 uid="uid://bmdsvf5rv54fy"]
 
 [ext_resource type="Texture2D" uid="uid://0ewunmx5d7mg" path="res://Assets/Player/ATTACK 1/attack1_down.png" id="1_ec0a4"]
 [ext_resource type="Texture2D" uid="uid://bbw4hkylxk1g3" path="res://Assets/Player/ATTACK 2/attack2_down.png" id="2_14pui"]
@@ -899,8 +899,6 @@ _data = {
 &"walk_up": SubResource("Animation_043cr")
 }
 
-[node name="Anim" type="AnimationPlayer"]
-libraries = {
-&"": SubResource("AnimationLibrary_fptme")
-}
-autoplay = "idle_down"
+[node name="Anim" type="AnimationPlayer" unique_id=371549664]
+libraries/ = SubResource("AnimationLibrary_fptme")
+autoplay = &"idle_down"

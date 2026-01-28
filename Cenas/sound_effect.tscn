@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://bbafstlytsq2r"]
+[gd_scene format=3 uid="uid://bbafstlytsq2r"]
 
 [ext_resource type="Script" uid="uid://3xevjd0uwscw" path="res://Script/sound_effect.gd" id="1_ti5p7"]
 
-[node name="SoundEffect" type="AudioStreamPlayer2D"]
+[node name="SoundEffect" type="AudioStreamPlayer2D" unique_id=1430477891]
 script = ExtResource("1_ti5p7")

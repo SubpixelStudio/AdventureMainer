@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://o12cn7xci7q1"]
+[gd_scene format=3 uid="uid://o12cn7xci7q1"]
 
 [ext_resource type="Script" uid="uid://cvm6q0sey07ct" path="res://Parry/parry_particle.gd" id="1_cd4hu"]
 [ext_resource type="Script" uid="uid://bgq02jc0yinag" path="res://Parry/scripts/viewport_center_node2d.gd" id="1_lqiek"]
@@ -89,10 +89,10 @@ animations = [{
 "speed": 16.0
 }]
 
-[node name="Parry" type="Node2D"]
+[node name="Parry" type="Node2D" unique_id=848085145]
 script = ExtResource("1_cd4hu")
 
-[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+[node name="CPUParticles2D" type="CPUParticles2D" parent="." unique_id=759532110]
 material = SubResource("ShaderMaterial_m7a2g")
 emitting = false
 amount = 12
@@ -117,18 +117,18 @@ scale_curve_x = SubResource("Curve_hmvie")
 scale_curve_y = SubResource("Curve_j11rp")
 color_initial_ramp = ExtResource("3_m7a2g")
 
-[node name="SubViewport" type="SubViewport" parent="CPUParticles2D"]
+[node name="SubViewport" type="SubViewport" parent="CPUParticles2D" unique_id=649500786]
 transparent_bg = true
 script = ExtResource("1_lqiek")
 
-[node name="Polygon2D" type="Polygon2D" parent="CPUParticles2D/SubViewport"]
+[node name="Polygon2D" type="Polygon2D" parent="CPUParticles2D/SubViewport" unique_id=1349570810]
 position = Vector2(256, 256)
 rotation = 1.5707964
 scale = Vector2(2, 0.69)
 polygon = PackedVector2Array(0, 0, 128, -40, 124, 40)
 uv = PackedVector2Array(0, 0, 120, 40, 120, -48)
 
-[node name="DustParticles" type="CPUParticles2D" parent="."]
+[node name="DustParticles" type="CPUParticles2D" parent="." unique_id=1647452866]
 scale = Vector2(4, 4)
 emitting = false
 amount = 50
@@ -146,22 +146,22 @@ initial_velocity_max = 483.24
 color_ramp = SubResource("Gradient_2pvlr")
 color_initial_ramp = ExtResource("3_m7a2g")
 
-[node name="ParriedSprite" type="AnimatedSprite2D" parent="."]
+[node name="ParriedSprite" type="AnimatedSprite2D" parent="." unique_id=1618466654]
 scale = Vector2(4, 4)
 sprite_frames = SubResource("SpriteFrames_4ifc8")
 animation = &"parried"
 frame = 5
 frame_progress = 1.0
 
-[node name="UnfreezeTimer" type="Timer" parent="."]
+[node name="UnfreezeTimer" type="Timer" parent="." unique_id=974093460]
 process_mode = 3
 wait_time = 0.3
 one_shot = true
 
-[node name="Flashbang" type="CanvasLayer" parent="."]
+[node name="Flashbang" type="CanvasLayer" parent="." unique_id=1499692617]
 visible = false
 
-[node name="ColorRect" type="ColorRect" parent="Flashbang"]
+[node name="ColorRect" type="ColorRect" parent="Flashbang" unique_id=1553574971]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

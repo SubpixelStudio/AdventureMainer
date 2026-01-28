@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://bxadna0se63kg"]
+[gd_scene format=3 uid="uid://bxadna0se63kg"]
 
 [ext_resource type="Script" uid="uid://sxrm42bhaqwk" path="res://Script/npc.gd" id="1_5a2k8"]
 [ext_resource type="Texture2D" uid="uid://bnkdk36p7i8cs" path="res://Assets/Player/IDLE/idle_down.png" id="1_ngkl2"]
@@ -85,41 +85,39 @@ font_color = Color(0, 0, 0, 1)
 [sub_resource type="CircleShape2D" id="CircleShape2D_ngkl2"]
 radius = 20.09975
 
-[node name="NPC" type="Node2D"]
+[node name="NPC" type="Node2D" unique_id=145922529]
 z_index = 2
 
-[node name="Character" type="CharacterBody2D" parent="." node_paths=PackedStringArray("mission_screen", "dialog_text")]
+[node name="Character" type="CharacterBody2D" parent="." unique_id=1385984899 node_paths=PackedStringArray("mission_screen", "dialog_text")]
 collision_layer = 8
 script = ExtResource("1_5a2k8")
 mission_screen = NodePath("../Canvas/MissionScreen")
 dialog_text = NodePath("../Canvas/MissionScreen/DialogPanel/DialogText")
 
-[node name="Shape" type="CollisionShape2D" parent="Character"]
+[node name="Shape" type="CollisionShape2D" parent="Character" unique_id=1661615740]
 shape = SubResource("CapsuleShape2D_4b6u5")
 
-[node name="Texture" type="Sprite2D" parent="Character"]
+[node name="Texture" type="Sprite2D" parent="Character" unique_id=1209420659]
 modulate = Color(0, 1, 1, 0.7019608)
 texture = ExtResource("1_ngkl2")
 hframes = 8
 frame = 1
 
-[node name="Anim" type="AnimationPlayer" parent="Character/Texture"]
-libraries = {
-&"": SubResource("AnimationLibrary_5a2k8")
-}
-autoplay = "Main"
+[node name="Anim" type="AnimationPlayer" parent="Character/Texture" unique_id=339011745]
+libraries/ = SubResource("AnimationLibrary_5a2k8")
+autoplay = &"Main"
 
-[node name="Input" type="AnimatedSprite2D" parent="Character"]
+[node name="Input" type="AnimatedSprite2D" parent="Character" unique_id=1793310058]
 position = Vector2(0, -25)
 sprite_frames = SubResource("SpriteFrames_v3pj5")
 animation = &"idle"
 frame = 1
 frame_progress = 0.7264189
 
-[node name="Canvas" type="CanvasLayer" parent="."]
+[node name="Canvas" type="CanvasLayer" parent="." unique_id=160214297]
 script = ExtResource("4_la7mh")
 
-[node name="MissionScreen" type="Control" parent="Canvas"]
+[node name="MissionScreen" type="Control" parent="Canvas" unique_id=833673111]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -128,7 +126,7 @@ grow_horizontal = 2
 grow_vertical = 2
 metadata/_edit_use_anchors_ = true
 
-[node name="DialogPanel" type="ColorRect" parent="Canvas/MissionScreen"]
+[node name="DialogPanel" type="ColorRect" parent="Canvas/MissionScreen" unique_id=1059396751]
 custom_minimum_size = Vector2(720, 200)
 layout_mode = 1
 anchors_preset = 7
@@ -143,7 +141,7 @@ grow_horizontal = 2
 grow_vertical = 0
 color = Color(0, 0, 0, 0.5882353)
 
-[node name="DialogText" type="Label" parent="Canvas/MissionScreen/DialogPanel"]
+[node name="DialogText" type="Label" parent="Canvas/MissionScreen/DialogPanel" unique_id=996658652]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -159,7 +157,7 @@ label_settings = SubResource("LabelSettings_5a2k8")
 autowrap_mode = 2
 script = ExtResource("4_is1ok")
 
-[node name="MissionPanel" type="ColorRect" parent="Canvas/MissionScreen"]
+[node name="MissionPanel" type="ColorRect" parent="Canvas/MissionScreen" unique_id=406334510]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = -1
@@ -174,7 +172,7 @@ grow_horizontal = 0
 grow_vertical = 2
 color = Color(0, 0, 0, 0.1882353)
 
-[node name="MissionText" type="Label" parent="Canvas/MissionScreen/MissionPanel"]
+[node name="MissionText" type="Label" parent="Canvas/MissionScreen/MissionPanel" unique_id=782806223]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -188,13 +186,13 @@ vertical_alignment = 1
 autowrap_mode = 3
 script = ExtResource("7_a2sxp")
 
-[node name="ocultar" type="ColorRect" parent="Canvas/MissionScreen/MissionPanel"]
+[node name="ocultar" type="ColorRect" parent="Canvas/MissionScreen/MissionPanel" unique_id=210346856]
 layout_mode = 0
 offset_left = -37.0
 offset_right = 3.0
 offset_bottom = 40.0
 
-[node name="Label" type="Label" parent="Canvas/MissionScreen/MissionPanel/ocultar"]
+[node name="Label" type="Label" parent="Canvas/MissionScreen/MissionPanel/ocultar" unique_id=1437520967]
 layout_mode = 0
 offset_left = 12.0
 offset_top = 12.0
@@ -203,10 +201,10 @@ offset_bottom = 35.0
 text = "Q"
 label_settings = SubResource("LabelSettings_6g1jd")
 
-[node name="AreaMission" type="Area2D" parent="."]
+[node name="AreaMission" type="Area2D" parent="." unique_id=1951601481]
 collision_layer = 8
 
-[node name="Shape" type="CollisionShape2D" parent="AreaMission"]
+[node name="Shape" type="CollisionShape2D" parent="AreaMission" unique_id=1105416047]
 position = Vector2(0, 20)
 shape = SubResource("CircleShape2D_ngkl2")
 

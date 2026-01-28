@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://cwxtl16ajnq0q"]
+[gd_scene format=3 uid="uid://cwxtl16ajnq0q"]
 
 [sub_resource type="GDScript" id="GDScript_ngkl2"]
 script/source = "extends Label
@@ -66,9 +66,9 @@ func _input(event):
 		text = _texto_completo
 "
 
-[node name="Canvas" type="CanvasLayer"]
+[node name="Canvas" type="CanvasLayer" unique_id=1814520396]
 
-[node name="NodeUI" type="Control" parent="."]
+[node name="NodeUI" type="Control" parent="." unique_id=742335446]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -77,7 +77,7 @@ grow_horizontal = 2
 grow_vertical = 2
 metadata/_edit_use_anchors_ = true
 
-[node name="Color" type="ColorRect" parent="NodeUI"]
+[node name="Color" type="ColorRect" parent="NodeUI" unique_id=1725687946]
 layout_mode = 1
 anchors_preset = -1
 anchor_top = 0.74300003
@@ -89,7 +89,7 @@ grow_vertical = 0
 color = Color(0, 0, 0, 0.5882353)
 metadata/_edit_use_anchors_ = true
 
-[node name="Label" type="Label" parent="NodeUI/Color"]
+[node name="Label" type="Label" parent="NodeUI/Color" unique_id=863092468]
 layout_mode = 1
 anchors_preset = 14
 anchor_top = 0.5

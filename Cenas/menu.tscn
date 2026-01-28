@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://pcwxft3n2dd1"]
+[gd_scene format=3 uid="uid://pcwxft3n2dd1"]
 
 [ext_resource type="Script" uid="uid://de25s6dpwc18u" path="res://Script/menu.gd" id="1_vpgfy"]
 [ext_resource type="Texture2D" uid="uid://d3eau32k2guw6" path="res://Assets/Menu/menu_background.png" id="2_eheat"]
@@ -128,7 +128,7 @@ _data = {
 &"enter": SubResource("Animation_vpgfy")
 }
 
-[node name="Menu" type="Control"]
+[node name="Menu" type="Control" unique_id=1037012068]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -137,7 +137,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_vpgfy")
 
-[node name="Background" type="TextureRect" parent="."]
+[node name="Background" type="TextureRect" parent="." unique_id=1240844221]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -148,14 +148,14 @@ texture = ExtResource("2_eheat")
 expand_mode = 5
 stretch_mode = 5
 
-[node name="GameName" type="Label" parent="."]
+[node name="GameName" type="Label" parent="." unique_id=1094546714]
 modulate = Color(1, 1, 0.92156863, 1)
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.0859375
 anchor_top = 0.094444446
 anchor_right = 0.484375
-anchor_bottom = 0.67361104
+anchor_bottom = 0.38194436
 offset_right = 0.00012207031
 offset_bottom = 217.00006
 grow_horizontal = 2
@@ -169,12 +169,10 @@ horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_use_anchors_ = true
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="GameName"]
-libraries = {
-&"": SubResource("AnimationLibrary_8lfl8")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="GameName" unique_id=1985352021]
+libraries/ = SubResource("AnimationLibrary_8lfl8")
 
-[node name="StartText" type="Label" parent="."]
+[node name="StartText" type="Label" parent="." unique_id=82675938]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.04609375
@@ -187,13 +185,11 @@ text = "Press Enter to Start"
 label_settings = SubResource("LabelSettings_m7tta")
 metadata/_edit_use_anchors_ = true
 
-[node name="StartGameTimer" type="Timer" parent="StartText"]
+[node name="StartGameTimer" type="Timer" parent="StartText" unique_id=1580047375]
 one_shot = true
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="StartText"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="StartText" unique_id=1586805728]
 root_node = NodePath("../..")
-libraries = {
-&"": SubResource("AnimationLibrary_fapvr")
-}
+libraries/ = SubResource("AnimationLibrary_fapvr")
 
 [connection signal="timeout" from="StartText/StartGameTimer" to="." method="_on_start_game_timer_timeout"]
