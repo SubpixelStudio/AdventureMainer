@@ -71,6 +71,7 @@ func start_combat() -> void:
 func spawnar_npc() -> void:
 	if is_instance_valid(npc_parent):
 		npc_parent.queue_free()
+	npc_parent.name = "NPC"
 	npc_parent = npc_scene.instantiate()
 	call_deferred("add_child", npc_parent)
 	
@@ -167,6 +168,6 @@ func finalizar_missao() -> void:
 	start_idle()
 	GameData.has_died = false
 	#GameData.iniciou_combat = false
-	#GameData.pegou_missao = false
+	GameData.pegou_missao = false
 	GameData.missao_atual = min(GameData.missao_atual + 1, GameData.limite_de_inimigos.size() - 1)
 	print("GameData.missao_atual: %s" % GameData.missao_atual)

@@ -4,8 +4,8 @@ signal died
 @export var speed: float = 120
 @export var attack_range: float = 40
 @export var attack_cooldown: float = 1.0
-@export var damage: int = 10
-@export var max_life: int = 30
+@export var array_damage: Array[int]
+@export var choices_life : Array[int]
 @export var anim: AnimationPlayer
 
 var knockback = Vector2.ZERO
@@ -24,7 +24,7 @@ var is_dead: bool = false
 # -------------------------------------------------
 
 func _ready():
-	life = max_life
+	life = choices_life[randi() % choices_life.size()]
 	player = get_tree().get_first_node_in_group("Player")
 
 # -------------------------------------------------
@@ -70,7 +70,7 @@ func attack():
 	
 	play_attack_animation()
 	
-	player.take_damage(damage, self)
+	player.take_damage(array_damage[randi() % array_damage.size()], self)
 	
 	await anim.animation_finished
 	is_attacking = false

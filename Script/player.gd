@@ -7,7 +7,7 @@ const ATTACK_ANIM_SPEED: float = 1
 @export_group("Properties")
 @export var speed: float = 200
 @export var attack_cooldown: float = 0.4
-@export var damage: int = 10
+@export var damage: int 
 @export var max_life: int = 100
 @export var max_mana: int = 400
 @export_group("Nodes")
@@ -26,6 +26,7 @@ const ATTACK_ANIM_SPEED: float = 1
 @onready var power: int = max_mana
 
 var last_direction: Vector2 = Vector2.DOWN
+var mira: Sprite2D = null
 
 var can_attack: bool = true
 var is_attacking: bool = false
@@ -70,15 +71,14 @@ func _ready() -> void:
 # -------------------------------------------------
 
 func _physics_process(_delta: float) -> void:
+	if is_dead:
+		return
 	_handle_states()
 	calc_knockback()
 	health.value = life
 	health.max_value = max_life
 	mana.value = power
 	mana.max_value = max_mana
-	if is_dead:
-		return
-	
 	update_enemy_list()
 	handle_target_selection()
 	update_attack_area()
@@ -106,7 +106,7 @@ func switch_state(new_state: PlayerState) -> void:
 			play_walk_animation()
 		
 		PlayerState.ATTACK:
-			_pre_attack_state()
+			_attack_state(_pre_attack_state())
 		
 		PlayerState.BLOCK:
 			parry_buffer_timer.start()
@@ -116,9 +116,6 @@ func _idle_state() -> void:
 	handle_movement()
 	if power < max_mana:
 		power += 1
-	# Reencher vida e power/mana
-	if power < max_mana:
-		power += 2
 	if not is_attacked:
 		if life < max_life:
 			life += 1
@@ -129,9 +126,32 @@ func _idle_state() -> void:
 	if power > 0:
 		if Input.is_action_pressed("block"):
 			switch_state(PlayerState.BLOCK)
-		
-		if Input.is_action_pressed("attack"):
+		if Input.is_action_just_pressed("attack") or Input.is_action_pressed("attack"):
 			attack()
+
+func carregando_attack(charge_time: float) -> int:
+	# Configurações locais
+	var base_damage: int = 20
+	var stamina_cost: int = 10
+	var max_charge_time: float = 2.0
+	var max_stamina_multiplier: float = 2.0
+	if power < stamina_cost:
+		return 0
+	# Normaliza stamina (0 → 1)
+	var stamina_ratio: float = clamp(float(power) / float(max_mana), 0.0, 1.0)
+	# Normaliza charge (0 → 1)
+	charge_time = clamp(charge_time, 0.0, max_charge_time)
+	var charge_ratio: float = charge_time / max_charge_time
+	# Consome stamina
+	power -= stamina_cost
+	# Dano base escalado pela stamina + carga
+	var final_damage: float = base_damage
+	final_damage *= lerp(1.0, max_stamina_multiplier, stamina_ratio)
+	final_damage *= lerp(1.0, 1.5, charge_ratio)
+	return int(final_damage)
+
+
+
 
 func _walk_state() -> void:
 	handle_movement()
@@ -143,16 +163,19 @@ func _walk_state() -> void:
 	if power > 0:
 		if Input.is_action_pressed("block"):
 			switch_state(PlayerState.BLOCK)
-		
-		if Input.is_action_just_pressed("attack"):
+		if Input.is_action_just_pressed("attack") or Input.is_action_pressed("attack"):
 			attack()
 
-func _pre_attack_state() -> void:
+func _pre_attack_state() -> int:
+	var final_damage = carregando_attack(2.0)
+	return final_damage
+func _attack_state(amount) -> void:
+	print(damage)
 	can_attack = false
 	is_attacking = true
 	play_attack_sound()
 	velocity = Vector2.ZERO
-	power -= 20
+	damage = amount 
 	# Olhar pro inimigo pra atacá-lo
 	last_direction = get_target_direction()
 	play_attack_animation()
@@ -213,31 +236,63 @@ func _handle_states() -> void:
 
 func update_enemy_list() -> void:
 	enemies.clear()
-	
+
 	for enemy in get_tree().get_nodes_in_group("enemies"):
 		if enemy is Node2D:
 			enemies.append(enemy)
-	
+
 	if enemies.is_empty():
 		current_target = null
+		if mira and mira.get_parent():
+			mira.get_parent().remove_child(mira)
 		return
-	
+
 	target_index = clamp(target_index, 0, enemies.size() - 1)
-	current_target = enemies[target_index]
+
+	# Define alvo inicial
+	if current_target == null:
+		current_target = enemies[target_index]
+
+		if mira == null:
+			mira = preload("res://Cenas/mira.tscn").instantiate()
+
+		current_target.add_child(mira)
+		mira.position = Vector2(0, -5)
+
 
 
 func handle_target_selection() -> void:
-	if Input.is_action_just_pressed("enemy"):
-		if enemies.is_empty():
-			current_target = null
-			return
-		
-		for i in range(1, enemies.size() + 1):
-			var next_index = (target_index + i) % enemies.size()
-			if enemies[next_index]:
-				target_index = next_index
-				current_target = enemies[target_index]
-				break
+	if not Input.is_action_just_pressed("enemy"):
+		return
+
+	if enemies.is_empty():
+		current_target = null
+		if mira and mira.get_parent():
+			mira.get_parent().remove_child(mira)
+		return
+
+	for i in range(1, enemies.size() + 1):
+		var next_index := (target_index + i) % enemies.size()
+		var next_enemy := enemies[next_index]
+
+		if not is_instance_valid(next_enemy):
+			continue
+
+		target_index = next_index
+		current_target = next_enemy
+
+		if mira == null:
+			mira = preload("res://Cenas/mira.tscn").instantiate()
+
+		# Remove do alvo antigo
+		if mira.get_parent():
+			mira.get_parent().remove_child(mira)
+
+		current_target.add_child(mira)
+		mira.position = Vector2(0, -10)
+		break
+
+
 
 
 
@@ -375,7 +430,6 @@ func calc_knockback() -> void:
 	if knockback.length() > min_knockback:
 		knockback /= slow_knockback
 		velocity = knockback
-		move_and_slide()
 		return
 
 func play_attack_sound():

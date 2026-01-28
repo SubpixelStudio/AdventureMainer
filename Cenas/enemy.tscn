@@ -11,6 +11,8 @@ radius = 9.0
 z_index = 3
 collision_layer = 2
 script = ExtResource("1_rk41v")
+array_damage = Array[int]([5, 10, 15, 20])
+choices_life = Array[int]([60, 120, 180, 240, 300, 360, 420])
 anim = NodePath("Anim")
 
 [node name="Texture" type="Sprite2D" parent="."]

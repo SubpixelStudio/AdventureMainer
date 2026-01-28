@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://di4soubipygw0"]
+
+[ext_resource type="Texture2D" uid="uid://cbytspw4oicc8" path="res://Assets/UI/untitled.png" id="1_cc060"]
+
+[node name="Mira" type="Sprite2D"]
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("1_cc060")

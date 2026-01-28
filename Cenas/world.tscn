@@ -529,6 +529,4 @@ shape = SubResource("CapsuleShape2D_dswv5")
 [node name="SoundManager" type="Node" parent="."]
 
 [connection signal="timeout" from="CanvasLayer/Label/Timer" to="." method="_on_timer_timeout"]
-[connection signal="body_entered" from="LabelArea" to="." method="_on_body_entered"]
-[connection signal="body_exited" from="LabelArea" to="." method="_on_body_exited"]
 [connection signal="timeout" from="Timer" to="." method="_on_countdown_timeout"]
