@@ -1,10 +1,11 @@
-[gd_scene load_steps=36 format=4 uid="uid://fhd1osrl7ew6"]
+[gd_scene load_steps=37 format=4 uid="uid://fhd1osrl7ew6"]
 
 [ext_resource type="Script" uid="uid://b0xxwahjhpp0" path="res://Script/world.gd" id="1_y3i6s"]
 [ext_resource type="PackedScene" uid="uid://blik8w00x5ity" path="res://Cenas/player.tscn" id="1_yxi74"]
 [ext_resource type="Texture2D" uid="uid://dfqpw7hpa706l" path="res://Assets/Tilemap/tilesets/grass.png" id="2_gi2ty"]
 [ext_resource type="Texture2D" uid="uid://d00m6bclt1qq5" path="res://Assets/Tilemap/tilesets/fences.png" id="3_bqdng"]
 [ext_resource type="Texture2D" uid="uid://bfdtbhdn8khc1" path="res://Assets/Tilemap/tilesets/plains.png" id="3_ge5mm"]
+[ext_resource type="Texture2D" uid="uid://cxniqykjlbsno" path="res://Assets/UI/Luz.png" id="4_m1lnq"]
 [ext_resource type="Texture2D" uid="uid://btxr5taowilfb" path="res://Assets/Tilemap/tilesets/walls/walls.png" id="4_w45jc"]
 [ext_resource type="Texture2D" uid="uid://bd0jl137uobul" path="res://Assets/Tilemap/tilesets/walls/wooden_door.png" id="5_dswv5"]
 [ext_resource type="Texture2D" uid="uid://bxgofwurap8tn" path="res://Assets/Tilemap/tilesets/floors/wooden.png" id="6_kokpr"]
@@ -390,8 +391,10 @@ _data = {
 radius = 338.0
 height = 698.0
 
-[node name="World" type="Node" node_paths=PackedStringArray("player", "enemies_container", "hud_tempo", "countdown", "SoundManager", "npc_parent")]
+[node name="World" type="Node" node_paths=PackedStringArray("luz", "day_cycle", "player", "enemies_container", "hud_tempo", "countdown", "SoundManager", "npc_parent")]
 script = ExtResource("1_y3i6s")
+luz = NodePath("Player/PointLight2D")
+day_cycle = NodePath("Ciclo")
 player = NodePath("Player")
 enemies_container = NodePath("Enemies")
 hud_tempo = NodePath("CanvasLayer/Tempo")
@@ -399,6 +402,9 @@ countdown = NodePath("Timer")
 SoundManager = NodePath("SoundManager")
 npc_scene = ExtResource("13_2gbgk")
 npc_parent = NodePath("NPC")
+
+[node name="Ciclo" type="CanvasModulate" parent="."]
+color = Color(0.27752772, 0.27752772, 0.27752772, 1)
 
 [node name="Player" parent="." node_paths=PackedStringArray("health", "mana", "npc", "world", "animation") groups=["Player"] instance=ExtResource("1_yxi74")]
 position = Vector2(135, 475)
@@ -416,6 +422,10 @@ limit_top = -179
 limit_right = 1630
 limit_bottom = 760
 editor_draw_limits = true
+
+[node name="PointLight2D" type="PointLight2D" parent="Player"]
+color = Color(1.18, 0.8537869, 0.80116034, 1)
+texture = ExtResource("4_m1lnq")
 
 [node name="Enemies" type="Node" parent="."]
 

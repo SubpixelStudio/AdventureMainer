@@ -1,14 +1,19 @@
 class_name WorldManager extends Node
 
+var duracao_dia: float = 60.0 # segundos
+
+var tempo: float = 0.0
+
 # =========================
 # ESTADOS
 # =========================
 enum WorldState { IDLE, READING, COMBAT }
 var state: WorldState = WorldState.IDLE
-
+const COMBAT_TIME = 0.76
 var limite_inimigos: PackedInt32Array = [10, 20, 50, 15, 1]
 var inimigos_derrotados: int = 0
-
+@export var luz:PointLight2D
+@export var day_cycle : CanvasModulate
 @export var player: Node2D
 @export var enemies_container: Node
 @export var hud_tempo: Label
@@ -22,6 +27,7 @@ var music := [preload("res://Assets/Sound/theme melodia.wav"),preload("res://Ass
 # READY
 # =========================
 func _ready() -> void:
+	luz.visible = false
 	hud_tempo.visible = false
 	countdown.stop()
 	SoundEffect.play_music(music[0],SoundManager,player.position,"Normal")
@@ -48,16 +54,17 @@ func start_idle() -> void:
 func start_reading() -> void:
 	if state != WorldState.IDLE:
 		return
-	
 	state = WorldState.READING
 	print_state()
 	
 	hud_tempo.visible = false
 
 func start_combat() -> void:
+	day_cycle.color = calcular_cor(0.76)
 	if state != WorldState.READING:
 		return
 	battle_sound = true
+	
 	state = WorldState.COMBAT
 	print_state("Combate iniciado")
 	inimigos_derrotados = 0
@@ -90,7 +97,19 @@ func spawnar_npc() -> void:
 # =========================
 # HUD
 # =========================
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
+	if state != WorldState.COMBAT:
+		tempo += delta
+		var t := fmod(tempo / duracao_dia, 1.0)
+		day_cycle.color = calcular_cor(t)
+		print(t)
+		if t > 0.75:
+			luz.visible = true
+	else:
+		# Noite fixa durante o combate
+		luz.visible = true
+		day_cycle.color = calcular_cor(COMBAT_TIME)
+
 	if battle_sound:
 		for i in SoundManager.get_children():
 			if i.name == "Normal":
@@ -103,6 +122,20 @@ func _physics_process(_delta: float) -> void:
 		WorldState.COMBAT:
 			hud_tempo.visible = true
 			hud_tempo.text = str(floori(countdown.time_left))
+
+func calcular_cor(t: float) -> Color:
+	if t < 0.25:
+		# Dia → Tarde
+		return Color(1,1,1).lerp(Color(1,0.85,0.7), t / 0.25)
+	elif t < 0.5:
+		# Tarde → Noite
+		return Color(1,0.85,0.7).lerp(Color(0.2,0.2,0.35), (t - 0.25) / 0.25)
+	elif t < 0.75:
+		# Noite → Madrugada
+		return Color(0.2,0.2,0.35).lerp(Color(0.1,0.1,0.2), (t - 0.5) / 0.25)
+	else:
+		# Madrugada → Dia
+		return Color(0.1,0.1,0.2).lerp(Color(1,1,1), (t - 0.75) / 0.25)
 
 
 # =========================
@@ -158,6 +191,7 @@ func _on_enemy_died() -> void:
 # FINAL
 # =========================
 func finalizar_missao() -> void:
+	luz.visible = false
 	if battle_sound:
 		battle_sound = false
 		for i in SoundManager.get_children():
@@ -165,6 +199,8 @@ func finalizar_missao() -> void:
 				i.queue_free()
 				SoundEffect.play_music(music[0],SoundManager,player.position,"Normal")
 	print("Missão concluída")
+	for i in range(enemies_container.get_children().size()):
+		enemies_container.get_children()[i].queue_free()
 	start_idle()
 	GameData.has_died = false
 	#GameData.iniciou_combat = false
