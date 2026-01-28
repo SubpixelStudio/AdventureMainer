@@ -229,3 +229,19 @@ func play_world_music(world_music_index: int, pos: Vector2, song_name: String, r
 			replaced_music.queue_free()
 	
 	SoundEffect.play_music(music[world_music_index], SoundManager, pos, song_name)
+
+
+func _on_label_area_body_entered(body: Node2D) -> void:
+	if body.is_in_group("Player"):
+		$CanvasLayer/Label.text = "Alvelas Village"
+		$CanvasLayer/Label/Timer.start()
+		await $CanvasLayer/Label/Timer.timeout
+		$CanvasLayer/Label.text = ""
+
+
+func _on_label_area_body_exited(body: Node2D) -> void:
+	if body.is_in_group("Player"):
+		$CanvasLayer/Label.text = "Forest"
+		$CanvasLayer/Label/Timer.start()
+		await $CanvasLayer/Label/Timer.timeout
+		$CanvasLayer/Label.text = ""

@@ -462,7 +462,7 @@ grow_vertical = 0
 label_settings = SubResource("LabelSettings_kokpr")
 
 [node name="Timer" type="Timer" parent="CanvasLayer/Label" unique_id=1492979506]
-wait_time = 2.0
+wait_time = 1.25
 
 [node name="Tempo" type="Label" parent="CanvasLayer" unique_id=1664285401]
 anchors_preset = 5
@@ -537,4 +537,6 @@ shape = SubResource("CapsuleShape2D_dswv5")
 [node name="SoundManager" type="Node" parent="." unique_id=974596174]
 
 [connection signal="timeout" from="CanvasLayer/Label/Timer" to="." method="_on_timer_timeout"]
+[connection signal="body_entered" from="LabelArea" to="." method="_on_label_area_body_entered"]
+[connection signal="body_exited" from="LabelArea" to="." method="_on_label_area_body_exited"]
 [connection signal="timeout" from="Timer" to="." method="_on_countdown_timeout"]
