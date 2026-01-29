@@ -12,8 +12,8 @@ var state: WorldState = WorldState.IDLE
 const COMBAT_TIME = 0.76
 var limite_inimigos: PackedInt32Array = [10, 20, 50, 15, 1]
 var inimigos_derrotados: int = 0
-@export var luz:PointLight2D
-@export var day_cycle : CanvasModulate
+@export var luz: PointLight2D
+@export var day_cycle: CanvasModulate
 @export var player: Node2D
 @export var enemies_container: Node
 @export var hud_tempo: Label
@@ -27,18 +27,17 @@ const music: Array[AudioStream] = [
 	preload("res://Assets/Sound/Ville Theme.wav"),
 	preload("res://Assets/Sound/Floresta tema.wav")
 ]
-var named = ["Normal","Forest"]
-var battle_music = false
+var current_music_node: AudioStreamPlayer2D
+
+
 # =========================
 # READY
 # =========================
-
-
 func _ready() -> void:
 	luz.visible = false
 	hud_tempo.visible = false
 	countdown.stop()
-	#SoundEffect.play_music(music[0], SoundManager, player.position, "Normal")
+	
 	play_world_music(0, player.position,"Normal")
 	start_idle()  # Começa no estado IDLE
 
@@ -72,7 +71,7 @@ func start_combat() -> void:
 	day_cycle.color = calcular_cor(0.76)
 	if state != WorldState.READING:
 		return
-	battle_music = true
+	play_world_music(1, player.position, "Batalha")
 	
 	state = WorldState.COMBAT
 	print_state("Combate iniciado")
@@ -111,16 +110,13 @@ func _physics_process(delta: float) -> void:
 		tempo += delta
 		var t := fmod(tempo / duracao_dia, 1.0)
 		day_cycle.color = calcular_cor(t)
-		print(t)
+		#print(t)
 		luz.visible = t > 0.6
 
 	else:
 		# Noite fixa durante o combate
 		luz.visible = true
 		day_cycle.color = calcular_cor(COMBAT_TIME)
-
-	if battle_music:
-		play_world_music(1, player.position, "Batalha", "Normal")
 
 	match state:
 		WorldState.IDLE, WorldState.READING:
@@ -201,9 +197,7 @@ func finalizar_missao() -> void:
 	print("Missão concluída")
 	
 	luz.visible = false
-	if battle_music:
-		play_world_music(0, player.position, "Normal", "Batalha")
-		battle_music = false
+	play_world_music(0, player.position, "Normal")
 	
 	# Destruir todos os inimigos
 	for enemy in enemies_container.get_children():
@@ -220,25 +214,20 @@ func finalizar_missao() -> void:
 # =========================
 # SOM
 # =========================
-
-func play_world_music(world_0: int, pos: Vector2, song_name: String, replaced_music_name: String = ""):
-	# TODO: Fazer isso de um jeito melhor. Por exemplo usando uma variável pra saber quais músicas
-	# da lista tão tocando, em vez de chamar get_node() toda hora
-	# Não tocar a mesma música se já tiver tocando
-	if SoundManager.get_node_or_null(song_name): 
-		return
-	# Destruir música substituida
-	if not replaced_music_name.is_empty():
-		var replaced_music: AudioStreamPlayer2D = SoundManager.get_node_or_null(replaced_music_name)
-		if replaced_music:
-			replaced_music.queue_free()
+func play_world_music(music_index: int, pos: Vector2, song_name: String):
+	if current_music_node:
+		# Não tocar a mesma música se já tiver tocando
+		if current_music_node.name == song_name: 
+			return
+		# Destruir a música que está tocando pra tocar a nova musica
+		current_music_node.queue_free()
 	
-	SoundEffect.play_music(music[world_0], SoundManager, pos, song_name)
+	current_music_node = SoundEffect.play_music(music[music_index], SoundManager, pos, song_name)
 
 
 func _on_label_area_body_entered(body: Node2D) -> void:
-	if body.is_in_group("Player"):
-		play_world_music(2,player.position,"Vila",named[0])
+	if not GameData.pegou_missao and body.is_in_group("Player"):
+		play_world_music(2, player.position, "Vila")
 		$CanvasLayer/Label.text = "Alvelas Village"
 		$CanvasLayer/Label/Timer.start()
 		await $CanvasLayer/Label/Timer.timeout
@@ -246,10 +235,8 @@ func _on_label_area_body_entered(body: Node2D) -> void:
 
 
 func _on_label_area_body_exited(body: Node2D) -> void:
-	if body.is_in_group("Player"):
-		if named[0] == "Normal":
-			named.pop_front()
-		play_world_music(3,player.position,"Forest","Vila")
+	if not GameData.pegou_missao and body.is_in_group("Player"):
+		play_world_music(3, player.position, "Forest")
 		$CanvasLayer/Label.text = "Forest"
 		$CanvasLayer/Label/Timer.start()
 		await $CanvasLayer/Label/Timer.timeout
