@@ -128,6 +128,9 @@ _data = {
 &"enter": SubResource("Animation_vpgfy")
 }
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vpgfy"]
+size = Vector2(1280, 720)
+
 [node name="Menu" type="Control" unique_id=1037012068]
 layout_mode = 3
 anchors_preset = 15
@@ -157,7 +160,7 @@ anchor_top = 0.094444446
 anchor_right = 0.484375
 anchor_bottom = 0.38194436
 offset_right = 0.00012207031
-offset_bottom = 217.00006
+offset_bottom = 427.00006
 grow_horizontal = 2
 grow_vertical = 0
 text = "No
@@ -192,4 +195,10 @@ one_shot = true
 root_node = NodePath("../..")
 libraries/ = SubResource("AnimationLibrary_fapvr")
 
+[node name="Mobile" type="TouchScreenButton" parent="." unique_id=931450937]
+position = Vector2(640, 365)
+shape = SubResource("RectangleShape2D_vpgfy")
+action = "enter"
+
 [connection signal="timeout" from="StartText/StartGameTimer" to="." method="_on_start_game_timer_timeout"]
+[connection signal="pressed" from="Mobile" to="." method="_on_mobile_pressed"]

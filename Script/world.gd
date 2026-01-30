@@ -34,6 +34,7 @@ var current_music_node: AudioStreamPlayer2D
 # READY
 # =========================
 func _ready() -> void:
+	$TouchButton.visible = OS.get_name() == "Android"
 	luz.visible = false
 	hud_tempo.visible = false
 	countdown.stop()

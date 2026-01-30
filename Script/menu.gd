@@ -9,16 +9,26 @@ const world_scene = preload("res://Cenas/world.tscn")
 
 
 func _ready() -> void:
+	$Mobile.visible = OS.get_name() == "Android"
+	if OS.get_name() == "Android":
+		start_text.text = "Touch Me"
+	else:
+		start_text.text = "Press Enter to Start"
 	game_name_animp.play("wave")
 	start_text_animp.play("blink")
 
 func _input(event: InputEvent) -> void:
 	if not event is InputEventKey: return
 	
-	if start_text.visible and Input.is_action_just_pressed("enter"):
+	if Input.is_action_just_pressed("enter"):
 		start_text_animp.play("enter")
 		start_game_timer.start()
 
 
 func _on_start_game_timer_timeout() -> void:
 	get_tree().change_scene_to_packed(world_scene)
+
+
+func _on_mobile_pressed() -> void:
+	start_text_animp.play("enter")
+	start_game_timer.start()

@@ -16,6 +16,7 @@
 [ext_resource type="Texture2D" uid="uid://dvqaiwefjt2bi" path="res://Assets/Tilemap/Pine/Size_05.png" id="10_k0dnu"]
 [ext_resource type="PackedScene" uid="uid://bxadna0se63kg" path="res://Cenas/npc.tscn" id="13_2gbgk"]
 [ext_resource type="Texture2D" uid="uid://bnkdk36p7i8cs" path="res://Assets/Player/IDLE/idle_down.png" id="15_o8vbg"]
+[ext_resource type="PackedScene" uid="uid://b7v4vxl0y7iru" path="res://Cenas/touch_button.tscn" id="17_ojfwj"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_bqdng"]
 texture = ExtResource("2_gi2ty")
@@ -535,6 +536,8 @@ shape = SubResource("CapsuleShape2D_dswv5")
 [node name="NPC" parent="." unique_id=138538550 instance=ExtResource("13_2gbgk")]
 
 [node name="SoundManager" type="Node" parent="." unique_id=974596174]
+
+[node name="TouchButton" parent="." unique_id=223181013 instance=ExtResource("17_ojfwj")]
 
 [connection signal="timeout" from="CanvasLayer/Label/Timer" to="." method="_on_timer_timeout"]
 [connection signal="body_entered" from="LabelArea" to="." method="_on_label_area_body_entered"]
