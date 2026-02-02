@@ -53,9 +53,12 @@ func _finalizar_dialogo() -> void:
 
 func _atualizar_input_icon() -> void:
 	input_icon.visible = jogador_perto
-
-	if jogador_perto and input_icon.animation != "idle":
-		input_icon.play("idle")
+	input_icon.get_node("Label").visible = OS.get_name() == "Android"
+	if jogador_perto and input_icon.animation != "PC":
+		if OS.get_name() == "Android":
+			input_icon.play("Mobile")
+			input_icon.scale = Vector2(0.5,0.5)
+		input_icon.play("PC")
 
 func _cancelar_interacao() -> void:
 	dialogo_ativo = false

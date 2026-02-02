@@ -5,8 +5,15 @@
 [ext_resource type="Texture2D" uid="uid://dypcgyn2jvu5u" path="res://Assets/UI/mobile-controls-1/Sprites/Icons/Large (2×)/icon_sword.png" id="3_u58u0"]
 [ext_resource type="Texture2D" uid="uid://b52tnqda8h6y5" path="res://Assets/UI/mobile-controls-1/Sprites/Icons/Default/icon_shield.png" id="4_o28hk"]
 [ext_resource type="Texture2D" uid="uid://dxtqnlfk7tewp" path="res://Assets/UI/mobile-controls-1/Sprites/Icons/Large (2×)/icon_shield.png" id="5_td3p6"]
+[ext_resource type="Texture2D" uid="uid://crutudwydekiy" path="res://Assets/UI/mobile-controls-1/Sprites/Icons/Large (2×)/icon_target.png" id="6_3rfxs"]
+[ext_resource type="Texture2D" uid="uid://bgri8ylqg53p6" path="res://Assets/UI/mobile-controls-1/Sprites/Icons/Default/icon_target.png" id="7_y0h1v"]
+[ext_resource type="Texture2D" uid="uid://bed6cp1vs5hba" path="res://Assets/UI/mobile-controls-1/Sprites/Icons/Default/icon_sound.png" id="8_y0h1v"]
+[ext_resource type="Script" uid="uid://7yxlnm1c217s" path="res://Script/soundMobile.gd" id="9_u26lm"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_dtdjx"]
+radius = 70.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_u26lm"]
 radius = 30.0
 
 [node name="TouchButton" type="CanvasLayer" unique_id=223181013]
@@ -17,30 +24,76 @@ action_right = "D"
 action_up = "W"
 action_down = "S"
 
-[node name="Button" type="Control" parent="." unique_id=1265758417]
-layout_mode = 3
+[node name="HBox" type="HBoxContainer" parent="." unique_id=1014206804]
+custom_minimum_size = Vector2(0, 100)
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -280.0
-offset_top = -120.0
-offset_right = -240.0
-offset_bottom = -80.0
+offset_left = -332.0
+offset_top = -140.0
+offset_bottom = -40.0
 grow_horizontal = 0
 grow_vertical = 0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 200
 
-[node name="Attack" type="TouchScreenButton" parent="Button" unique_id=582485017]
-position = Vector2(-200, -25)
-texture_normal = ExtResource("2_dtdjx")
-texture_pressed = ExtResource("3_u58u0")
+[node name="1" type="Control" parent="HBox" unique_id=2073679149]
+layout_mode = 2
+
+[node name="Attack" type="TouchScreenButton" parent="HBox/1" unique_id=1424510605]
+texture_normal = ExtResource("3_u58u0")
+texture_pressed = ExtResource("2_dtdjx")
 shape = SubResource("CircleShape2D_dtdjx")
 action = "attack"
 
-[node name="Block" type="TouchScreenButton" parent="Button" unique_id=1476791522]
-position = Vector2(0, -25)
-texture_normal = ExtResource("4_o28hk")
-texture_pressed = ExtResource("5_td3p6")
+[node name="2" type="Control" parent="HBox/1" unique_id=2059331289]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Block" type="TouchScreenButton" parent="HBox/1/2" unique_id=900460652]
+position = Vector2(-200, 0)
+texture_normal = ExtResource("5_td3p6")
+texture_pressed = ExtResource("4_o28hk")
 shape = SubResource("CircleShape2D_dtdjx")
 action = "block"
+
+[node name="3" type="Control" parent="HBox" unique_id=601993340]
+layout_mode = 2
+
+[node name="Target" type="TouchScreenButton" parent="HBox/3" unique_id=115392503]
+texture_normal = ExtResource("6_3rfxs")
+texture_pressed = ExtResource("7_y0h1v")
+shape = SubResource("CircleShape2D_dtdjx")
+action = "enemy"
+
+[node name="Container" type="HBoxContainer" parent="." unique_id=1356030140]
+custom_minimum_size = Vector2(0, 100)
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -332.0
+offset_top = 20.0
+offset_right = -332.0
+offset_bottom = 120.0
+grow_horizontal = 0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 200
+alignment = 2
+
+[node name="1" type="Control" parent="Container" unique_id=2101462356]
+layout_mode = 2
+
+[node name="Sound" type="TouchScreenButton" parent="Container/1" unique_id=807737730]
+texture_normal = ExtResource("8_y0h1v")
+shape = SubResource("CircleShape2D_u26lm")
+script = ExtResource("9_u26lm")
+
+[connection signal="pressed" from="Container/1/Sound" to="Container/1/Sound" method="_on_pressed"]

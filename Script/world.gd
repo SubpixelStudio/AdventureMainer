@@ -23,7 +23,7 @@ var inimigos_derrotados: int = 0
 @export var npc_parent: Node2D
 const music: Array[AudioStream] = [
 	preload("res://Assets/Sound/theme melodia.wav"),
-	preload("res://Assets/Sound/ominousdark-medievalfantasy-song-309510.mp3"),
+	preload("res://Assets/Sound/Battle theme.wav"),
 	preload("res://Assets/Sound/Ville Theme.wav"),
 	preload("res://Assets/Sound/Floresta tema.wav")
 ]
