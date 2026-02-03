@@ -1,4 +1,5 @@
-class_name Objective extends Label
+class_name Objective
+extends Label
 
 @export var missoes: Dictionary = {
 	0: """Objetivo: Mate 10 Almas Vermelhas
@@ -40,33 +41,44 @@ Encare o inimigo supremo e...
 liberte a cidade do terror eterno."""
 }
 
-var frases: PackedStringArray
-var frase_atual: int = -1
-
-# WorldManager para iniciar o combate depois
-@onready var world: WorldManager = get_tree().current_scene
+var frases: PackedStringArray = []
+var frase_atual: int = 0
 
 
 func _ready() -> void:
 	text = ""
 	visible = false
 
+
+# =============================
+# CONTROLE PELO NPC
+# =============================
 func iniciar_missao(indice: int) -> void:
+	if not missoes.has(indice):
+		push_error("Missão inexistente: %s" % indice)
+		return
+	
 	frases = missoes[indice].split("\n")
-	# Pega as linhas da missão
+	frase_atual = 0
+	text = frases[frase_atual]
+	visible = true
+
+
+func avancar_dialogo() -> void:
+	frase_atual += 1
+	
 	if frase_atual < frases.size():
 		text = frases[frase_atual]
-		visible = true
+	else:
+		encerrar_dialogo()
+
+
+func encerrar_dialogo() -> void:
+	text = ""
+	visible = false
 
 func resetar_dialogo() -> void:
+	frases.clear()
 	frase_atual = 0
-
-
-func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("interagir"):
-		frase_atual += 1
-		if frase_atual < frases.size():
-			text = frases[frase_atual]  # mostra próxima linha
-		else:
-			text = ""
-			visible = false
+	text = ""
+	visible = false

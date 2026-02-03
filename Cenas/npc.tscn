@@ -105,11 +105,9 @@ radius = 20.09975
 [node name="NPC" type="Node2D" unique_id=145922529]
 z_index = 2
 
-[node name="Character" type="CharacterBody2D" parent="." unique_id=1385984899 node_paths=PackedStringArray("mission_screen", "dialog_text")]
+[node name="Character" type="CharacterBody2D" parent="." unique_id=1385984899]
 collision_layer = 8
 script = ExtResource("1_5a2k8")
-mission_screen = NodePath("../Canvas/MissionScreen")
-dialog_text = NodePath("../Canvas/MissionScreen/DialogPanel/DialogText")
 
 [node name="Shape" type="CollisionShape2D" parent="Character" unique_id=1661615740]
 shape = SubResource("CapsuleShape2D_4b6u5")

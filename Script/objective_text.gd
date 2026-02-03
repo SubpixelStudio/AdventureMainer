@@ -8,7 +8,7 @@ var textos_missao: Dictionary = {
 	4: "Derrote o King SoulRed"
 }
 
-@onready var world: WorldManager = get_tree().current_scene
+#@onready var world: WorldManager = get_tree().current_scene
 func _ready() -> void:
 	text = "..."
 
@@ -18,4 +18,4 @@ func _physics_process(_delta) -> void:
 		var total = GameData.limite_de_inimigos[GameData.missao_atual]
 		text = textos_missao.get(GameData.missao_atual, "Missão") \
 			+ "\n\n" \
-			+ str(world.inimigos_derrotados) + " / " + str(total)
+			+ str(GameData.inimigos_derrotados) + " / " + str(total)

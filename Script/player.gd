@@ -16,6 +16,7 @@ const ATTACK_ANIM_SPEED: float = 1
 @export var npc: Node2D
 @export var world: WorldManager
 @export var animation: AnimationPlayer
+@export var soundManager:Node
 @onready var anim: AnimationPlayer = $Anim
 @onready var attack_area: Area2D = $AttackArea
 @onready var parry_buffer_timer: Timer = $ParryBufferTimer
@@ -434,8 +435,8 @@ func calc_knockback() -> void:
 
 func play_attack_sound() -> void:
 	const ATTACK_SOUND: AudioStream = preload("res://Assets/Sound/swordslash1.mp3")
-	SoundEffect.play_sound(ATTACK_SOUND, world.SoundManager, global_position)
+	SoundEffect.play_sound(ATTACK_SOUND,soundManager, global_position)
 
 func play_parry_sound() -> void:
 	const PARRY_SOUND: AudioStream = preload("res://Assets/Sound/swordparry1.mp3")
-	SoundEffect.play_sound(PARRY_SOUND, world.SoundManager, global_position)
+	SoundEffect.play_sound(PARRY_SOUND,soundManager, global_position)

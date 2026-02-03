@@ -3,20 +3,29 @@
 [ext_resource type="Script" uid="uid://b0xxwahjhpp0" path="res://Script/world.gd" id="1_y3i6s"]
 [ext_resource type="PackedScene" uid="uid://blik8w00x5ity" path="res://Cenas/player.tscn" id="1_yxi74"]
 [ext_resource type="Texture2D" uid="uid://dfqpw7hpa706l" path="res://Assets/Tilemap/tilesets/grass.png" id="2_gi2ty"]
+[ext_resource type="Script" uid="uid://b8n6o74xgxuj7" path="res://Script/ciclo.gd" id="3_3a4k6"]
 [ext_resource type="Texture2D" uid="uid://d00m6bclt1qq5" path="res://Assets/Tilemap/tilesets/fences.png" id="3_bqdng"]
 [ext_resource type="Texture2D" uid="uid://bfdtbhdn8khc1" path="res://Assets/Tilemap/tilesets/plains.png" id="3_ge5mm"]
 [ext_resource type="Texture2D" uid="uid://cxniqykjlbsno" path="res://Assets/UI/Luz.png" id="4_m1lnq"]
 [ext_resource type="Texture2D" uid="uid://btxr5taowilfb" path="res://Assets/Tilemap/tilesets/walls/walls.png" id="4_w45jc"]
+[ext_resource type="Script" uid="uid://b4gknd06f4lg0" path="res://Script/quest_manager.gd" id="5_0263v"]
 [ext_resource type="Texture2D" uid="uid://bd0jl137uobul" path="res://Assets/Tilemap/tilesets/walls/wooden_door.png" id="5_dswv5"]
+[ext_resource type="Script" uid="uid://cf2y5ojfabnfi" path="res://Script/quest.gd" id="5_m0tab"]
 [ext_resource type="Texture2D" uid="uid://bxgofwurap8tn" path="res://Assets/Tilemap/tilesets/floors/wooden.png" id="6_kokpr"]
 [ext_resource type="Texture2D" uid="uid://n8agtcyt2r03" path="res://Assets/Tilemap/Pine/Size_02.png" id="7_ijklj"]
 [ext_resource type="Texture2D" uid="uid://cexnxh1h0gnc" path="res://Assets/Tilemap/Pine/Size_03.png" id="8_2gbgk"]
 [ext_resource type="FontFile" uid="uid://43814se2v5d0" path="res://PressStart2P-Regular.ttf" id="8_dswv5"]
+[ext_resource type="Script" uid="uid://cmempbxd1qf1t" path="res://Script/enemies.gd" id="8_m0tab"]
 [ext_resource type="Texture2D" uid="uid://c287hd1ijld43" path="res://Assets/Tilemap/Pine/Size_04.png" id="9_y3i6s"]
 [ext_resource type="Texture2D" uid="uid://dvqaiwefjt2bi" path="res://Assets/Tilemap/Pine/Size_05.png" id="10_k0dnu"]
 [ext_resource type="PackedScene" uid="uid://bxadna0se63kg" path="res://Cenas/npc.tscn" id="13_2gbgk"]
 [ext_resource type="Texture2D" uid="uid://bnkdk36p7i8cs" path="res://Assets/Player/IDLE/idle_down.png" id="15_o8vbg"]
 [ext_resource type="PackedScene" uid="uid://b7v4vxl0y7iru" path="res://Cenas/touch_button.tscn" id="17_ojfwj"]
+[ext_resource type="Script" uid="uid://dj1gntjvmvfr" path="res://Script/sound_manager.gd" id="18_k85id"]
+
+[sub_resource type="Resource" id="Resource_m0tab"]
+script = ExtResource("5_m0tab")
+metadata/_custom_type_script = "uid://cf2y5ojfabnfi"
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_bqdng"]
 texture = ExtResource("2_gi2ty")
@@ -392,22 +401,25 @@ _data = {
 radius = 338.0
 height = 698.0
 
-[node name="World" type="Node" unique_id=1608191893 node_paths=PackedStringArray("luz", "day_cycle", "player", "enemies_container", "hud_tempo", "countdown", "SoundManager", "npc_parent")]
+[node name="World" type="Node" unique_id=1608191893 node_paths=PackedStringArray("hud_tempo") groups=["world"]]
 script = ExtResource("1_y3i6s")
-luz = NodePath("Player/PointLight2D")
-day_cycle = NodePath("Ciclo")
-player = NodePath("Player")
-enemies_container = NodePath("Enemies")
 hud_tempo = NodePath("CanvasLayer/Tempo")
-countdown = NodePath("Timer")
-SoundManager = NodePath("SoundManager")
-npc_scene = ExtResource("13_2gbgk")
-npc_parent = NodePath("NPC")
 
-[node name="Ciclo" type="CanvasModulate" parent="." unique_id=265753367]
+[node name="Ciclo" type="CanvasModulate" parent="." unique_id=265753367 node_paths=PackedStringArray("luz")]
 color = Color(0.27752772, 0.27752772, 0.27752772, 1)
+script = ExtResource("3_3a4k6")
+luz = NodePath("../Player/PointLight2D")
 
-[node name="Player" parent="." unique_id=1915623923 node_paths=PackedStringArray("health", "mana", "npc", "world", "animation") groups=["Player"] instance=ExtResource("1_yxi74")]
+[node name="SoundManager" type="Node" parent="." unique_id=974596174 node_paths=PackedStringArray("player", "world")]
+script = ExtResource("18_k85id")
+player = NodePath("../Player")
+world = NodePath("..")
+
+[node name="QuestManager" type="Node" parent="." unique_id=1981848940]
+script = ExtResource("5_0263v")
+quest = SubResource("Resource_m0tab")
+
+[node name="Player" parent="." unique_id=1915623923 node_paths=PackedStringArray("health", "mana", "npc", "world", "animation", "soundManager") groups=["Player"] instance=ExtResource("1_yxi74")]
 position = Vector2(135, 475)
 attack_cooldown = 0.0
 health = NodePath("../CanvasLayer/HUD/Health")
@@ -415,6 +427,7 @@ mana = NodePath("../CanvasLayer/HUD/Mana")
 npc = NodePath("../NPC")
 world = NodePath("..")
 animation = NodePath("../CanvasLayer/HUD/ColorRect/Sprite2D/Animation")
+soundManager = NodePath("../SoundManager")
 
 [node name="Camera2D" type="Camera2D" parent="Player" unique_id=1746695821]
 zoom = Vector2(3, 3)
@@ -428,7 +441,13 @@ editor_draw_limits = true
 color = Color(1.18, 0.8537869, 0.80116034, 1)
 texture = ExtResource("4_m1lnq")
 
-[node name="Enemies" type="Node" parent="." unique_id=241430844]
+[node name="Enemies" type="Node" parent="." unique_id=241430844 node_paths=PackedStringArray("countdown", "player", "quest_manager")]
+script = ExtResource("8_m0tab")
+countdown = NodePath("Spawner")
+player = NodePath("../Player")
+quest_manager = NodePath("../QuestManager")
+
+[node name="Spawner" type="Timer" parent="Enemies" unique_id=737202859]
 
 [node name="Cenario" type="Node2D" parent="." unique_id=1233531890]
 
@@ -531,17 +550,16 @@ position = Vector2(300, 117)
 [node name="Shape" type="CollisionShape2D" parent="LabelArea" unique_id=1962677891]
 shape = SubResource("CapsuleShape2D_dswv5")
 
-[node name="Timer" type="Timer" parent="." unique_id=1711152532]
-
 [node name="NPC" parent="." unique_id=138538550 instance=ExtResource("13_2gbgk")]
 
-[node name="SoundManager" type="Node" parent="." unique_id=974596174]
+[node name="Character" parent="NPC" index="0" unique_id=1385984899 node_paths=PackedStringArray("quest_manager")]
+quest_manager = NodePath("../../QuestManager")
 
 [node name="TouchButton" parent="." unique_id=223181013 instance=ExtResource("17_ojfwj")]
 
 [connection signal="timeout" from="CanvasLayer/Label/Timer" to="." method="_on_timer_timeout"]
-[connection signal="body_entered" from="LabelArea" to="." method="_on_label_area_body_entered"]
-[connection signal="body_exited" from="LabelArea" to="." method="_on_label_area_body_exited"]
-[connection signal="timeout" from="Timer" to="." method="_on_countdown_timeout"]
+[connection signal="body_entered" from="LabelArea" to="SoundManager" method="_on_body_entered"]
+[connection signal="body_exited" from="LabelArea" to="SoundManager" method="_on_body_exited"]
 
+[editable path="NPC"]
 [editable path="TouchButton"]
