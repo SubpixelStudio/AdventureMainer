@@ -1,12 +1,15 @@
 extends CharacterBody2D
 
-signal died
 @export var speed: float = 120
 @export var attack_range: float = 40
 @export var attack_cooldown: float = 1.0
 @export var array_damage: Array[int]
 @export var choices_life : Array[int]
 @export var anim: AnimationPlayer
+
+@export_category("quest_config")
+##o id para contabilizar na quest
+@export var id:String = "none"
 
 var knockback = Vector2.ZERO
 var min_knockback := 100.0
@@ -20,6 +23,9 @@ var can_attack: bool = true
 var is_attacking: bool = false
 var attack_index: int = 1
 var is_dead: bool = false
+
+##isso emite um sinal util para contagem de quest
+signal count_delivered(delivery_id:String, action_type:int)
 
 # -------------------------------------------------
 
@@ -102,7 +108,8 @@ func die():
 	is_dead = true
 	velocity = Vector2.ZERO
 	#print("Inimigo morreu")
-	died.emit()
+	#died.emit()
+	count_delivered.emit(id,0)
 	await get_tree().create_timer(0.1).timeout
 	queue_free()
 

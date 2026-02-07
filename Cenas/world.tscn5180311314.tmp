@@ -27,6 +27,10 @@
 [ext_resource type="PackedScene" uid="uid://b7v4vxl0y7iru" path="res://Cenas/touch_button.tscn" id="17_ojfwj"]
 [ext_resource type="Script" uid="uid://dj1gntjvmvfr" path="res://Script/sound_manager.gd" id="18_k85id"]
 
+[sub_resource type="Resource" id="Resource_m0tab"]
+script = ExtResource("5_m0tab")
+metadata/_custom_type_script = "uid://cf2y5ojfabnfi"
+
 [sub_resource type="LabelSettings" id="LabelSettings_5a2k8"]
 font = ExtResource("8_dswv5")
 
@@ -42,22 +46,10 @@ font_color = Color(0, 0, 0, 1)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_w1l2h"]
 size = Vector2(40, 40)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hmoou"]
-bg_color = Color(0.446777, 0.44677705, 0.44677705, 0.57254905)
-
 [sub_resource type="Resource" id="Resource_81fic"]
 script = ExtResource("12_hmoou")
-actor_lines = Array[String](["como estava dizendo...", "A cidade adormece sob um manto de silêncio,", "mas algo se move nas sombras.", "Almas perdidas,", "corrompidas pelo medo e pela noite, ", "vagam pelas ruas.", "Sua primeira missão,", "eliminá-las", "antes que encontrem vítimas inocentes."])
+actor_lines = Array[String](["A cidade adormece sob um manto de silêncio"])
 metadata/_custom_type_script = "uid://7g1rrjacbwvn"
-
-[sub_resource type="Resource" id="Resource_u44w2"]
-script = ExtResource("5_m0tab")
-missionName = "Derrote inimigos"
-description = "\"Derrote 10 Almas Vermelhas\""
-current_state = 0
-object_id = Array[String](["Almas Vermelhas"])
-show_counter = true
-metadata/_custom_type_script = "uid://cf2y5ojfabnfi"
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_bqdng"]
 texture = ExtResource("2_gi2ty")
@@ -449,18 +441,21 @@ world = NodePath("..")
 
 [node name="QuestManager" type="Node" parent="." unique_id=1981848940]
 script = ExtResource("5_0263v")
+quest = SubResource("Resource_m0tab")
 
-[node name="Enemies" type="Node" parent="." unique_id=241430844 node_paths=PackedStringArray("player", "quest_manager")]
+[node name="Enemies" type="Node" parent="." unique_id=241430844 node_paths=PackedStringArray("countdown", "player", "quest_manager")]
 script = ExtResource("8_m0tab")
+countdown = NodePath("Spawner")
 player = NodePath("../Player")
 quest_manager = NodePath("../QuestManager")
 
-[node name="UIManager" type="CanvasLayer" parent="." unique_id=1058281448 node_paths=PackedStringArray("quest_manager", "player_target")]
+[node name="Spawner" type="Timer" parent="Enemies" unique_id=737202859]
+
+[node name="DialogManager" type="CanvasLayer" parent="." unique_id=1058281448 node_paths=PackedStringArray("player_target")]
 script = ExtResource("7_psyty")
-quest_manager = NodePath("../QuestManager")
 player_target = NodePath("../Player")
 
-[node name="MissionScreen" type="Control" parent="UIManager" unique_id=1744773450]
+[node name="MissionScreen" type="Control" parent="DialogManager" unique_id=1744773450]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -469,7 +464,7 @@ grow_horizontal = 2
 grow_vertical = 2
 metadata/_edit_use_anchors_ = true
 
-[node name="DialogPanel" type="ColorRect" parent="UIManager/MissionScreen" unique_id=699735782]
+[node name="DialogPanel" type="ColorRect" parent="DialogManager/MissionScreen" unique_id=699735782]
 custom_minimum_size = Vector2(720, 200)
 layout_mode = 1
 anchors_preset = 7
@@ -484,7 +479,7 @@ grow_horizontal = 2
 grow_vertical = 0
 color = Color(0, 0, 0, 0.5882353)
 
-[node name="DialogText" type="Label" parent="UIManager/MissionScreen/DialogPanel" unique_id=1637441233]
+[node name="DialogText" type="Label" parent="DialogManager/MissionScreen/DialogPanel" unique_id=1637441233]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -500,7 +495,7 @@ label_settings = SubResource("LabelSettings_5a2k8")
 autowrap_mode = 2
 script = ExtResource("9_hmoou")
 
-[node name="MissionPanel" type="ColorRect" parent="UIManager/MissionScreen" unique_id=743641714]
+[node name="MissionPanel" type="ColorRect" parent="DialogManager/MissionScreen" unique_id=743641714]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = -1
@@ -515,7 +510,7 @@ grow_horizontal = 0
 grow_vertical = 2
 color = Color(0, 0, 0, 0.1882353)
 
-[node name="MissionText" type="Label" parent="UIManager/MissionScreen/MissionPanel" unique_id=1354808531]
+[node name="MissionText" type="Label" parent="DialogManager/MissionScreen/MissionPanel" unique_id=1354808531]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -529,13 +524,13 @@ vertical_alignment = 1
 autowrap_mode = 3
 script = ExtResource("10_81fic")
 
-[node name="ocultar" type="ColorRect" parent="UIManager/MissionScreen/MissionPanel" unique_id=9096449]
+[node name="ocultar" type="ColorRect" parent="DialogManager/MissionScreen/MissionPanel" unique_id=9096449]
 layout_mode = 0
 offset_left = -37.0
 offset_right = 3.0
 offset_bottom = 40.0
 
-[node name="Label" type="Label" parent="UIManager/MissionScreen/MissionPanel/ocultar" unique_id=734136544]
+[node name="Label" type="Label" parent="DialogManager/MissionScreen/MissionPanel/ocultar" unique_id=734136544]
 layout_mode = 0
 offset_left = 12.0
 offset_top = 12.0
@@ -544,12 +539,12 @@ offset_bottom = 35.0
 text = "Q"
 label_settings = SubResource("LabelSettings_6g1jd")
 
-[node name="TouchScreenButton" type="TouchScreenButton" parent="UIManager/MissionScreen/MissionPanel/ocultar" unique_id=1234281115]
+[node name="TouchScreenButton" type="TouchScreenButton" parent="DialogManager/MissionScreen/MissionPanel/ocultar" unique_id=1234281115]
 position = Vector2(20, 20)
 shape = SubResource("RectangleShape2D_w1l2h")
 action = "ocultar"
 
-[node name="ProgressBar" type="ProgressBar" parent="UIManager/MissionScreen" unique_id=154932812]
+[node name="ProgressBar" type="ProgressBar" parent="DialogManager/MissionScreen" unique_id=154932812]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
@@ -558,17 +553,10 @@ anchor_bottom = 1.0
 offset_top = -27.0
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_styles/fill = SubResource("StyleBoxFlat_hmoou")
-value = 49.16
-show_percentage = false
 
 [node name="NPC" parent="." unique_id=2088797439 instance=ExtResource("13_psyty")]
-z_index = 1
+z_index = 61
 dialogue = SubResource("Resource_81fic")
-current_interaction = 1
-quest_to_give = SubResource("Resource_u44w2")
-main_give_quest = true
-delivery_dialogue_index = 8
 
 [node name="Player" parent="." unique_id=1915623923 node_paths=PackedStringArray("health", "mana", "world", "animation", "soundManager") groups=["Player"] instance=ExtResource("1_yxi74")]
 position = Vector2(135, 475)
@@ -694,7 +682,6 @@ shape = SubResource("CapsuleShape2D_dswv5")
 
 [node name="TouchButton" parent="." unique_id=223181013 instance=ExtResource("17_ojfwj")]
 
-[connection signal="end_actor" from="NPC" to="Enemies" method="active"]
 [connection signal="timeout" from="CanvasLayer/Label/Timer" to="." method="_on_timer_timeout"]
 [connection signal="body_entered" from="LabelArea" to="SoundManager" method="_on_body_entered"]
 [connection signal="body_exited" from="LabelArea" to="SoundManager" method="_on_body_exited"]

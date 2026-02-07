@@ -9,13 +9,14 @@ var textos_missao: Dictionary = {
 }
 
 #@onready var world: WorldManager = get_tree().current_scene
-func _ready() -> void:
-	text = "..."
+#func _ready() -> void:
+	#text = "..."
 
-func _physics_process(_delta) -> void:
-	# Só mostra durante combate
-	if not GameData.has_died and GameData.iniciou_combat and GameData.pegou_missao:
-		var total = GameData.limite_de_inimigos[GameData.missao_atual]
-		text = textos_missao.get(GameData.missao_atual, "Missão") \
-			+ "\n\n" \
-			+ str(GameData.inimigos_derrotados) + " / " + str(total)
+##removido por não haver utilidade
+#func _physics_process(_delta) -> void:
+	## Só mostra durante combate
+	#if not GameData.has_died and GameData.iniciou_combat and GameData.pegou_missao:
+		#var total = GameData.limite_de_inimigos[GameData.missao_atual]
+		#text = textos_missao.get(GameData.missao_atual, "Missão") \
+			#+ "\n\n" \
+			#+ str(GameData.inimigos_derrotados) + " / " + str(total)

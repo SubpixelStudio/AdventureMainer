@@ -1,63 +1,105 @@
 extends CharacterBody2D
+class_name Generic_NPC
 
-@export var mission_screen: Control
-@export var dialog_text: Objective
-@export var quest_manager: QuestManager
-@export var quest_id: int
-
+@export_category("configuração")
+@export var area_interaction:Area2D
+@export_category("interação")
+@export var dialogue:NpcDialogueResource
+##o valor do index do dialogo atual(ou que vai começar)
+@export var current_interaction:int = 0
+@export_category("quests")
+##a quest que será dada
+@export var quest_to_give:Quest
+##se a quest é uma principal
+@export var main_give_quest:bool = false
+##se a queste será entregue ao finalizar o dialogo
+@export var give_quest:bool = true
+##o index do dialogo que será entregue.(ele entrega no fim deste dialogo)
+@export var delivery_dialogue_index:int = 0
 @onready var input_icon: AnimatedSprite2D = $Input
-@onready var dialog_panel: ColorRect = mission_screen.get_node("DialogPanel")
+
+
+
 
 var jogador_perto: bool = false
 var dialogo_ativo: bool = false
+var dialogo_completado:bool = false
 
+##isso emite oque fala
+signal actor_speak(text:String)
+##isso emite quando o npc termina a fala
+signal end_actor
+##isso emite quando o npc inicia a fala
+signal start_dialogue
+##isso emite quando o npc a fala é interrompida(podendo ser por termino)
+signal end_dialogue(time:float)
+##isso emite quando ele esta entregando uma quest
+signal quest_delivered(quest:Quest,main_give_quest:bool)
 
 func _ready() -> void:
-	print(quest_manager)
-	dialog_panel.visible = false
+	if area_interaction: 
+		area_interaction.body_entered.connect(_on_AreaMission_body_entered)
+		area_interaction.body_exited.connect(_on_AreaMission_body_exited)
+	
 	input_icon.visible = false
-
 
 func _process(_delta: float) -> void:
 	_atualizar_input_icon()
-	_processar_interacao()
 
-
-func _processar_interacao() -> void:
-	if not jogador_perto:
+func interaction() -> void:
+	#condições ant crash
+	if not dialogue: return
+	if dialogue.actor_lines.size() == 0: return
+	
+	#condição ant bug
+	if (
+		current_interaction >= dialogue.actor_lines.size()
+		and not dialogo_ativo
+	): return
+	
+	#codigo de entrega de quest
+	if (
+		quest_to_give 
+		and give_quest 
+		and current_interaction == delivery_dialogue_index+1
+		):
+		var quest_to_emit:Quest = quest_to_give.duplicate()
+		quest_delivered.emit(quest_to_emit,main_give_quest)
+	
+	#condições de inicio e fim do dialogo
+	if not dialogo_ativo: _iniciar_dialogo()
+	if (
+		current_interaction >= dialogue.actor_lines.size()
+		and dialogo_ativo
+	): 
+		_finalizar_dialogo()
+		_end_actor()
 		return
 	
-	if Input.is_action_just_pressed("interagir"):
-		if not dialogo_ativo:
-			_iniciar_dialogo()
-		else:
-			_avancar_ou_finalizar_dialogo()
-
-
-func _iniciar_dialogo() -> void:
-	dialogo_ativo = true
-	dialog_panel.visible = true
+	#isso é que faz as coisas acontecerem
 	
-	dialog_text.resetar_dialogo()
-	dialog_text.iniciar_missao(quest_id)
+	
+	
+	#codigo do dialogo 
+	var current_text:String
+	if current_interaction < dialogue.actor_lines.size():
+		current_text = dialogue.actor_lines[current_interaction]
+	#codigo de emissão e proximo dialogo
+	current_interaction+=1
+	actor_speak.emit(current_text)
 
+func _iniciar_dialogo():
+	dialogo_ativo = true
+	start_dialogue.emit()
 
-func _avancar_ou_finalizar_dialogo() -> void:
-	if dialog_text.frase_atual >= dialog_text.frases.size() - 1:
-		_finalizar_dialogo()
-	else:
-		dialog_text.avancar_dialogo()
-
-
-func _finalizar_dialogo() -> void:
+func _finalizar_dialogo(time:float = 0) -> void:
 	dialogo_ativo = false
-	dialog_panel.visible = false
-	if quest_manager:
-		quest_manager.iniciar_quest(quest_id) 
+	end_dialogue.emit(time)
+	
 
-	queue_free()
-
-
+func _end_actor():
+	dialogo_completado = true
+	end_actor.emit()
 
 # =============================
 # INPUT ICON
@@ -85,10 +127,12 @@ func _atualizar_input_icon() -> void:
 # CANCELAMENTO
 # =============================
 func _cancelar_interacao() -> void:
-	dialogo_ativo = false
-	dialog_panel.visible = false
-	mission_screen.visible = false
-	dialog_text.resetar_dialogo()
+	if dialogo_completado: return
+	current_interaction = 0
+	actor_speak.emit("ei, volte!, eu estava falando!")
+	
+	_finalizar_dialogo(2.0)
+	
 
 
 # =============================

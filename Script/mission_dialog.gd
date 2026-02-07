@@ -47,12 +47,14 @@ var frase_atual: int = 0
 
 func _ready() -> void:
 	text = ""
-	visible = false
+	#visible = false
 
 
 # =============================
 # CONTROLE PELO NPC
 # =============================
+
+##isso é q esta iniciando o dialogo, por alguma razão
 func iniciar_missao(indice: int) -> void:
 	if not missoes.has(indice):
 		push_error("Missão inexistente: %s" % indice)
@@ -63,10 +65,11 @@ func iniciar_missao(indice: int) -> void:
 	text = frases[frase_atual]
 	visible = true
 
-
 func avancar_dialogo() -> void:
 	frase_atual += 1
-	
+	print("dialogo avançado")
+	print(frase_atual)
+	print(frases.size())
 	if frase_atual < frases.size():
 		text = frases[frase_atual]
 	else:
@@ -76,6 +79,7 @@ func avancar_dialogo() -> void:
 func encerrar_dialogo() -> void:
 	text = ""
 	visible = false
+	print("encerrar dialogo")
 
 func resetar_dialogo() -> void:
 	frases.clear()

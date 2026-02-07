@@ -1,0 +1,132 @@
+[gd_scene format=3 uid="uid://c4dr2fbjwn0hp"]
+
+[ext_resource type="Script" uid="uid://sxrm42bhaqwk" path="res://Script/npc.gd" id="1_gnrkw"]
+[ext_resource type="Texture2D" uid="uid://bnkdk36p7i8cs" path="res://Assets/Player/IDLE/idle_down.png" id="1_qvy4y"]
+[ext_resource type="Texture2D" uid="uid://dpd5evddy80xb" path="res://Assets/UI/mobile-controls-1/Sprites/Icons/Default/icon_talk.png" id="2_gnrkw"]
+[ext_resource type="Texture2D" uid="uid://dylf84ojf2vtj" path="res://Assets/UI/space-Sheet-Sheet.png" id="3_aexvs"]
+[ext_resource type="FontFile" uid="uid://43814se2v5d0" path="res://PressStart2P-Regular.ttf" id="4_qqy3y"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_bhfgm"]
+
+[sub_resource type="Animation" id="Animation_ngkl2"]
+resource_name = "Main"
+length = 0.71
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6, 7]
+}
+
+[sub_resource type="Animation" id="Animation_85goq"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_2if0b"]
+_data = {
+&"Main": SubResource("Animation_ngkl2"),
+&"RESET": SubResource("Animation_85goq")
+}
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_la7mh"]
+atlas = ExtResource("3_aexvs")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gellq"]
+atlas = ExtResource("3_aexvs")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_okdf2"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_gnrkw")
+}],
+"loop": true,
+"name": &"Mobile",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_la7mh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gellq")
+}],
+"loop": true,
+"name": &"PC",
+"speed": 2.0
+}]
+
+[sub_resource type="LabelSettings" id="LabelSettings_24d70"]
+font = ExtResource("4_qqy3y")
+font_size = 24
+font_color = Color(1, 0.6901961, 0, 1)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_gnrkw"]
+radius = 62.201286
+
+[node name="NPC" type="CharacterBody2D" unique_id=2088797439 node_paths=PackedStringArray("area_interaction")]
+script = ExtResource("1_gnrkw")
+area_interaction = NodePath("area_interaction")
+
+[node name="Shape" type="CollisionShape2D" parent="." unique_id=1255239365]
+shape = SubResource("CapsuleShape2D_bhfgm")
+
+[node name="Texture" type="Sprite2D" parent="." unique_id=1150014241]
+modulate = Color(0, 1, 1, 0.7019608)
+texture = ExtResource("1_qvy4y")
+hframes = 8
+frame = 1
+
+[node name="Anim" type="AnimationPlayer" parent="Texture" unique_id=861660889]
+libraries/ = SubResource("AnimationLibrary_2if0b")
+autoplay = &"Main"
+
+[node name="Input" type="AnimatedSprite2D" parent="." unique_id=825572945]
+position = Vector2(0, -25)
+sprite_frames = SubResource("SpriteFrames_okdf2")
+animation = &"Mobile"
+
+[node name="Label" type="Label" parent="Input" unique_id=1748018775]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -24.0
+offset_top = -24.0
+offset_right = -24.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "!"
+label_settings = SubResource("LabelSettings_24d70")
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Touch" type="TouchScreenButton" parent="." unique_id=740582793]
+shape = SubResource("CapsuleShape2D_bhfgm")
+action = "interagir"
+
+[node name="area_interaction" type="Area2D" parent="." unique_id=882975318]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="area_interaction" unique_id=271711943]
+shape = SubResource("CircleShape2D_gnrkw")

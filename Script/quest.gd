@@ -1,54 +1,31 @@
 class_name Quest
 extends Resource
 
-var quests := {
-	0: {
-		#"texto": "Derrote os inimigos da floresta.",
-		"ativa": false,
-		"etapa": 0,
-		"progresso": 0,
-		"limites": [10, 20, 50, 15, 1]
-	},
-	#1: {
-		#"texto": "Derrote o guardião ancestral.",
-		#"ativa": false,
-		#"etapa": 0,
-		#"progresso": 0,
-		#"limites": [1]
-	#}
-}
 
-func iniciar(id: int) -> void:
-	if not quests.has(id):
-		push_error("Quest inexistente: %d" % id)
-		return
+
+@export var missionName:String
+@export_multiline var description:String
+
+@export_enum("DERROTAR","COLETAR","CONVERSAR") var current_state
+@export var object_id:Array[String]
+@export var quantidade_max:int = 10
+@export var quantidade_atual:int = 0
+
+@export var show_counter:bool
+
+signal counted(quest:Quest)
+signal quest_completed(quest:Quest)
+
+func count(value:int = 1):
+	quantidade_atual+=value
+	if quantidade_atual >= quantidade_max:
+		completar_quest()
+	else:
+		counted.emit(self)
+	print("contado: ", quantidade_atual)
+
+##emite um sinal de quest completada
+func completar_quest():
+	print("completado ")
+	quest_completed.emit(self)
 	
-	var q = quests[id]
-	q.ativa = true
-	q.etapa = 0
-	q.progresso = 0
-
-
-func inimigo_morto() -> void:
-	for q in quests.values():
-		if not q.ativa:
-			continue
-		
-		q.progresso += 1
-		if q.progresso >= q.limites[q.etapa]:
-			q.etapa += 1
-			q.progresso = 0
-			
-			if q.etapa >= q.limites.size():
-				q.ativa = false
-				print("Quest concluída!")
-
-
-func cancelar(id: int) -> void:
-	if not quests.has(id):
-		return
-	
-	var q = quests[id]
-	q.ativa = false
-	q.etapa = 0
-	q.progresso = 0

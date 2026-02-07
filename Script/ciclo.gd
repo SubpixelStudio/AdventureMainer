@@ -10,6 +10,7 @@ func _process(delta: float) -> void:
 	var t := fmod(tempo / duracao_dia, 1.0)
 	color = calcular_cor(t)
 	luz.visible = t > 0.6
+	if tempo >= duracao_dia*2: tempo = 0
 
 
 func calcular_cor(t: float) -> Color:

@@ -57,6 +57,19 @@ var enemies: Array[Node2D] = []
 var target_index: int = 0
 var current_target: Node2D = null
 
+
+# ------------------------------
+# SISTEMA DE INTERAÇÃO
+# ------------------------------
+## a area de interação do player
+@onready var area_interact:Area2D =  $Area2D
+##isso deve rodar toda vez e achar o npc mais perto(ainda sem utilidade)
+##não adicionei nada ao codigo para não processar sobrecarregar de funções
+var npc_interact_tartget:Generic_NPC
+## sinal emite o npc que interagiu
+signal interacted_npc(npc:Generic_NPC)
+
+
 # -------------------------------------------------
 
 func _ready() -> void:
@@ -83,8 +96,33 @@ func _physics_process(_delta: float) -> void:
 	update_enemy_list()
 	handle_target_selection()
 	update_attack_area()
+	interact_update()
 	
 	move_and_slide()
+
+func interact_update():
+	
+	if not area_interact: return
+	if Input.is_action_just_pressed("interagir"):
+		var bodies = area_interact.get_overlapping_bodies()
+		var near_npc:Generic_NPC
+		var shortest_distance = INF
+		for body in bodies:
+			if body is Generic_NPC:
+				# Calcula a distância entre seu personagem e o NPC
+				var distance = global_position.distance_to(body.global_position)
+				
+				# Verifica se é o NPC mais próximo encontrado até agora
+				if distance < shortest_distance:
+					shortest_distance = distance
+					near_npc = body
+		if near_npc:
+			##aqui é o npc mais perto
+			interacted_npc.emit(near_npc)
+		else:
+			##aqui é quando não acha nenhum npc
+			pass
+			print("nenhum npc achado")
 
 #--------------------------------------------------
 # STATE MACHINE
@@ -97,7 +135,7 @@ func switch_state(new_state: PlayerState) -> void:
 		return
 	last_state = state
 	state = new_state
-	print("Player State: %s" % PlayerState.find_key(state))
+	#print("Player State: %s" % PlayerState.find_key(state))
 	
 	match new_state:
 		PlayerState.IDLE:
@@ -171,7 +209,7 @@ func _pre_attack_state() -> int:
 	var final_damage = carregando_attack(2.0)
 	return final_damage
 func _attack_state(amount) -> void:
-	print(damage)
+	#print(damage)
 	can_attack = false
 	is_attacking = true
 	play_attack_sound()
