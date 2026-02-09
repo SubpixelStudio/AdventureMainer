@@ -47,6 +47,8 @@ enum PlayerState {
 	BLOCK,
 }
 
+var step_interval = 0.35
+var step_timer = Timer.new()
 var state: PlayerState
 var last_state: PlayerState
 
@@ -74,7 +76,9 @@ signal interacted_npc(npc:Generic_NPC)
 
 func _ready() -> void:
 	switch_state(PlayerState.IDLE)
-	
+	step_timer.wait_time = step_interval
+	step_timer.timeout.connect(play_walking_sound)
+	add_child(step_timer)
 	attack_area.monitoring = false
 	attack_area.body_entered.connect(_on_attack_area_body_entered)
 	update_enemy_list()
@@ -195,10 +199,14 @@ func carregando_attack(charge_time: float) -> int:
 func _walk_state() -> void:
 	handle_movement()
 	play_walk_animation()
-	
 	if velocity == Vector2.ZERO:
+		step_timer.stop()
 		switch_state(PlayerState.IDLE)
-	
+		return
+
+	if step_timer.is_stopped():
+		step_timer.start()
+
 	if power > 0:
 		if Input.is_action_pressed("block"):
 			switch_state(PlayerState.BLOCK)
@@ -444,6 +452,7 @@ func play_walk_animation() -> void:
 	play_directional_animation("walk")
 	animation.play("Walking")
 
+
 func play_attack_animation() -> void:
 	anim.speed_scale = ATTACK_ANIM_SPEED
 	play_directional_animation("attack", true)
@@ -471,6 +480,9 @@ func calc_knockback() -> void:
 		velocity = knockback
 		return
 
+func play_walking_sound() -> void:
+	const WALKING_SOUND:AudioStream = preload("res://Assets/Sound/Step.mp3")
+	SoundEffect.play_sound(WALKING_SOUND,soundManager,global_position)
 func play_attack_sound() -> void:
 	const ATTACK_SOUND: AudioStream = preload("res://Assets/Sound/swordslash1.mp3")
 	SoundEffect.play_sound(ATTACK_SOUND,soundManager, global_position)

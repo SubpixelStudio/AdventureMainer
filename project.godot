@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="Adventure Mainer"
+config/name="No Place for Honor"
 config/tags=PackedStringArray("2d", "action", "subpixel")
 run/main_scene="uid://pcwxft3n2dd1"
 config/features=PackedStringArray("4.6", "GL Compatibility")

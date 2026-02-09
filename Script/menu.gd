@@ -1,34 +1,22 @@
 extends Control
 
 const world_scene = preload("res://Cenas/world.tscn")
-
-@onready var start_text: Label = $StartText
-@onready var start_text_animp: AnimationPlayer = $StartText/AnimationPlayer
-@onready var game_name_animp: AnimationPlayer = $GameName/AnimationPlayer
-@onready var start_game_timer: Timer = $StartText/StartGameTimer
-
-
+@export var btn:Array[Button]
+var action := {}
 func _ready() -> void:
-	$Mobile.visible = OS.get_name() == "Android"
-	if OS.get_name() == "Android":
-		start_text.text = "Touch Me"
-	else:
-		start_text.text = "Press Enter to Start"
-	game_name_animp.play("wave")
-	start_text_animp.play("blink")
+	action = {
+		0: changed,
+		3: quit,
+	}
+	for i in range(btn.size()):
+		btn[i].pressed.connect(connect_button.bind(i))
 
-func _input(event: InputEvent) -> void:
-	if not event is InputEventKey: return
-	
-	if Input.is_action_just_pressed("enter"):
-		start_text_animp.play("enter")
-		start_game_timer.start()
+func connect_button(id:int) -> void:
+	if action.has(id):
+		action[id].call()
 
-
-func _on_start_game_timer_timeout() -> void:
+func changed():
 	get_tree().change_scene_to_packed(world_scene)
 
-
-func _on_mobile_pressed() -> void:
-	start_text_animp.play("enter")
-	start_game_timer.start()
+func quit():
+	get_tree().quit()
