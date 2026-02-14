@@ -3,6 +3,9 @@ extends Control
 const world_scene = preload("res://Cenas/world.tscn")
 @export var btn:Array[Button]
 var action := {}
+@onready var anim_player:AnimationPlayer =  $AnimationPlayer
+
+
 func _ready() -> void:
 	action = {
 		0: changed,
@@ -20,3 +23,6 @@ func changed():
 
 func quit():
 	get_tree().quit()
+
+func camera_animation(animation_string:String):
+	anim_player.play(animation_string)
