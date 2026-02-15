@@ -1,9 +1,9 @@
 extends Node
 const music: Array[AudioStream] = [
-	preload("res://Assets/Sound/theme melodia.wav"),
+	preload("res://Assets/Sound/Main Theme.mp3"),
 	preload("res://Assets/Sound/Battle theme.wav"),
 	preload("res://Assets/Sound/Ville Theme.wav"),
-	preload("res://Assets/Sound/Floresta tema.wav")
+	preload("res://Assets/Sound/Floresta theme.mp3")
 ]
 var current_music_node: AudioStreamPlayer2D
 enum {NORMAL,COMBAT,VILLAGE,FOREST}

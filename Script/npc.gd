@@ -37,6 +37,10 @@ signal end_dialogue(time:float)
 signal quest_delivered(quest:Quest,main_give_quest:bool)
 
 func _ready() -> void:
+	if OS.get_name() == "Android":
+		$Input.global_position.y = -42.0
+	else:
+		$Input.global_position.y = -24
 	if area_interaction: 
 		area_interaction.body_entered.connect(_on_AreaMission_body_entered)
 		area_interaction.body_exited.connect(_on_AreaMission_body_exited)
