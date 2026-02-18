@@ -1,8 +1,6 @@
 class_name Quest
 extends Resource
 
-
-
 @export var missionName:String
 @export_multiline var description:String
 
