@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bo7us08ok63gv"]
+
+[ext_resource type="Script" uid="uid://dagwxm0owocqp" path="res://Script/quests/quest_node_npc.gd" id="1_sjxsj"]
+
+[node name="QuestNode" type="Node" unique_id=1183361996]
+script = ExtResource("1_sjxsj")

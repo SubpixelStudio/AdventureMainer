@@ -9,6 +9,7 @@ var action := {}
 func _ready() -> void:
 	action = {
 		0: changed,
+		1:settings,
 		3: quit,
 	}
 	for i in range(btn.size()):
@@ -17,6 +18,9 @@ func _ready() -> void:
 func connect_button(id:int) -> void:
 	if action.has(id):
 		action[id].call()
+
+func settings():
+	get_tree().change_scene_to_file("res://Cenas/settings.tscn")
 
 func changed():
 	get_tree().change_scene_to_packed(world_scene)

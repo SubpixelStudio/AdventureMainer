@@ -6,6 +6,7 @@ extends Node
 
 ##lista de quests
 @export var questList:Array[Quest]
+var questCompletedList:Array[Quest]
 
 signal mission_setted(quest:Quest)
 
@@ -36,6 +37,7 @@ func recive_count(delivery_id:String, action_type:int):
 
 func complete_quest(quest:Quest):
 	questList.erase(quest)
+	questCompletedList.append(quest)
 	if quest == mainQuest:
 		mainQuest = null
 		mission_setted.emit(null)

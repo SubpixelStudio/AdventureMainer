@@ -12,10 +12,16 @@ class_name Generic_NPC
 @export var quest_to_give:Quest
 ##se a quest é uma principal
 @export var main_give_quest:bool = false
-##se a queste será entregue ao finalizar o dialogo
+##se a queste será entregue
 @export var give_quest:bool = true
 ##o index do dialogo que será entregue.(ele entrega no fim deste dialogo)
 @export var delivery_dialogue_index:int = 0
+
+##o caminho do node da proxima quest
+##obrigatório ser um NpcQuestNode.
+##obs: é um NodePath pois pode futuramente da erro de depedencia
+@export var next_quest:NodePath
+
 @onready var input_icon: AnimatedSprite2D = $Input
 
 
@@ -35,6 +41,8 @@ signal start_dialogue
 signal end_dialogue(time:float)
 ##isso emite quando ele esta entregando uma quest
 signal quest_delivered(quest:Quest,main_give_quest:bool)
+
+signal cur_quest_completed
 
 func _ready() -> void:
 	if OS.get_name() == "Android":
@@ -69,6 +77,7 @@ func interaction() -> void:
 		):
 		var quest_to_emit:Quest = quest_to_give.duplicate()
 		quest_delivered.emit(quest_to_emit,main_give_quest)
+		quest_to_emit.quest_completed.connect(self.quest_completed)
 	
 	#condições de inicio e fim do dialogo
 	if not dialogo_ativo: _iniciar_dialogo()
@@ -136,8 +145,26 @@ func _cancelar_interacao() -> void:
 	actor_speak.emit("ei, volte!, eu estava falando!")
 	
 	_finalizar_dialogo(2.0)
-	
 
+func quest_completed(_quest:Quest):
+	cur_quest_completed.emit()
+	
+	if not next_quest or not has_node(next_quest): return
+	var node = get_node(next_quest)
+	if not node is NpcQuestNode: 
+		push_error("o next_quest de ",name," não é um NpcQuestNode")
+		return
+	node.start_new_quest()
+
+func set_quest(quest:Quest,is_main:bool = false,will_give_in_end:bool = true,ddi:int = 0) -> void:
+	quest_to_give = quest
+	main_give_quest = is_main
+	give_quest = will_give_in_end
+	delivery_dialogue_index = ddi
+
+func set_dialogue(dilogue:NpcDialogueResource, start_index:int) -> void:
+	current_interaction = start_index
+	dialogue = dilogue
 
 # =============================
 # AREA DE DETECÇÃO

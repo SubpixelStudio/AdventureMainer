@@ -11,6 +11,8 @@ extends Resource
 
 @export var show_counter:bool
 
+var is_completed:bool = false
+
 signal counted(quest:Quest)
 signal quest_completed(quest:Quest)
 
