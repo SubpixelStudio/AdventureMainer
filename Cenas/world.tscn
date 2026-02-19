@@ -361,7 +361,7 @@ zoom = Vector2(3, 3)
 limit_left = -62
 limit_top = -179
 limit_right = 1630
-limit_bottom = 760
+limit_bottom = 1100
 editor_draw_limits = true
 
 [node name="PointLight2D" type="PointLight2D" parent="Player" unique_id=1157210490]
