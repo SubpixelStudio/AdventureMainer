@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://blik8w00x5ity"]
 
 [ext_resource type="Script" uid="uid://b70in06erswue" path="res://Script/player.gd" id="1_eu07l"]
-[ext_resource type="Texture2D" uid="uid://bnkdk36p7i8cs" path="res://Assets/Player/IDLE/idle_down.png" id="2_5p0qj"]
+[ext_resource type="Texture2D" uid="uid://cgih0gbls6yl6" path="res://Assets/Player/ATTACK 1/attack1_up.png" id="2_yuqgu"]
 [ext_resource type="PackedScene" uid="uid://bmdsvf5rv54fy" path="res://Cenas/anim.tscn" id="3_kc4hd"]
 [ext_resource type="AnimationLibrary" uid="uid://ba0m37f2lyvq6" path="res://Recursos/anim.res" id="4_8w3h7"]
 [ext_resource type="PackedScene" uid="uid://o12cn7xci7q1" path="res://Parry/scenes/parry_prefab.tscn" id="5_yuqgu"]
@@ -17,9 +17,9 @@ script = ExtResource("1_eu07l")
 
 [node name="Texture" type="Sprite2D" parent="."]
 texture_filter = 3
-texture = ExtResource("2_5p0qj")
+texture = ExtResource("2_yuqgu")
 hframes = 8
-frame = 1
+frame = 5
 
 [node name="Anim" parent="." instance=ExtResource("3_kc4hd")]
 libraries = {

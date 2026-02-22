@@ -3,11 +3,13 @@ class_name Player
 
 const NORMAL_ANIM_SPEED: float = .6
 const ATTACK_ANIM_SPEED: float = 1
+const HEAVY_MIN_CHARGE := 0.3
 
 @export_group("Properties")
 @export var speed: float = 200
 @export var attack_cooldown: float = 0.4
 @export var damage: int = 10
+@export var heavy_damage: int = 30
 @export var max_life: int = 100
 @export var max_mana: int = 400
 @export_group("Nodes")
@@ -34,14 +36,24 @@ var is_dead: bool = false
 var is_attacked: bool = false
 
 var knockback = Vector2.ZERO
+var heavy_knockback: float = 800 
 var min_knockback := 100.0
 var slow_knockback := 1.1
+
+var heavy_cost: int = 50
+#var is_charging_heavy: bool = false
+var attack_press_time: int = 0
+var heavy_attack_time := 0.15
+var attack_hold_time: float = 0.0
+var is_holding_attack: bool = false
 
 enum PlayerState {
 	NONE,
 	IDLE,
 	WALK,
 	ATTACK,
+	HOLD_HEAVY_ATTACK,
+	RELEASE_HEAVY_ATTACK,
 	BLOCK,
 }
 
@@ -108,6 +120,14 @@ func switch_state(new_state: PlayerState) -> void:
 		PlayerState.ATTACK:
 			_pre_attack_state()
 		
+		PlayerState.HOLD_HEAVY_ATTACK:
+			_pre_hold_heavy_attack_state()
+			#play_heavy_attack_animation(is_holding_attack)
+		
+		PlayerState.RELEASE_HEAVY_ATTACK:
+			_pre_release_heavy_attack_state()
+			#play_heavy_attack_animation(is_holding_attack)
+		
 		PlayerState.BLOCK:
 			parry_buffer_timer.start()
 
@@ -129,8 +149,24 @@ func _idle_state() -> void:
 		if Input.is_action_pressed("block"):
 			switch_state(PlayerState.BLOCK)
 		
-		if Input.is_action_pressed("attack"):
-			attack()
+		if Input.is_action_just_pressed("attack"):
+			attack_press_time = Time.get_ticks_msec()
+		
+		if Input.is_action_just_released("attack"):
+			# Verifica quanto tempo ficou com o btn pressionando
+			var held_time := (Time.get_ticks_msec() - attack_press_time) / 1000.0
+			
+			if held_time <= heavy_attack_time:
+				# Fluxo pra aplicar Light Attack
+				attack()
+			else:
+				# Fluxo pra aplicar Heavy Attack
+				#print('CARGHING')
+				#play_heavy_attack_animation(is_holding_attack)
+				#print('HEAVY ATTACK')
+				#play_heavy_attack_animation(!is_holding_attack)
+				hold_heavy_attack()
+			#is_holding_attack = false
 
 func _walk_state() -> void:
 	handle_movement()
@@ -169,6 +205,34 @@ func _pre_attack_state() -> void:
 	# Reativar ataque após cooldown
 	await get_tree().create_timer(attack_cooldown).timeout
 	can_attack = true
+
+
+func _pre_hold_heavy_attack_state() -> void:
+	is_holding_attack = true
+	can_attack = false
+	is_attacking = true
+	velocity = Vector2.ZERO
+	#power -= 40
+	while not Input.is_action_just_released("attack"):
+		last_direction = get_target_direction()
+		play_heavy_attack_animation(is_holding_attack)
+		
+		attack_area.monitoring = true
+		# Acabar ataque. Ainda não dá pra atacar, mas dá pra se mover
+		await anim.animation_finished
+		attack_area.monitoring = false
+		is_attacking = false
+
+	switch_state(last_state)
+	# Reativar ataque após cooldown
+	await get_tree().create_timer(attack_cooldown*2).timeout
+	can_attack = true
+
+
+func _pre_release_heavy_attack_state() -> void:
+	power -= 40
+	pass
+
 
 func _block_state() -> void:
 	handle_movement()
@@ -239,7 +303,6 @@ func handle_target_selection() -> void:
 				break
 
 
-
 func get_target_direction() -> Vector2:
 	if current_target:
 		return (current_target.global_position - global_position).normalized()
@@ -275,6 +338,11 @@ func handle_movement() -> void:
 func attack() -> void:
 	switch_state(PlayerState.ATTACK)
 
+func hold_heavy_attack() -> void:
+	switch_state(PlayerState.HOLD_HEAVY_ATTACK)
+
+func release_heavy_attack() -> void:
+	switch_state(PlayerState.RELEASE_HEAVY_ATTACK)
 
 func _on_attack_area_body_entered(body: Node2D) -> void:
 	if body.has_method("take_damage"):
@@ -345,6 +413,14 @@ func play_walk_animation() -> void:
 func play_attack_animation() -> void:
 	anim.speed_scale = ATTACK_ANIM_SPEED
 	play_directional_animation("attack", true)
+	animation.play("Current")
+
+func play_heavy_attack_animation(is_holding: bool) -> void:
+	anim.speed_scale = ATTACK_ANIM_SPEED
+	var action = '_hold' if is_holding else '_release'
+	if action == '_hold':
+		print('ANIMACAO ' + action + ' TOCANDO')
+	play_directional_animation("heavy_attack" + action)
 	animation.play("Current")
 
 func play_directional_animation(prefix: String, alternate: bool = false) -> void:
