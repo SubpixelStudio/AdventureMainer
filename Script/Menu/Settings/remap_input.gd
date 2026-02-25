@@ -16,6 +16,9 @@ func _ready() -> void:
 func _toggled(toggled_on: bool) -> void:
 	set_process_unhandled_input(toggled_on)
 	if button_pressed:
+		for child in get_parent().get_children():
+			if child != self and child is Button:
+				child.focus_mode = Control.FOCUS_NONE
 		text = "Awaiting Input"
 
 func _unhandled_input(event: InputEvent) -> void:

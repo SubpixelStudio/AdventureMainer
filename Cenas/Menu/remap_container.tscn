@@ -9,6 +9,8 @@ font = ExtResource("2_364ky")
 outline_size = 8
 outline_color = Color(0, 0, 0, 1)
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wd4sf"]
+
 [node name="Remap_container" type="ColorRect" unique_id=1968894680]
 custom_minimum_size = Vector2(0, 30)
 color = Color(0, 0, 0, 0.2901961)
@@ -36,7 +38,10 @@ anchor_bottom = 1.0
 offset_left = -0.2000122
 grow_horizontal = 2
 grow_vertical = 2
+focus_mode = 0
+focus_behavior_recursive = 1
 theme_override_fonts/font = ExtResource("2_364ky")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_wd4sf")
 text = "Key"
 script = ExtResource("3_myfgr")
 
@@ -49,6 +54,9 @@ anchor_bottom = 1.0
 offset_left = -0.2000122
 grow_horizontal = 2
 grow_vertical = 2
+focus_mode = 0
+focus_behavior_recursive = 1
 theme_override_fonts/font = ExtResource("2_364ky")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_wd4sf")
 text = "Key"
 script = ExtResource("3_myfgr")
