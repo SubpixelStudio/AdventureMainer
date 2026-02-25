@@ -3,6 +3,10 @@
 [ext_resource type="FontFile" uid="uid://43814se2v5d0" path="res://PressStart2P-Regular.ttf" id="1_iwonr"]
 [ext_resource type="Script" uid="uid://ye51doy0dhdb" path="res://Script/settings.gd" id="1_l2xyu"]
 [ext_resource type="Script" uid="uid://vh78qe8umxjh" path="res://Script/video.gd" id="2_l2xyu"]
+[ext_resource type="Script" uid="uid://ch7palymp1gms" path="res://Script/Menu/Settings/controls.gd" id="4_7ni8t"]
+[ext_resource type="Script" uid="uid://bfw0wm502f58i" path="res://Script/Menu/Settings/remap_container.gd" id="4_nrf6h"]
+[ext_resource type="Script" uid="uid://3b53rqlnmfi0" path="res://Script/Menu/Settings/remap_input.gd" id="4_t01ve"]
+[ext_resource type="Script" uid="uid://cgmx85radop7r" path="res://Recursos/Utils/ActionData.gd" id="5_5dtob"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_jlfwg"]
 font = ExtResource("1_iwonr")
@@ -11,6 +15,53 @@ outline_size = 24
 outline_color = Color(0, 0, 0, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_t01ve"]
+font = ExtResource("1_iwonr")
+outline_size = 8
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="Resource" id="Resource_7ni8t"]
+script = ExtResource("5_5dtob")
+name = "Up"
+action_name = "W"
+metadata/_custom_type_script = "uid://cgmx85radop7r"
+
+[sub_resource type="Resource" id="Resource_5dtob"]
+script = ExtResource("5_5dtob")
+name = "Down"
+action_name = "S"
+metadata/_custom_type_script = "uid://cgmx85radop7r"
+
+[sub_resource type="Resource" id="Resource_vgyn2"]
+script = ExtResource("5_5dtob")
+name = "Left"
+action_name = "A"
+metadata/_custom_type_script = "uid://cgmx85radop7r"
+
+[sub_resource type="Resource" id="Resource_wyaqe"]
+script = ExtResource("5_5dtob")
+name = "Right"
+action_name = "D"
+metadata/_custom_type_script = "uid://cgmx85radop7r"
+
+[sub_resource type="Resource" id="Resource_jjpi6"]
+script = ExtResource("5_5dtob")
+name = "Attack"
+action_name = "attack"
+metadata/_custom_type_script = "uid://cgmx85radop7r"
+
+[sub_resource type="Resource" id="Resource_suf6b"]
+script = ExtResource("5_5dtob")
+name = "Block"
+action_name = "block"
+metadata/_custom_type_script = "uid://cgmx85radop7r"
+
+[sub_resource type="Resource" id="Resource_q5i35"]
+script = ExtResource("5_5dtob")
+name = "Interact"
+action_name = "interagir"
+metadata/_custom_type_script = "uid://cgmx85radop7r"
+
+[sub_resource type="LabelSettings" id="LabelSettings_5dtob"]
 font = ExtResource("1_iwonr")
 outline_size = 8
 outline_color = Color(0, 0, 0, 1)
@@ -37,6 +88,7 @@ grow_vertical = 2
 color = Color(0, 0, 0, 0.21568628)
 
 [node name="Video" type="Control" parent="Main" unique_id=1792925200 node_paths=PackedStringArray("button", "check_vsync")]
+visible = false
 layout_mode = 1
 anchor_left = 0.25
 anchor_right = 1.0
@@ -199,6 +251,7 @@ grow_vertical = 2
 alignment = 2
 
 [node name="Sound" type="Control" parent="Main" unique_id=1379602878]
+visible = false
 layout_mode = 1
 anchor_left = 0.25
 anchor_right = 1.0
@@ -325,6 +378,175 @@ grow_horizontal = 2
 grow_vertical = 2
 value = 100.0
 
+[node name="Controls" type="Control" parent="Main" unique_id=87728058]
+layout_mode = 1
+anchor_left = 0.25
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("4_7ni8t")
+actions_list = Array[ExtResource("5_5dtob")]([SubResource("Resource_7ni8t"), SubResource("Resource_5dtob"), SubResource("Resource_vgyn2"), SubResource("Resource_wyaqe"), SubResource("Resource_jjpi6"), SubResource("Resource_suf6b"), SubResource("Resource_q5i35")])
+path_to_remap_container = NodePath("Control/VBoxContainer")
+
+[node name="key_pop_up_control" type="Control" parent="Main/Controls" unique_id=133693650]
+z_index = 100
+layout_mode = 1
+anchor_left = 0.1
+anchor_top = 0.45
+anchor_right = 0.9
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="key_pop_up" type="ColorRect" parent="Main/Controls/key_pop_up_control" unique_id=444965527]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.23921569, 0.23921569, 0.23921569, 0.27058825)
+
+[node name="Label" type="Label" parent="Main/Controls/key_pop_up_control/key_pop_up" unique_id=331235623]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "key already assigned"
+label_settings = SubResource("LabelSettings_jlfwg")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label" type="Label" parent="Main/Controls" unique_id=511270779]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 40.0
+offset_right = 232.0
+offset_bottom = 72.0
+text = "Contols"
+label_settings = SubResource("LabelSettings_jlfwg")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Control" type="Control" parent="Main/Controls" unique_id=161013007]
+layout_mode = 1
+anchor_top = 0.12900001
+anchor_right = 0.96400005
+anchor_bottom = 0.95100003
+offset_left = 20.0
+offset_top = 0.11999512
+offset_right = -0.44006348
+offset_bottom = 0.27996826
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Main/Controls/Control" unique_id=1735788231]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 11
+
+[node name="guide_container" type="ColorRect" parent="Main/Controls/Control/VBoxContainer" unique_id=851262184]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+color = Color(0, 0, 0, 0.2901961)
+
+[node name="Label" type="Label" parent="Main/Controls/Control/VBoxContainer/guide_container" unique_id=303788646]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.05
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_right = 0.19999695
+grow_horizontal = 2
+grow_vertical = 2
+text = "keyboard Inputs"
+label_settings = SubResource("LabelSettings_t01ve")
+vertical_alignment = 1
+
+[node name="B_remap" type="Label" parent="Main/Controls/Control/VBoxContainer/guide_container" unique_id=1624927131]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.4
+anchor_right = 0.7
+anchor_bottom = 1.0
+offset_left = -0.2000122
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("1_iwonr")
+text = "Primary"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="B_remap2" type="Label" parent="Main/Controls/Control/VBoxContainer/guide_container" unique_id=2076623748]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.7
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -0.2000122
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("1_iwonr")
+text = "Secundary"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Remap_container" type="ColorRect" parent="Main/Controls/Control/VBoxContainer" unique_id=1968894680]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+color = Color(0, 0, 0, 0.2901961)
+script = ExtResource("4_nrf6h")
+
+[node name="L_input" type="Label" parent="Main/Controls/Control/VBoxContainer/Remap_container" unique_id=127998571]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.05
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_right = 0.19999695
+grow_horizontal = 2
+grow_vertical = 2
+text = "input"
+label_settings = SubResource("LabelSettings_5dtob")
+vertical_alignment = 1
+
+[node name="B_remap" type="Button" parent="Main/Controls/Control/VBoxContainer/Remap_container" unique_id=1052368985]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.4
+anchor_right = 0.7
+anchor_bottom = 1.0
+offset_left = -0.2000122
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("1_iwonr")
+text = "Key"
+script = ExtResource("4_t01ve")
+
+[node name="B_remap2" type="Button" parent="Main/Controls/Control/VBoxContainer/Remap_container" unique_id=21803890]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.7
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -0.2000122
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("1_iwonr")
+text = "Key"
+script = ExtResource("4_t01ve")
+
 [node name="Option" type="ColorRect" parent="." unique_id=145948952]
 layout_mode = 1
 anchors_preset = 9
@@ -364,6 +586,7 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_jlfwg")
 text = "Sound"
 
 [node name="Gameplay" type="Button" parent="Option/VBoxContainer" unique_id=81137313]
+visible = false
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 theme_override_colors/font_hover_color = Color(18.892157, 18.892157, 18.892157, 1)
@@ -381,6 +604,20 @@ theme_override_fonts/font = ExtResource("1_iwonr")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_jlfwg")
 text = "Controls"
 
+[node name="B_back" type="Button" parent="." unique_id=1546829008]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.025
+anchor_top = 0.95
+anchor_right = 0.025
+anchor_bottom = 0.95
+offset_top = -31.0
+offset_right = 45.0
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("1_iwonr")
+text = "Back"
+
 [connection signal="pressed" from="Main/Video/Control/VBoxContainer/Resolução/OptionButton" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="Main/Video/Control/VBoxContainer/Janela/OptionButton" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="Main/Video/Control/VBoxContainer/FPS/OptionButton" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="B_back" to="." method="_on_b_back_pressed"]

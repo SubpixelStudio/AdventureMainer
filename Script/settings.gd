@@ -26,3 +26,7 @@ func on_press(btn:Button) -> void:
 		target.visible = true
 	else:
 		push_warning("Página não encontrada para: " + btn.name)
+
+
+func _on_b_back_pressed() -> void:
+	get_tree().change_scene_to_file("res://Cenas/menu.tscn")
