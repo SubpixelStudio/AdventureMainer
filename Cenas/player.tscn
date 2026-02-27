@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://bmdsvf5rv54fy" path="res://Cenas/anim.tscn" id="3_kc4hd"]
 [ext_resource type="AnimationLibrary" uid="uid://ba0m37f2lyvq6" path="res://Recursos/anim.res" id="4_8w3h7"]
 [ext_resource type="PackedScene" uid="uid://o12cn7xci7q1" path="res://Parry/scenes/parry_prefab.tscn" id="5_yuqgu"]
-[ext_resource type="Script" uid="uid://dbdbs3d4rjh0j" path="res://Script/StateMachine/player_state_manager.gd" id="6_8vhvd"]
+[ext_resource type="Script" uid="uid://do3mdxjpa0ybc" path="res://Script/StateMachine/state_manager.gd" id="6_e2nbm"]
 [ext_resource type="Script" uid="uid://dhvufes7fead1" path="res://Script/StateMachine/idle_state.gd" id="7_8vhvd"]
 [ext_resource type="Script" uid="uid://b04xrw0r2x0bg" path="res://Script/StateMachine/run_state.gd" id="8_e2nbm"]
 
@@ -54,18 +54,14 @@ scale = Vector2(0.25, 0.25)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=446600289]
 shape = SubResource("CircleShape2D_yuqgu")
 
-[node name="PlayerStateManager" type="Node" parent="." unique_id=1839976206 node_paths=PackedStringArray("base_state", "initial_state")]
-script = ExtResource("6_8vhvd")
-base_state = NodePath("BaseState")
-initial_state = NodePath("BaseState/IDLE")
+[node name="PlayerStateManager" type="Node" parent="." unique_id=1839976206]
+script = ExtResource("6_e2nbm")
 metadata/_custom_type_script = "uid://do3mdxjpa0ybc"
 
-[node name="BaseState" type="Node" parent="PlayerStateManager" unique_id=416602733]
-
-[node name="IDLE" type="Node" parent="PlayerStateManager/BaseState" unique_id=1725542745]
+[node name="Idle" type="Node" parent="PlayerStateManager" unique_id=1725542745]
 script = ExtResource("7_8vhvd")
 metadata/_custom_type_script = "uid://el0c4txcqdk8"
 
-[node name="RUN" type="Node" parent="PlayerStateManager/BaseState" unique_id=78235815]
+[node name="Run" type="Node" parent="PlayerStateManager" unique_id=78235815]
 script = ExtResource("8_e2nbm")
 metadata/_custom_type_script = "uid://el0c4txcqdk8"
