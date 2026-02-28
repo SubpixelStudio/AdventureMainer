@@ -1,0 +1,144 @@
+[gd_scene format=3 uid="uid://x5c5420xm0re"]
+
+[ext_resource type="Script" uid="uid://bkjjdbid0412o" path="res://Script/pause_menu.gd" id="1_dokru"]
+[ext_resource type="FontFile" uid="uid://43814se2v5d0" path="res://PressStart2P-Regular.ttf" id="2_ddlpt"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dokru"]
+bg_color = Color(0, 0, 0, 0.4745098)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+corner_detail = 18
+expand_margin_left = 10.0
+expand_margin_top = 10.0
+expand_margin_right = 10.0
+expand_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_adfkx"]
+bg_color = Color(1, 1, 1, 0.4745098)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+corner_detail = 18
+expand_margin_left = 10.0
+expand_margin_top = 10.0
+expand_margin_right = 10.0
+expand_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8514u"]
+bg_color = Color(0, 0, 0, 0.4745098)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(1, 0.45882353, 0, 1)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+corner_detail = 18
+expand_margin_left = 10.0
+expand_margin_top = 10.0
+expand_margin_right = 10.0
+expand_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wdnpe"]
+
+[node name="Menu" type="Control" unique_id=1813045062 node_paths=PackedStringArray("btn")]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_dokru")
+btn = [NodePath("ColorRect/VBoxContainer/Resume"), NodePath("ColorRect/VBoxContainer/Settings"), NodePath("ColorRect/VBoxContainer/MainMenu"), NodePath("ColorRect/VBoxContainer/Quit")]
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1746893217]
+custom_minimum_size = Vector2(500, 500)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.33333334)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ColorRect" unique_id=1872628374]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -149.0
+offset_top = -144.0
+offset_right = 149.0
+offset_bottom = 144.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 62
+alignment = 1
+
+[node name="Resume" type="Button" parent="ColorRect/VBoxContainer" unique_id=277063361]
+layout_mode = 2
+theme_override_constants/outline_size = 12
+theme_override_fonts/font = ExtResource("2_ddlpt")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxFlat_dokru")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_adfkx")
+theme_override_styles/hover = SubResource("StyleBoxFlat_8514u")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_wdnpe")
+text = "Resume"
+
+[node name="Settings" type="Button" parent="ColorRect/VBoxContainer" unique_id=1518419614]
+layout_mode = 2
+theme_override_constants/outline_size = 12
+theme_override_fonts/font = ExtResource("2_ddlpt")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxFlat_dokru")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_adfkx")
+theme_override_styles/hover = SubResource("StyleBoxFlat_8514u")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_wdnpe")
+text = "Settings"
+
+[node name="MainMenu" type="Button" parent="ColorRect/VBoxContainer" unique_id=1019367419]
+layout_mode = 2
+theme_override_constants/outline_size = 12
+theme_override_fonts/font = ExtResource("2_ddlpt")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxFlat_dokru")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_adfkx")
+theme_override_styles/hover = SubResource("StyleBoxFlat_8514u")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_wdnpe")
+text = "Main Menu"
+
+[node name="Quit" type="Button" parent="ColorRect/VBoxContainer" unique_id=384127182]
+layout_mode = 2
+theme_override_constants/outline_size = 12
+theme_override_fonts/font = ExtResource("2_ddlpt")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxFlat_dokru")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_adfkx")
+theme_override_styles/hover = SubResource("StyleBoxFlat_8514u")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_wdnpe")
+text = "Quit"

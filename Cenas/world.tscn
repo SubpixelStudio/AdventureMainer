@@ -10,6 +10,7 @@
 [ext_resource type="FontFile" uid="uid://43814se2v5d0" path="res://PressStart2P-Regular.ttf" id="8_dswv5"]
 [ext_resource type="Script" uid="uid://cmempbxd1qf1t" path="res://Script/enemies.gd" id="8_m0tab"]
 [ext_resource type="Script" uid="uid://ysdm0el3qcol" path="res://Script/mission_dialog.gd" id="9_hmoou"]
+[ext_resource type="PackedScene" uid="uid://x5c5420xm0re" path="res://Cenas/pause_menu.tscn" id="10_3a4k6"]
 [ext_resource type="Script" uid="uid://bmsfo62413myf" path="res://Script/objective_text.gd" id="10_81fic"]
 [ext_resource type="Script" uid="uid://7g1rrjacbwvn" path="res://Recursos/npc_dialogue.gd" id="12_hmoou"]
 [ext_resource type="PackedScene" uid="uid://c4dr2fbjwn0hp" path="res://Cenas/NPC/npc.tscn" id="13_psyty"]
@@ -211,6 +212,7 @@ radius = 338.0
 height = 698.0
 
 [node name="World" type="Node" unique_id=1608191893 node_paths=PackedStringArray("hud_tempo") groups=["world"]]
+process_mode = 1
 script = ExtResource("1_y3i6s")
 hud_tempo = NodePath("CanvasLayer/Tempo")
 
@@ -338,6 +340,8 @@ grow_vertical = 0
 theme_override_styles/fill = SubResource("StyleBoxFlat_hmoou")
 value = 49.16
 show_percentage = false
+
+[node name="Menu" parent="UIManager" unique_id=1813045062 instance=ExtResource("10_3a4k6")]
 
 [node name="NPC" parent="." unique_id=2088797439 instance=ExtResource("13_psyty")]
 z_index = 1

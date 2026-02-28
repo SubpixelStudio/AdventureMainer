@@ -58,6 +58,15 @@ func npc_getter(npc:Generic_NPC):
 	
 	npc_target.interaction()
 
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("Pause"):
+		get_tree().paused = !get_tree().paused
+		if get_tree().paused:
+			$Menu.show()
+			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		else:
+			$Menu.hide()
+			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("ocultar"):
 		ocultar(ocultado)
