@@ -26,6 +26,7 @@ const ATTACK_ANIM_SPEED: float = 1
 @onready var life: int = max_life
 @onready var power: int = max_mana
 
+var input_vector: Vector2
 var last_direction: Vector2 = Vector2.DOWN
 var mira: Sprite2D = null
 
@@ -365,11 +366,12 @@ func update_attack_area() -> void:
 # -------------------------------------------------
 
 func handle_movement() -> void:
-	var input_vector: Vector2 = Input.get_vector("A", "D", "W", "S").normalized()
-	velocity = input_vector * speed
-	
-	if input_vector != Vector2.ZERO:
-		last_direction = input_vector.normalized()
+	pass
+	#var input_vector: Vector2 = Input.get_vector("A", "D", "W", "S").normalized()
+	#velocity = input_vector * speed
+	#
+	#if input_vector != Vector2.ZERO:
+		#last_direction = input_vector.normalized()
 
 # -------------------------------------------------
 # ATAQUE
@@ -443,20 +445,23 @@ func die() -> void:
 # -------------------------------------------------
 
 func play_idle_animation() -> void:
-	anim.speed_scale = NORMAL_ANIM_SPEED
-	play_directional_animation("idle")
-	animation.play("Current")
+	pass
+	#anim.speed_scale = NORMAL_ANIM_SPEED
+	#play_directional_animation("idle")
+	#animation.play("Current")
 
 func play_walk_animation() -> void:
-	anim.speed_scale = NORMAL_ANIM_SPEED
-	play_directional_animation("walk")
-	animation.play("Walking")
+	pass
+	#anim.speed_scale = NORMAL_ANIM_SPEED
+	#play_directional_animation("walk")
+	#animation.play("Walking")
 
 
 func play_attack_animation() -> void:
-	anim.speed_scale = ATTACK_ANIM_SPEED
-	play_directional_animation("attack", true)
-	animation.play("Current")
+	pass
+	#anim.speed_scale = ATTACK_ANIM_SPEED
+	#play_directional_animation("attack", true)
+	#animation.play("Current")
 
 func play_directional_animation(prefix: String, alternate: bool = false) -> void:
 	var sufix: String
@@ -490,3 +495,7 @@ func play_attack_sound() -> void:
 func play_parry_sound() -> void:
 	const PARRY_SOUND: AudioStream = preload("res://Assets/Sound/swordparry1.mp3")
 	SoundEffect.play_sound(PARRY_SOUND,soundManager, global_position)
+
+func _unhandled_input(_event: InputEvent) -> void:
+	input_vector = Input.get_vector("A", "D", "W", "S").normalized()
+	print(input_vector)

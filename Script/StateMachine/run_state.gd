@@ -6,7 +6,13 @@ func _start():
 
 func _run(delta: float) -> void:
 	print('Continuo em Run')
-	if Input.is_action_just_released("W"):
+	var player: Player = manager.owner_node
+	var input_vector: Vector2 = Input.get_vector("A", "D", "W", "S").normalized()
+	
+	player.velocity = input_vector * player.speed
+	
+	if input_vector == Vector2.ZERO:
+		player.last_direction = input_vector.normalized()
 		manager.switch_state('Idle')
 
 
