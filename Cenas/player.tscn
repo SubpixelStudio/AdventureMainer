@@ -33,8 +33,7 @@ position = Vector2(0, 5)
 shape = SubResource("CapsuleShape2D_043cr")
 
 [node name="AttackArea" type="Area2D" parent="." unique_id=5515110]
-collision_mask = 2
-monitoring = false
+collision_mask = 6
 
 [node name="Polygon" type="CollisionPolygon2D" parent="AttackArea" unique_id=44047127]
 polygon = PackedVector2Array(10, 30, -10, 30, 0, 0)
@@ -50,3 +49,5 @@ scale = Vector2(0.25, 0.25)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=446600289]
 shape = SubResource("CircleShape2D_yuqgu")
+
+[connection signal="area_entered" from="AttackArea" to="." method="_on_attack_area_area_entered"]
