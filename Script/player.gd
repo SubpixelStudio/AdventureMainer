@@ -22,11 +22,13 @@ const ATTACK_ANIM_SPEED: float = 1
 @onready var parry_buffer_timer: Timer = $ParryBufferTimer
 @onready var parry_effect: ParryEffect = $ParryEffect
 
+@onready var anim_tree: AnimationTree = $AnimationTree
+@onready var state_machine = anim_tree.get("parameters/playback")
 
 @onready var life: int = max_life
 @onready var power: int = max_mana
 
-var input_vector: Vector2
+var input_vector: Vector2 = Vector2.DOWN
 var last_direction: Vector2 = Vector2.DOWN
 var mira: Sprite2D = null
 
@@ -76,20 +78,34 @@ signal interacted_npc(npc:Generic_NPC)
 # -------------------------------------------------
 
 func _ready() -> void:
-	switch_state(PlayerState.IDLE)
-	step_timer.wait_time = step_interval
-	step_timer.timeout.connect(play_walking_sound)
-	add_child(step_timer)
-	attack_area.monitoring = false
-	attack_area.body_entered.connect(_on_attack_area_body_entered)
-	update_enemy_list()
+	# Liga animation tree no idle
+	anim_tree.active = true
+	#state_machine.travel("Idle")
 	
-	parry_effect.z_index = z_index
-	parry_effect.call_deferred("reparent", world)
+	#switch_state(PlayerState.IDLE)
+	#step_timer.wait_time = step_interval
+	#step_timer.timeout.connect(play_walking_sound)
+	#add_child(step_timer)
+	#attack_area.monitoring = false
+	#attack_area.body_entered.connect(_on_attack_area_body_entered)
+	#update_enemy_list()
+	#
+	#parry_effect.z_index = z_index
+	#parry_effect.call_deferred("reparent", world)
 
 # -------------------------------------------------
 
 func _physics_process(_delta: float) -> void:
+	input_vector = Input.get_vector("A", "D", "W", "S").normalized()
+	
+	if input_vector != Vector2.ZERO:
+		#state_machine.travel("run")
+		anim_tree.set("parameters/Run/blend_position", input_vector)
+	else:
+		#state_machine.travel("idle")
+		anim_tree.set("parameters/Idle/blend_position", last_direction)
+	
+	
 	if is_dead:
 		return
 	_handle_states()
@@ -464,20 +480,26 @@ func play_attack_animation() -> void:
 	#animation.play("Current")
 
 func play_directional_animation(prefix: String, alternate: bool = false) -> void:
-	var sufix: String
-	
-	if abs(last_direction.x) > abs(last_direction.y):
-		sufix = ("_right" if last_direction.x > 0 else "_left")
-	else:
-		sufix = ("_down" if last_direction.y > 0 else "_up")
-	var anim_name: String = prefix + sufix
-	
-	if alternate:
-		anim_name += str(attack_index)
-		attack_index = 2 if attack_index == 1 else 1
+	pass
+	#var sufix: String
+	#
+	#if abs(last_direction.x) > abs(last_direction.y):
+		#sufix = ("_right" if last_direction.x > 0 else "_left")
+	#else:
+		#sufix = ("_down" if last_direction.y > 0 else "_up")
+	#var anim_name: String = prefix + sufix
+	#
+	#if alternate:
+		#anim_name += str(attack_index)
+		#attack_index = 2 if attack_index == 1 else 1
+#
+	#if anim.current_animation != anim_name:
+		#anim.play(anim_name)
 
-	if anim.current_animation != anim_name:
-		anim.play(anim_name)
+
+# -------------------------------------------------
+# KNOCKBACK / SOM
+# -------------------------------------------------
 
 func calc_knockback() -> void:
 	if knockback.length() > min_knockback:

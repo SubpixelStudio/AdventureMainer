@@ -2,8 +2,15 @@ extends Node
 
 class_name StateManager
 
+## Caminho do AnimationTree desejado
+@export var animation_tree_path: NodePath
+
 @export var array_states: Array[State]
 @export var initial_state: String
+
+# Pega o AnimationTree e captura o Tree Root (pai das anims)
+@onready var anim_tree: AnimationTree = get_node(animation_tree_path)
+@onready var state_machine = anim_tree.get("parameters/playback")
 
 var owner_node: Node
 var current_state: State
