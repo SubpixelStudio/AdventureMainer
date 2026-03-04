@@ -188,6 +188,7 @@ func _idle_state() -> void:
 			switch_state(PlayerState.BLOCK)
 		if Input.is_action_just_pressed("attack") or Input.is_action_pressed("attack"):
 			attack()
+			
 
 func carregando_attack(charge_time: float) -> int:
 	# Configurações locais
@@ -521,3 +522,9 @@ func play_parry_sound() -> void:
 func _unhandled_input(_event: InputEvent) -> void:
 	input_vector = Input.get_vector("A", "D", "W", "S").normalized()
 	print(input_vector)
+
+
+func _on_attack_area_area_entered(area: Area2D) -> void:
+	if area.is_in_group("Tree"):
+		if area.has_method("take_damage"):
+			area.take_damage(1)

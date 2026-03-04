@@ -5,6 +5,9 @@
 [ext_resource type="Texture2D" uid="uid://dpd5evddy80xb" path="res://Assets/UI/mobile-controls-1/Sprites/Icons/Default/icon_talk.png" id="2_gnrkw"]
 [ext_resource type="Texture2D" uid="uid://dylf84ojf2vtj" path="res://Assets/UI/space-Sheet-Sheet.png" id="3_aexvs"]
 [ext_resource type="FontFile" uid="uid://43814se2v5d0" path="res://PressStart2P-Regular.ttf" id="4_qqy3y"]
+[ext_resource type="Script" uid="uid://npjve7r1o107" path="res://Script/quests/quest_node_npc.gd" id="6_aexvs"]
+[ext_resource type="Script" uid="uid://7g1rrjacbwvn" path="res://Recursos/npc_dialogue.gd" id="7_qqy3y"]
+[ext_resource type="Script" uid="uid://cf2y5ojfabnfi" path="res://Script/quest.gd" id="8_bhfgm"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_bhfgm"]
 
@@ -84,9 +87,25 @@ font_color = Color(1, 0.6901961, 0, 1)
 [sub_resource type="CircleShape2D" id="CircleShape2D_gnrkw"]
 radius = 62.201286
 
+[sub_resource type="Resource" id="Resource_bhfgm"]
+script = ExtResource("7_qqy3y")
+actor_lines = Array[String](["Como estava dizendo...", "Edgar, o guardião da floresta, 
+enviou um pedido urgente.", "A escuridão se intensifica entre as árvores, ", "e criaturas inquietas se aproximam da aldeia.
+", "Não há tempo a perder", "proteja os que ainda sobrevivem."])
+metadata/_custom_type_script = "uid://7g1rrjacbwvn"
+
+[sub_resource type="Resource" id="Resource_2if0b"]
+script = ExtResource("8_bhfgm")
+missionName = "Investigue a floresta"
+description = "'Derrote 5 Almas Vermelhas\""
+current_state = 0
+quantidade_max = 5
+metadata/_custom_type_script = "uid://cf2y5ojfabnfi"
+
 [node name="NPC" type="CharacterBody2D" unique_id=2088797439 node_paths=PackedStringArray("area_interaction")]
 script = ExtResource("1_gnrkw")
 area_interaction = NodePath("area_interaction")
+next_quest = NodePath("NpcQuestNode")
 
 [node name="Shape" type="CollisionShape2D" parent="." unique_id=1255239365]
 shape = SubResource("CapsuleShape2D_bhfgm")
@@ -130,3 +149,11 @@ action = "interagir"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="area_interaction" unique_id=271711943]
 shape = SubResource("CircleShape2D_gnrkw")
+
+[node name="NpcQuestNode" type="Node" parent="." unique_id=431267762]
+script = ExtResource("6_aexvs")
+new_dialogue = SubResource("Resource_bhfgm")
+current_interaction = 1
+new_quest = SubResource("Resource_2if0b")
+main_give_quest = true
+metadata/_custom_type_script = "uid://npjve7r1o107"
