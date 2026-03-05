@@ -375,6 +375,7 @@ texture = ExtResource("4_m1lnq")
 [node name="Cenario" parent="." unique_id=235547944 instance=ExtResource("15_ojfwj")]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1252187237]
+visible = false
 
 [node name="Label" type="Label" parent="CanvasLayer" unique_id=1928606108]
 anchors_preset = 2
@@ -457,6 +458,7 @@ position = Vector2(300, 117)
 shape = SubResource("CapsuleShape2D_dswv5")
 
 [node name="TouchButton" parent="." unique_id=223181013 instance=ExtResource("17_ojfwj")]
+visible = false
 
 [connection signal="end_actor" from="NPC" to="Enemies" method="active"]
 [connection signal="timeout" from="CanvasLayer/Label/Timer" to="." method="_on_timer_timeout"]

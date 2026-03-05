@@ -6,11 +6,7 @@ static func _moviment_dir(node:CharacterBody2D, direction:Vector2, speed:float =
 	node.velocity = dir * speed
 	node.move_and_slide()
 
-static func _area_attack(area2D:Area2D, damage:int = 0):
-	var Nodes:Array[Node2D] =area2D.get_overlapping_bodies()
-	for i in Nodes:
-		if i is Entities:
-			i._received_damage(damage)
+
 
 static func _block(node:Entities):
 	node._block_system()

@@ -27,11 +27,15 @@ class_name Entities
 
 var block:bool = false
 var parry_blocked:bool = false
+var is_attacking:bool = false
 
 var is_dead:bool = false
 
 var is_attacked:bool = false
 
+var input_vector: Vector2 = Vector2.DOWN
+
+var can_attack: bool = true
 signal damaged(value:int)
 signal blocked
 signal died
@@ -83,3 +87,12 @@ func _block_system():
 func _die():
 	died.emit()
 	is_dead=true
+
+func _area_attack(area2D:Area2D, damage:int = 0):
+	var Nodes:Array[Node2D] =area2D.get_overlapping_bodies()
+	for i in Nodes:
+		if i is Entities:
+			i._received_damage(damage)
+
+func calc_knockback(knockback_force:Vector2) -> void:
+	velocity = knockback_force

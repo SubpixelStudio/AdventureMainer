@@ -1,13 +1,16 @@
 [gd_scene format=3 uid="uid://blik8w00x5ity"]
 
 [ext_resource type="Script" uid="uid://b70in06erswue" path="res://Script/player.gd" id="1_eu07l"]
-[ext_resource type="Texture2D" uid="uid://0ewunmx5d7mg" path="res://Assets/Player/ATTACK 1/attack1_down.png" id="2_e2nbm"]
+[ext_resource type="Texture2D" uid="uid://bbw4hkylxk1g3" path="res://Assets/Player/ATTACK 2/attack2_down.png" id="2_4q8k4"]
 [ext_resource type="PackedScene" uid="uid://bmdsvf5rv54fy" path="res://Cenas/anim.tscn" id="3_kc4hd"]
 [ext_resource type="AnimationLibrary" uid="uid://ba0m37f2lyvq6" path="res://Recursos/anim.res" id="4_8w3h7"]
 [ext_resource type="PackedScene" uid="uid://o12cn7xci7q1" path="res://Parry/scenes/parry_prefab.tscn" id="5_yuqgu"]
 [ext_resource type="Script" uid="uid://do3mdxjpa0ybc" path="res://Script/StateMachine/state_manager.gd" id="6_e2nbm"]
 [ext_resource type="Script" uid="uid://dhvufes7fead1" path="res://Script/StateMachine/idle_state.gd" id="7_8vhvd"]
 [ext_resource type="Script" uid="uid://b04xrw0r2x0bg" path="res://Script/StateMachine/run_state.gd" id="8_e2nbm"]
+[ext_resource type="Script" uid="uid://7jkdqv8hwkpe" path="res://Script/StateMachine/light_attack_state.gd" id="9_2enhl"]
+[ext_resource type="Script" uid="uid://el0c4txcqdk8" path="res://Script/StateMachine/state.gd" id="10_ruciq"]
+[ext_resource type="Script" uid="uid://dxwft7uirhkg2" path="res://Script/StateMachine/hold_attack_state.gd" id="11_2enhl"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_043cr"]
 radius = 5.0
@@ -205,7 +208,7 @@ states/Run/node = SubResource("AnimationNodeBlendSpace2D_ruciq")
 states/Run/position = Vector2(730, 123)
 states/Start/position = Vector2(200, 123)
 transitions = ["Start", "Idle", SubResource("AnimationNodeStateMachineTransition_yk6xx"), "Idle", "Run", SubResource("AnimationNodeStateMachineTransition_bb2x8"), "Run", "Idle", SubResource("AnimationNodeStateMachineTransition_60xba"), "Idle", "LightAttack", SubResource("AnimationNodeStateMachineTransition_2ex7r"), "LightAttack", "Run", SubResource("AnimationNodeStateMachineTransition_ylkck"), "Run", "LightAttack", SubResource("AnimationNodeStateMachineTransition_phtmq"), "Idle", "HoldAttack", SubResource("AnimationNodeStateMachineTransition_8vy8t"), "HoldAttack", "ReleaseAttack", SubResource("AnimationNodeStateMachineTransition_gdv6k"), "ReleaseAttack", "Idle", SubResource("AnimationNodeStateMachineTransition_0jd21"), "ReleaseAttack", "Run", SubResource("AnimationNodeStateMachineTransition_pxip4"), "Run", "HoldAttack", SubResource("AnimationNodeStateMachineTransition_hgucs"), "LightAttack", "Idle", SubResource("AnimationNodeStateMachineTransition_157go"), "LightAttack", "LightAttack2", SubResource("AnimationNodeStateMachineTransition_72r0d"), "LightAttack2", "Idle", SubResource("AnimationNodeStateMachineTransition_u2l5q"), "LightAttack2", "Run", SubResource("AnimationNodeStateMachineTransition_of7aa")]
-graph_offset = Vector2(-37, 128)
+graph_offset = Vector2(-12, 44)
 
 [node name="Player" type="CharacterBody2D" unique_id=213993585]
 z_index = 2
@@ -214,7 +217,7 @@ script = ExtResource("1_eu07l")
 
 [node name="Texture" type="Sprite2D" parent="." unique_id=1151652623]
 texture_filter = 3
-texture = ExtResource("2_e2nbm")
+texture = ExtResource("2_4q8k4")
 hframes = 8
 frame = 1
 
@@ -257,7 +260,24 @@ metadata/_custom_type_script = "uid://el0c4txcqdk8"
 script = ExtResource("8_e2nbm")
 metadata/_custom_type_script = "uid://el0c4txcqdk8"
 
+[node name="LightAttack" type="Node" parent="PlayerStateManager" unique_id=800782940]
+script = ExtResource("9_2enhl")
+metadata/_custom_type_script = "uid://el0c4txcqdk8"
+
+[node name="HeavyAttack" type="Node" parent="PlayerStateManager" unique_id=76103404]
+script = ExtResource("10_ruciq")
+metadata/_custom_type_script = "uid://el0c4txcqdk8"
+
+[node name="Block" type="Node" parent="PlayerStateManager" unique_id=386686543]
+script = ExtResource("10_ruciq")
+metadata/_custom_type_script = "uid://el0c4txcqdk8"
+
+[node name="HoldAttack" type="Node" parent="PlayerStateManager" unique_id=684173974]
+script = ExtResource("11_2enhl")
+metadata/_custom_type_script = "uid://el0c4txcqdk8"
+
 [node name="AnimationTree" type="AnimationTree" parent="." unique_id=1882760255]
+active = false
 tree_root = SubResource("AnimationNodeStateMachine_2c22q")
 anim_player = NodePath("../Anim")
 parameters/conditions/idle = false
