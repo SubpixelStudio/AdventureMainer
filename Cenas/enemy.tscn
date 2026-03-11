@@ -1,26 +1,24 @@
 [gd_scene format=3 uid="uid://c2ubtvdrrvcpg"]
 
+[ext_resource type="Texture2D" uid="uid://bnkdk36p7i8cs" path="res://Assets/Player/IDLE/idle_down.png" id="1_1ejt6"]
 [ext_resource type="PackedScene" uid="uid://bmdsvf5rv54fy" path="res://Cenas/anim.tscn" id="1_hp8vh"]
-[ext_resource type="Script" uid="uid://dmjbnnugecjfi" path="res://Script/enemy.gd" id="1_rk41v"]
-[ext_resource type="Texture2D" uid="uid://bp06dm2mfu8fr" path="res://Assets/Player/DEAD/dead_down.png" id="2_rk41v"]
+[ext_resource type="Script" uid="uid://cqeg3rr185qwf" path="res://Script/enemy.gd" id="1_rk41v"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_itt5p"]
 radius = 9.0
 
-[node name="Enemy" type="CharacterBody2D" unique_id=338810172 node_paths=PackedStringArray("anim") groups=["enemies"]]
+[node name="Enemy" type="CharacterBody2D" unique_id=338810172 groups=["enemies"]]
 z_index = 3
 collision_layer = 2
 script = ExtResource("1_rk41v")
-array_damage = Array[int]([5, 10, 15, 20])
-choices_life = Array[int]([60, 120])
-anim = NodePath("Anim")
-id = "Almas Vermelhas"
-
-[node name="Texture" type="Sprite2D" parent="." unique_id=1888206774]
-modulate = Color(0.9286411, 2.5509298e-06, 1.540184e-06, 0.62352943)
-texture = ExtResource("2_rk41v")
 
 [node name="Shape" type="CollisionShape2D" parent="." unique_id=75091424]
 shape = SubResource("CapsuleShape2D_itt5p")
+
+[node name="Texture" type="Sprite2D" parent="." unique_id=1888206774]
+modulate = Color(0.9286411, 2.5509298e-06, 1.540184e-06, 0.62352943)
+texture = ExtResource("1_1ejt6")
+hframes = 8
+frame = 1
 
 [node name="Anim" parent="." unique_id=1883151376 instance=ExtResource("1_hp8vh")]
